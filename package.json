@@ -9,7 +9,7 @@
 		"clean": "yarn autoclean --force",
 		"clear": "rimraf build",
 		"lint": "eslint --fix --ext .ts,.tsx .",
-		"walk": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css build",
+		"walk": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css src/public/**/*.png build",
 		"build": "yarn clear && tsc && yarn walk",
 		"start": "yarn build && node ."
 	},
