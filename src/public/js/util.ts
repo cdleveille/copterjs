@@ -8,7 +8,7 @@ export const loadImage = (url: string): HTMLImageElement => {
 	return img;
 };
 
-export const hasTouch = (): boolean => {
-	return "ontouchstart" in document.documentElement
-		|| navigator.maxTouchPoints > 0;
-};
+export interface ICoord {
+	x: number,
+	y: number
+}

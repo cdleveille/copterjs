@@ -1,6 +1,5 @@
 import Game from "./game.js";
-import { loadImage } from "./util.js";
-import { ICoord } from "./types.js";
+import { ICoord, loadImage } from "./util.js";
 
 export default class Copter {
 	game: Game;

@@ -9,9 +9,9 @@
   "scripts": {
     "clean": "yarn autoclean --force",
     "clear": "rimraf build",
+    "copy": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css src/public/**/*.png build",
     "lint": "eslint --fix --ext .ts,.tsx .",
-    "walk": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css src/public/**/*.png build",
-    "build": "yarn clear && tsc && yarn walk",
+    "build": "yarn lint && yarn clear && tsc && yarn copy",
     "start": "yarn build && node ."
   },
   "dependencies": {
