@@ -1,5 +1,5 @@
-import log from "./services/log";
-import app from "./services/server";
+import log from "./services/log.js";
+import app from "./services/server.js";
 
 process.on("uncaughtException", (error) => {
 	log.error(error);

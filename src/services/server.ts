@@ -6,9 +6,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import log from "./log";
+import log from "./log.js";
 //import router from "../controllers/index";
-import Config from "../helpers/config";
+import Config from "../helpers/config.js";
 //import { Routes } from "../types/constants";
 
 export default class App {

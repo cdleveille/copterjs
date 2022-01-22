@@ -16,17 +16,22 @@
     "**/.DS_Store": true,
     "**/node_modules": true
   },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features",
     "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
   "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "eslint.validate": [
     "javascript",
-    "typescript",
+    "typescript"
   ],
   "prettier.endOfLine": "crlf",
   "prettier.printWidth": 150,

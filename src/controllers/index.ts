@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
-
 import fs from "fs";
 import path from "path";
-import log from "../services/log";
-import { Routes } from "../types/constants";
+
+import log from "../services/log.js";
+import { Routes } from "../types/constants.js";
 
 const router = Router();
 
