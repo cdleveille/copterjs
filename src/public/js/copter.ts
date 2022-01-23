@@ -42,17 +42,18 @@ export default class Copter {
 		if (this.climbing) this.yv -= this.power * step;
 		this.y += this.yv * step;
 
-		if (this.y < 0) {
-			this.y = 0;
-			this.yv = 0;
-		}
-		if (this.y > window.innerHeight - this.img.height) {
-			this.y = window.innerHeight - this.img.height;
-			this.yv = 0;
+		for (const t of this.game.terrain.tunnel) {
+			if (this.y < t.topDepth + 5) {
+				this.y = t.topDepth + 5;
+				this.yv = 0;
+			} else if (this.y > window.innerHeight - t.botDepth - this.img.height + 2) {
+				this.y = window.innerHeight - t.botDepth - this.img.height + 2;
+				this.yv = 0;
+			}
 		}
 
-		if (this.yv < -600) this.yv = -600;
-		if (this.yv > 800) this.yv = 800;
+		if (this.yv < -500) this.yv = -500;
+		if (this.yv > 600) this.yv = 600;
 
 		if (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40) {
 			this.smoke.push({ x: this.x - this.smokeImg.width + 4, y: this.y + 6 });

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import Game from "./game.js";
 import { timestamp } from "./util.js";
 import InputHandler from "./input.js";
