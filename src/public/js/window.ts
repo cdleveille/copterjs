@@ -3,15 +3,15 @@ import Game from "./game.js";
 export default class WindowHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
 		const gameWindowChangeHandler = () => {
-			let ctx = canvas.getContext("2d");
-			let [width, height] = resizeCanvas();
+			const ctx = canvas.getContext("2d");
+			const [width, height] = resizeCanvas();
 
-			let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			canvas.width = width;
 			canvas.height = height;
 			ctx.putImageData(imgData, 0, 0);
 
-			game.resizeCanvas(canvas.width, canvas.height);
+			game.resizeGameWindow();
 		};
 
 		const resizeCanvas = () => {
@@ -27,6 +27,6 @@ export default class WindowHandler {
 		});
 
 		[canvas.width, canvas.height] = resizeCanvas();
-		game.resizeCanvas(canvas.width, canvas.height);
+		game.resizeGameWindow();
 	}
 }

@@ -12,3 +12,16 @@ export interface ICoord {
 	x: number,
 	y: number
 }
+
+export interface ITunnel {
+	x: number,
+	length: number,
+	topDepth: number
+	botDepth: number
+}
+
+export interface IBlock {
+	x: number,
+	y: number,
+	height: number
+}
