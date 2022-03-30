@@ -11,6 +11,7 @@ export default class Game {
 	distanceValue: HTMLElement;
 	bestLabel: HTMLElement;
 	bestValue: HTMLElement;
+	isOver: boolean;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -24,6 +25,7 @@ export default class Game {
 
 	init() {
 		this.paused = true;
+		this.isOver = false;
 		this.copter.init();
 		this.terrain.init();
 	}
@@ -43,6 +45,8 @@ export default class Game {
 	}
 
 	update(step: number) {
+		if (this.isOver) return;
+
 		this.terrain.update(step);
 		this.copter.update(step);
 	}
@@ -51,6 +55,7 @@ export default class Game {
 		ctx.fillStyle = "#000000";
 		ctx.fillRect(0, 0, this.width, this.height);
 
+		this.copter.drawSmoke(ctx);
 		this.terrain.draw(ctx);
 		this.copter.draw(ctx);
 

@@ -23,23 +23,24 @@ export default class Copter {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.g = 4000;
-		this.power = 7500;
-		this.hitBoxOffset = { left: 0, right: 0, top: 5, bottom: 2 };
+		this.g = 3500;
+		this.power = 6500;
+		this.hitBoxOffset = { left: 10, right: 10, top: 5, bottom: 5 };
 		this.loadAssets();
 	}
 
 	init() {
 		this.x = this.game.width / 4;
 		this.y = this.game.height / 2;
-		this.xv = 500;
+		this.xv = 700;
 		this.yv = 0;
 		this.width = 124;
 		this.height = 57;
 		this.climbing = false;
 		this.smoke = [];
+		this.best = this.distance && this.distance > this.best ? this.distance : this.best || 0;
 		this.distance = 0;
-		this.best = 0;
+		this.startTime = undefined;
 	}
 
 	loadAssets() {
@@ -51,7 +52,7 @@ export default class Copter {
 		if (this.game.paused) return;
 
 		if (this.startTime === undefined) this.startTime = Date.now();
-		this.distance = Math.floor((Date.now() - this.startTime) / 10);
+		this.distance = Math.floor((Date.now() - this.startTime) / 30);
 
 		// update position
 		this.yv += this.g * step;
@@ -68,24 +69,25 @@ export default class Copter {
 
 		// enforce maximum vertical speeds
 		if (this.yv < -500) this.yv = -500;
-		if (this.yv > 600) this.yv = 600;
+		if (this.yv > 650) this.yv = 650;
 
-		// check for collision with terrain tunnel
+		// check for collision with tunnel
 		for (const segment of this.game.terrain.tunnel) {
 			const segmentTopRect: IRect = { x: segment.x, y: 0, width: segment.length, height: segment.topDepth };
 			if (areRectanglesColliding(this.hitbox, segmentTopRect)) {
-				this.y = segment.topDepth - this.hitBoxOffset.top;
-				this.yv = 0;
-
-				// crash
+				this.game.isOver = true;
 			}
 
 			const segmentBotRect: IRect = { x: segment.x, y: this.game.height - segment.botDepth, width: segment.length, height: segment.botDepth };
 			if (areRectanglesColliding(this.hitbox, segmentBotRect)) {
-				this.y = this.game.height - segment.botDepth - this.height + this.hitBoxOffset.bottom;
-				this.yv = 0;
+				this.game.isOver = true;
+			}
+		}
 
-				// crash
+		// check for collision with blocks
+		for (const block of this.game.terrain.blocks) {
+			if (areRectanglesColliding(this.hitbox, block)) {
+				this.game.isOver = true;
 			}
 		}
 
@@ -110,7 +112,7 @@ export default class Copter {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
-		if (this.climbing) {
+		if (this.climbing && !this.game.paused && !this.game.isOver) {
 			ctx.save();
 			ctx.translate(this.x, this.y);
 			ctx.rotate(-5 * Math.PI / 180);
@@ -119,7 +121,9 @@ export default class Copter {
 		} else {
 			ctx.drawImage(this.img, this.x, this.y);
 		}
+	}
 
+	drawSmoke(ctx: CanvasRenderingContext2D) {
 		for (const s of this.smoke) {
 			ctx.drawImage(this.smokeImg, s.x, s.y);
 		}
