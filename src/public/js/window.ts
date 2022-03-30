@@ -11,11 +11,11 @@ export default class WindowHandler {
 			canvas.height = height;
 			ctx.putImageData(imgData, 0, 0);
 
-			game.resizeGameWindow();
+			game.resizeGameWindow(width, height);
 		};
 
 		const resizeCanvas = () => {
-			return [Math.max(screen.width, window.innerWidth), Math.max(screen.height, window.innerHeight)];
+			return [1600, 900];
 		};
 
 		window.addEventListener("resize", () => {
@@ -27,6 +27,6 @@ export default class WindowHandler {
 		});
 
 		[canvas.width, canvas.height] = resizeCanvas();
-		game.resizeGameWindow();
+		game.resizeGameWindow(canvas.width, canvas.height);
 	}
 }

@@ -10,8 +10,15 @@ html {
 	-webkit-user-select: none;
 	user-select: none;
 	touch-action: none;
+	background-color: #333333;
 }
 
 #game-screen {
+	border: 2px solid black;
 	position: absolute;
+	top: 50%;
+	left: 50%;
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
 }

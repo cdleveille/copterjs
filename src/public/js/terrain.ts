@@ -7,21 +7,22 @@ export default class Terrain {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.tunnel = [];
 	}
 
 	init() {
-		this.tunnel.push({ x: 0, length: 999999999999999, topDepth: 80, botDepth: 80 });
+		this.tunnel = [];
+		this.tunnel.push({ x: 0, length: 1800, topDepth: 80, botDepth: 80 });
+		this.tunnel.push({ x: 1800, length: 200, topDepth: 100, botDepth: 60 });
 	}
 
 	update(step: number) {
 		if (this.game.paused) return;
 
-		for (const t of this.tunnel) {
-			t.x -= this.game.copter.xv * step;
+		for (const segment of this.tunnel) {
+			segment.x -= this.game.copter.xv * step;
 		}
 
-		if (this.tunnel[0].x + this.tunnel[0].length < 0) {
+		if (this.tunnel.length > 0 && this.tunnel[0].x + this.tunnel[0].length < 0) {
 			this.tunnel.shift();
 		}
 	}
@@ -31,7 +32,7 @@ export default class Terrain {
 
 		for (const t of this.tunnel) {
 			ctx.fillRect(t.x, 0, t.length, t.topDepth);
-			ctx.fillRect(t.x, window.innerHeight - t.botDepth, t.length, t.botDepth);
+			ctx.fillRect(t.x, this.game.height - t.botDepth, t.length, t.botDepth);
 		}
 	}
 }

@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "yarn start",
+      "command": "yarn dev",
       "name": "debug",
       "request": "launch",
       "type": "node-terminal"

@@ -12,7 +12,8 @@
     "copy": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css src/public/**/*.png build",
     "lint": "eslint --fix --ext .ts,.tsx .",
     "build": "yarn lint && yarn clear && tsc && yarn copy",
-    "start": "yarn build && node ."
+    "dev": "yarn build && node .",
+    "start": "node ."
   },
   "dependencies": {
     "compression": "^1.7.4",

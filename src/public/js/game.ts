@@ -2,8 +2,8 @@ import Copter from "./copter.js";
 import Terrain from "./terrain.js";
 
 export default class Game {
-	gameWidth: number;
-	gameHeight: number;
+	width: number;
+	height: number;
 	copter: Copter;
 	terrain: Terrain;
 	paused: boolean;
@@ -20,9 +20,12 @@ export default class Game {
 		this.terrain.init();
 	}
 
-	resizeGameWindow() {
-		this.copter.x = window.innerWidth / 4;
-		this.copter.y = window.innerHeight / 2 - this.copter.img.height / 2;
+	resizeGameWindow(width: number, height: number) {
+		this.width = width;
+		this.height = height;
+
+		this.copter.x = this.width / 4;
+		this.copter.y = this.height / 2 - this.copter.img.height / 2;
 	}
 
 	update(step: number) {
@@ -32,7 +35,7 @@ export default class Game {
 
 	draw(ctx: CanvasRenderingContext2D) {
 		ctx.fillStyle = "#000000";
-		ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+		ctx.fillRect(0, 0, this.width, this.height);
 
 		this.terrain.draw(ctx);
 
