@@ -21,4 +21,27 @@ html {
 	-moz-transform: translateX(-50%) translateY(-50%);
 	-webkit-transform: translateX(-50%) translateY(-50%);
 	transform: translateX(-50%) translateY(-50%);
+	z-index: 0;
+}
+
+#distance-label,
+#best-label {
+	z-index: 1;
+	position: absolute;
+	font-size: 3.5rem;
+	background: transparent;
+	font-family: "digital-7";
+	color: #000000;
+}
+
+#distance-value,
+#best-value {
+	background: transparent;
+}
+
+@font-face {
+	font-family: "digital-7";
+	font-style: "normal";
+	font-weight: 800;
+	src: local("digital-7"), url("../font/digital-7 (mono).ttf") format("truetype");
 }

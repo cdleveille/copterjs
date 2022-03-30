@@ -1,7 +1,7 @@
 {
   "name": "helicopter",
   "version": "1.0.0",
-  "main": "build/index.js",
+  "main": "build/server/index.js",
   "repository": "https://github.com/cdleveille/helicopter.git",
   "author": "Chris Leveille",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "yarn autoclean --force",
     "clear": "rimraf build",
-    "copy": "copyfiles -u 1 src/public/**/*.html src/public/**/*.css src/public/**/*.png build",
+    "copy": "copyfiles -u 1 -e \"**/*.ts\" src/client/**/* build",
     "lint": "eslint --fix --ext .ts,.tsx .",
     "build": "yarn lint && yarn clear && tsc && yarn copy",
     "dev": "yarn build && node .",

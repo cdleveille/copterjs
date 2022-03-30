@@ -17,6 +17,9 @@ export default class Copter {
 	img: HTMLImageElement;
 	smokeImg: HTMLImageElement;
 	smoke: ICoord[];
+	distance: number;
+	best: number;
+	startTime: number;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -35,6 +38,8 @@ export default class Copter {
 		this.height = 57;
 		this.climbing = false;
 		this.smoke = [];
+		this.distance = 0;
+		this.best = 0;
 	}
 
 	loadAssets() {
@@ -44,6 +49,9 @@ export default class Copter {
 
 	update(step: number) {
 		if (this.game.paused) return;
+
+		if (this.startTime === undefined) this.startTime = Date.now();
+		this.distance = Math.floor((Date.now() - this.startTime) / 10);
 
 		// update position
 		this.yv += this.g * step;

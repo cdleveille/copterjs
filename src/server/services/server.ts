@@ -39,7 +39,7 @@ export default class App {
 		}));
 		//App.instance.use(Routes.root, router);
 
-		App.instance.use(express.static(path.join(process.cwd(), "/build/public")));
+		App.instance.use(express.static(path.join(process.cwd(), "/build/client")));
 
 		App.instance.set("json spaces", 2);
 		App.instance.disabled("x-powered-by");

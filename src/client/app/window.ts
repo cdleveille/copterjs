@@ -11,7 +11,7 @@ export default class WindowHandler {
 			canvas.height = height;
 			ctx.putImageData(imgData, 0, 0);
 
-			game.resizeGameWindow(width, height);
+			game.resizeGameWindow(canvas);
 		};
 
 		const resizeCanvas = () => {
@@ -27,6 +27,6 @@ export default class WindowHandler {
 		});
 
 		[canvas.width, canvas.height] = resizeCanvas();
-		game.resizeGameWindow(canvas.width, canvas.height);
+		game.resizeGameWindow(canvas);
 	}
 }
