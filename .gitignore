@@ -39,3 +39,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 *.log
+
+helicopter-dev-container/data/
+
+__db_cache__/
