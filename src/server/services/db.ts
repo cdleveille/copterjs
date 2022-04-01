@@ -2,8 +2,8 @@ import path from "path";
 import { cwd } from "process";
 import { Connection, IDatabaseDriver, MikroORM, ConnectionOptions, EntityManager } from "@mikro-orm/core";
 
-import Config, { Db } from "../helpers/config.js";
-import log from "./log.js";
+import Config, { Db } from "../helpers/config";
+import log from "./log";
 
 export class Database {
 
@@ -24,8 +24,8 @@ export class Database {
 		logger: (msg: string) => log.query(msg),
 		type: Db.DB_TYPE,
 		clientUrl: Db.DB_URL,
-		entities: [path.join(cwd(), "build/src/server/models/**/*.js")],
-		entitiesTs: [path.join(cwd(), "server/src/server/models/**/*.ts")],
+		entities: [path.join(cwd(), "build/server/models/**/*.js")],
+		entitiesTs: [path.join(cwd(), "src/server/models/**/*.ts")],
 		cache: {
 			enabled: true,
 			pretty: !Config.IS_PROD,
@@ -45,7 +45,7 @@ export class Database {
 		user: Db.DB_USERNAME,
 		password: Db.DB_PASSWORD,
 		dbName: Db.DB_NAME,
-		entities: [path.join(cwd(), "build/src/server/models/**/*.js")],
+		entities: [path.join(cwd(), "build/server/models/**/*.js")],
 		entitiesTs: [path.join(cwd(), "src/server/models/**/*.ts")],
 		cache: {
 			enabled: true,

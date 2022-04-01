@@ -1,6 +1,6 @@
 import { Entity, Property, Index } from "@mikro-orm/core";
 
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 
 @Entity()
 export class Score extends Base {

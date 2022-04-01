@@ -1,8 +1,8 @@
 
 import { EntityRepository, QueryOrder } from "@mikro-orm/core";
 
-import { Score } from "../models/Score.js";
-import { IScore } from "../types/abstract.js";
+import { Score } from "../models/Score";
+import { IScore } from "../types/abstract";
 
 export type RequestRepo = EntityRepository<Score>;
 

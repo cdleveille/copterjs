@@ -1,13 +1,14 @@
 import compression from "compression";
 import cors from "cors";
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import fs from "fs";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import log from "./log.js";
-import Config from "../helpers/config.js";
+import log from "./log";
+import Config from "../helpers/config";
+import { Database } from "./db";
 
 export default class App {
 	private static instance: Express;
@@ -18,10 +19,10 @@ export default class App {
 		const logStream = fs.createWriteStream("combined.log", { flags: "a" });
 		App.instance.use(morgan("combined", { stream: logStream }));
 
-		// App.instance.use((req: Request, res: Response, next: NextFunction) => {
-		// 	res.locals.em = Database.Manager.fork();
-		// 	next();
-		// });
+		App.instance.use((req: Request, res: Response, next: NextFunction) => {
+			res.locals.em = Database.Manager.fork();
+			next();
+		});
 
 		App.instance.use(
 			helmet.contentSecurityPolicy({
@@ -41,14 +42,14 @@ export default class App {
 			methods: ["GET, POST"]
 		}));
 
-		App.instance.use(express.static(path.join(process.cwd(), "/build/src/client")));
+		App.instance.use(express.static(path.join(process.cwd(), "/build/client")));
 
 		App.instance.set("json spaces", 2);
 		App.instance.disabled("x-powered-by");
 	}
 
 	public static async start() {
-		// await Database.Connect();
+		await Database.Connect();
 		await App.setup();
 
 		App.instance.listen(Config.PORT);

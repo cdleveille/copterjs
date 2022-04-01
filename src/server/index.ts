@@ -1,5 +1,5 @@
-import log from "./services/log.js";
-import app from "./services/server.js";
+import log from "./services/log";
+import app from "./services/server";
 
 (async () => {
 	try {
