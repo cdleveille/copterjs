@@ -15,6 +15,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "plugins": [
+    "@typescript-eslint/eslint-plugin"
+  ],
   "rules": {
     "quotes": [
       "warn",

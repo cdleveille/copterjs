@@ -11,5 +11,6 @@ export enum Host {
 }
 
 export enum Routes {
-	root = "/"
+	root = "/",
+	highScores = "/top10"
 }
