@@ -7,8 +7,10 @@ import morgan from "morgan";
 import path from "path";
 
 import log from "./log";
+import router from "../controllers/index";
 import Config from "../helpers/config";
 import { Database } from "./db";
+import { Routes } from "../../shared/types/constants";
 
 export default class App {
 	private static instance: Express;
@@ -41,6 +43,8 @@ export default class App {
 			origin: "*",
 			methods: ["GET, POST"]
 		}));
+
+		App.instance.use(Routes.root, router);
 
 		App.instance.use(express.static(path.join(process.cwd(), Config.IS_PROD ? "build/client.min" : "build/client")));
 

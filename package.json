@@ -17,9 +17,10 @@
     "copy": "copyfiles -u 1 -e \"**/*.ts\" -e \"**/tsconfig.json\" src/client/**/* build",
     "min": "rimraf build/client.min && copyfiles -u 2 -e \"**/*.ts\" -e \"**/*.map\" build/client/**/* build/client.min && javascript-obfuscator build/client.min --output build/client.min",
     "lint": "eslint --fix --ext .ts,.tsx .",
-    "build": "yarn clear && yarn build-server && yarn build-client",
+    "build": "yarn clear && yarn build-server && yarn build-client-min",
     "build-server": "tsc -b src/server",
-    "build-client": "yarn clear-client && yarn copy && tsc -b src/client && yarn min",
+    "build-client": "yarn clear-client && yarn copy && tsc -b src/client",
+    "build-client-min": "yarn build-client && yarn min",
     "dev": "concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev-server\" \"yarn dev-client\"",
     "dev-server": "ts-node-dev --respawn --transpile-only --project src/server/tsconfig.json src/server/index.ts",
     "dev-client": "nodemon --watch src/client --exec \"yarn build-client\"",
@@ -64,8 +65,7 @@
   "mikro-orm": {
     "useTsNode": true,
     "configPaths": [
-      "./mikro-orm.config.ts",
-      "./build/mikro-orm.config.js"
+      "./mikro-orm.config.ts"
     ]
   }
 }
