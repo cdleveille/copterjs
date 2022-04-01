@@ -1,5 +1,5 @@
 import Game from "./game.js";
-import { ICoord, IRect, IHitboxOffset, loadImage, areRectanglesColliding } from "./util.js";
+import { ICoord, IRect, IHitboxOffset, loadImage, areRectanglesColliding, now } from "./util.js";
 
 export default class Copter {
 	game: Game;
@@ -15,11 +15,10 @@ export default class Copter {
 	hitbox: IRect;
 	hitBoxOffset: IHitboxOffset;
 	img: HTMLImageElement;
+	stoppedImg: HTMLImageElement;
+	flyImgs: HTMLImageElement[];
 	smokeImg: HTMLImageElement;
 	smoke: ICoord[];
-	distance: number;
-	best: number;
-	startTime: number;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -38,21 +37,52 @@ export default class Copter {
 		this.height = 57;
 		this.climbing = false;
 		this.smoke = [];
-		this.best = this.distance && this.distance > this.best ? this.distance : this.best || 0;
-		this.distance = 0;
-		this.startTime = undefined;
+		this.img = this.flyImgs[0];
 	}
 
 	loadAssets() {
-		this.img = loadImage("/img/copter.png");
-		this.smokeImg = loadImage("/img/smoke.png");
+		this.smokeImg = loadImage("img/smoke.png");
+		this.stoppedImg = loadImage("img/copter_stopped.png");
+		this.flyImgs = [
+			loadImage("img/copter1.png"),
+			loadImage("img/copter2.png"),
+			loadImage("img/copter3.png"),
+			loadImage("img/copter4.png"),
+			loadImage("img/copter5.png"),
+			loadImage("img/copter6.png"),
+			loadImage("img/copter7.png"),
+			loadImage("img/copter8.png"),
+			loadImage("img/copter9.png"),
+			loadImage("img/copter10.png"),
+			loadImage("img/copter11.png"),
+			loadImage("img/copter12.png"),
+			loadImage("img/copter13.png"),
+			loadImage("img/copter14.png"),
+			loadImage("img/copter15.png"),
+			loadImage("img/copter16.png"),
+			loadImage("img/copter17.png"),
+			loadImage("img/copter18.png"),
+			loadImage("img/copter19.png"),
+			loadImage("img/copter20.png")
+		];
+	}
+
+	crash() {
+		this.game.endTime = now();
+		this.game.isOver = true;
 	}
 
 	update(step: number) {
+		this.updateImg();
+
 		if (this.game.paused) return;
 
-		if (this.startTime === undefined) this.startTime = Date.now();
-		this.distance = Math.floor((Date.now() - this.startTime) / 30);
+		this.updateSmoke(step);
+
+		if (this.game.isOver) return;
+
+		if (this.game.startTime === undefined) this.game.startTime = now();
+		this.game.distance = Math.floor((now() - this.game.startTime) / 30);
 
 		// update position
 		this.yv += this.g * step;
@@ -74,31 +104,35 @@ export default class Copter {
 		// check for collision with tunnel
 		for (const segment of this.game.terrain.tunnel) {
 			const segmentTopRect: IRect = { x: segment.x, y: 0, width: segment.length, height: segment.topDepth };
-			if (areRectanglesColliding(this.hitbox, segmentTopRect)) {
-				this.game.isOver = true;
-			}
-
 			const segmentBotRect: IRect = { x: segment.x, y: this.game.height - segment.botDepth, width: segment.length, height: segment.botDepth };
-			if (areRectanglesColliding(this.hitbox, segmentBotRect)) {
-				this.game.isOver = true;
+
+			if (areRectanglesColliding(this.hitbox, segmentTopRect) || areRectanglesColliding(this.hitbox, segmentBotRect)) {
+				this.crash();
 			}
 		}
 
 		// check for collision with blocks
 		for (const block of this.game.terrain.blocks) {
 			if (areRectanglesColliding(this.hitbox, block)) {
-				this.game.isOver = true;
+				this.crash();
 			}
 		}
+	}
 
-		this.updateSmoke(step);
+	updateImg() {
+		if (this.game.isOver) return this.img = this.stoppedImg;
+		this.img = this.flyImgs[Math.floor(Math.random() * this.flyImgs.length)];
 	}
 
 	updateSmoke(step: number) {
+		if (this.game.paused) return;
+
 		// add new smoke puff
-		if (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40) {
+		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40)) {
 			this.smoke.push({ x: this.x - this.smokeImg.width + 4, y: this.y + 6 });
 		}
+
+		if (this.smoke.length < 1) return;
 
 		// remove smoke puff if it is offscreen
 		if (this.smoke[0].x < -this.smokeImg.width) {
@@ -106,8 +140,8 @@ export default class Copter {
 		}
 
 		// update position
-		for (const s of this.smoke) {
-			s.x -= this.xv * step;
+		for (const puff of this.smoke) {
+			puff.x -= this.xv * step;
 		}
 	}
 
@@ -121,6 +155,8 @@ export default class Copter {
 		} else {
 			ctx.drawImage(this.img, this.x, this.y);
 		}
+
+		this.drawSmoke(ctx);
 	}
 
 	drawSmoke(ctx: CanvasRenderingContext2D) {

@@ -1,5 +1,6 @@
 import Copter from "./copter.js";
 import Terrain from "./terrain.js";
+import { now } from "./util.js";
 
 export default class Game {
 	width: number;
@@ -12,6 +13,10 @@ export default class Game {
 	bestLabel: HTMLElement;
 	bestValue: HTMLElement;
 	isOver: boolean;
+	startTime: number;
+	endTime: number;
+	distance: number;
+	best: number;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -26,8 +31,17 @@ export default class Game {
 	init() {
 		this.paused = true;
 		this.isOver = false;
+		this.startTime = undefined;
+		this.endTime = undefined;
+		this.best = this.distance > this.best ? this.distance : this.best || 0;
+		this.distance = 0;
+
 		this.copter.init();
 		this.terrain.init();
+	}
+
+	reset() {
+		if (this.isOver && now() > this.endTime + 500) this.init();
 	}
 
 	resizeGameWindow(canvas: HTMLCanvasElement) {
@@ -45,8 +59,6 @@ export default class Game {
 	}
 
 	update(step: number) {
-		if (this.isOver) return;
-
 		this.terrain.update(step);
 		this.copter.update(step);
 	}
@@ -55,11 +67,10 @@ export default class Game {
 		ctx.fillStyle = "#000000";
 		ctx.fillRect(0, 0, this.width, this.height);
 
-		this.copter.drawSmoke(ctx);
-		this.terrain.draw(ctx);
 		this.copter.draw(ctx);
+		this.terrain.draw(ctx);
 
-		this.distanceValue.innerText = this.copter.distance.toString();
-		this.bestValue.innerText = this.copter.best.toString();
+		this.distanceValue.innerText = this.distance.toString();
+		this.bestValue.innerText = this.best.toString();
 	}
 }

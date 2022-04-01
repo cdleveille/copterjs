@@ -26,29 +26,25 @@ export default class Terrain {
 	}
 
 	update(step: number) {
-		if (this.game.paused) return;
+		if (this.game.paused || this.game.isOver) return;
 
 		this.updateTunnel(step);
 		this.updateBlocks(step);
 	}
 
 	updateTunnel(step: number) {
+		// update position of each tunnel segment, remove if offscreen
 		for (const segment of this.tunnel) {
 			segment.x -= this.game.copter.xv * step;
-		}
-
-		if (this.tunnel.length > 0 && this.tunnel[0].x + this.tunnel[0].length < 0) {
-			this.tunnel.shift();
+			if (segment.x + segment.length < 0) this.tunnel.shift();
 		}
 	}
 
 	updateBlocks(step: number) {
+		// update position of each block, remove if offscreen
 		for (const block of this.blocks) {
 			block.x -= this.game.copter.xv * step;
-		}
-
-		if (this.blocks.length > 0 && this.blocks[0].x + this.blocks[0].width < 0) {
-			this.blocks.shift();
+			if (block.x + block.width < 0) this.blocks.shift();
 		}
 	}
 

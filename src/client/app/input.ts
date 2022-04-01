@@ -9,7 +9,7 @@ export default class InputHandler {
 		canvas.addEventListener("mousedown", (e) => {
 			if (e.button == 0) {
 				if (game.paused) game.paused = false;
-				if (game.isOver) game.init();
+				if (game.isOver) game.reset();
 				game.copter.climbing = true;
 			}
 		});
@@ -23,7 +23,7 @@ export default class InputHandler {
 		document.addEventListener("keydown", (e) => {
 			if (!e.repeat && e.code === "Space") {
 				if (game.paused) game.paused = false;
-				if (game.isOver) game.init();
+				if (game.isOver) game.reset();
 				game.copter.climbing = true;
 			}
 		});
@@ -37,7 +37,7 @@ export default class InputHandler {
 		canvas.addEventListener("touchstart", (e) => {
 			e.preventDefault();
 			if (game.paused) game.paused = false;
-			if (game.isOver) game.init();
+			if (game.isOver) game.reset();
 			game.copter.climbing = true;
 		});
 
