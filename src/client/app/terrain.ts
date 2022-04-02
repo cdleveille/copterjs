@@ -26,7 +26,7 @@ export default class Terrain {
 	}
 
 	update(step: number) {
-		if (this.game.paused || this.game.isOver) return;
+		if (this.game.pausedAtStart || this.game.isOver) return;
 
 		this.updateTunnel(step);
 		this.updateBlocks(step);

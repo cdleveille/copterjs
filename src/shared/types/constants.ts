@@ -8,5 +8,6 @@ export enum Env {
 export enum Routes {
 	root = "/",
 	top10 = "/top10",
-	newScore = "/newscore"
+	newScore = "/newscore",
+	websocketClient = "/websocket-client"
 }

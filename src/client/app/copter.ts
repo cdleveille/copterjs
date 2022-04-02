@@ -69,13 +69,15 @@ export default class Copter {
 
 	crash() {
 		this.game.endTime = now();
+		this.game.distance = Math.floor((this.game.endTime - this.game.startTime) / 30);
 		this.game.isOver = true;
+		this.game.reportScore();
 	}
 
 	update(step: number) {
 		this.updateImg();
 
-		if (this.game.paused) return;
+		if (this.game.pausedAtStart) return;
 
 		this.updateSmoke(step);
 
@@ -125,7 +127,7 @@ export default class Copter {
 	}
 
 	updateSmoke(step: number) {
-		if (this.game.paused) return;
+		if (this.game.pausedAtStart) return;
 
 		// add new smoke puff
 		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40)) {
@@ -146,7 +148,7 @@ export default class Copter {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
-		if (this.climbing && !this.game.paused && !this.game.isOver) {
+		if (this.climbing && !this.game.pausedAtStart && !this.game.isOver) {
 			ctx.save();
 			ctx.translate(this.x, this.y);
 			ctx.rotate(-5 * Math.PI / 180);

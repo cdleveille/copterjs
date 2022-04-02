@@ -11,6 +11,8 @@ import router from "../controllers/index";
 import Config from "../helpers/config";
 import { Database } from "./db";
 import { Routes } from "../../shared/types/constants";
+import { IScore, ISocket } from "../../shared/types/abstract";
+import { validateScore, validateScoreSkipMsg } from "../helpers/score";
 
 export default class App {
 	private static instance: Express;
@@ -56,7 +58,23 @@ export default class App {
 		await Database.Connect();
 		await App.setup();
 
-		App.instance.listen(Config.PORT);
-		log.info(`Server started - listening on http://${Config.HOST}:${Config.PORT}`);
+		const manager = Database.Manager.fork();
+
+		const http = require("http").Server(App.instance);
+		const io = require("socket.io")(http);
+
+		io.on("connection", (socket: ISocket) => {
+			socket.on("validate_score", async (score: IScore) => {
+				await validateScore(manager, score, socket);
+			});
+
+			socket.on("validate_score_skip_msg", async (score: IScore) => {
+				await validateScoreSkipMsg(manager, score, socket);
+			});
+		});
+
+		http.listen(Config.PORT, () => {
+			log.info(`Server started - listening on http://${Config.HOST}:${Config.PORT}`);
+		});
 	}
 }

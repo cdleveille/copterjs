@@ -23,7 +23,15 @@
 			BEST:
 			<span id="best-value">0</span>
 		</div>
+		<div id="initials-section">
+			<span id="initials-label">NEW HIGH SCORE!</span>
+			<form id="initials-form" spellcheck="false">
+				<input id="initials-input" name="initialsBox" type="text" placeholder="---" />
+			</form>
+		</div>
 		<canvas id="game-screen" width="1600" height="900"></canvas>
+		<script src="/websocket-client" type="module"></script>
+		<script src="app/socket.js" type="module" defer></script>
 		<script src="app/index.js" type="module" defer></script>
 	</body>
 </html>

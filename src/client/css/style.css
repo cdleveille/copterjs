@@ -13,6 +13,13 @@ html {
 	background-color: #333333;
 }
 
+@font-face {
+	font-family: "digital-7";
+	font-style: "normal";
+	font-weight: 800;
+	src: local("digital-7"), url("../font/digital-7 (mono).ttf") format("truetype");
+}
+
 #game-screen {
 	border: 2px solid black;
 	position: absolute;
@@ -28,7 +35,7 @@ html {
 #best-label {
 	z-index: 1;
 	position: absolute;
-	font-size: 3.5rem;
+	font-size: 3.5vw;
 	background: transparent;
 	font-family: "digital-7";
 	color: #000000;
@@ -39,9 +46,51 @@ html {
 	background: transparent;
 }
 
-@font-face {
+#initials-section {
+	z-index: 1;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+	background: transparent;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
 	font-family: "digital-7";
-	font-style: "normal";
-	font-weight: 800;
-	src: local("digital-7"), url("../font/digital-7 (mono).ttf") format("truetype");
+	font-size: 3.5vw;
+	color: #33ccff;
+	display: none;
+}
+
+#initials-label {
+	background: transparent;
+}
+
+#initials-form {
+	margin: 4px;
+	margin-top: 1rem;
+	background: transparent;
+}
+
+#initials-input {
+	font-family: "digital-7";
+	font-size: 10vw;
+	color: #33ccff;
+	background: transparent;
+	width: 13.7vw;
+	border: 0.25vw solid #33ccff;
+	outline: none;
+	caret-color: #33ccff;
+}
+
+#initials-input:focus {
+	outline: none;
+	caret-color: #33ccff;
+}
+
+::placeholder {
+	color: #33ccff;
+	opacity: 0.25;
 }

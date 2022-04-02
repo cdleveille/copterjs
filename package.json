@@ -23,7 +23,7 @@
     "build-client-min": "yarn build-client && yarn min",
     "dev": "concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev-server\" \"yarn dev-client\"",
     "dev-server": "ts-node-dev --respawn --transpile-only --project src/server/tsconfig.json src/server/index.ts",
-    "dev-client": "nodemon --watch src/client --exec \"yarn build-client\"",
+    "dev-client": "nodemon --watch src/client --watch src/shared --exec \"yarn build-client\"",
     "start": "node ."
   },
   "dependencies": {
@@ -42,7 +42,8 @@
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
     "@mikro-orm/cli": "^5.1.1",
