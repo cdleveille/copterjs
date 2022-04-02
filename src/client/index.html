@@ -15,6 +15,11 @@
 	</head>
 	<body>
 		<noscript>Sorry, your browser does not support JavaScript! :(</noscript>
+		<div id="pilot-label">
+			PILOT:
+			<span id="pilot-value">?</span>
+		</div>
+		<div id="high-scores-label">HIGH SCORES</div>
 		<div id="distance-label">
 			DISTANCE:
 			<span id="distance-value">0</span>
@@ -24,11 +29,16 @@
 			<span id="best-value">0</span>
 		</div>
 		<div id="initials-section">
-			<span id="initials-label">NEW HIGH SCORE!</span>
+			<span id="initials-label"></span>
 			<form id="initials-form" spellcheck="false">
-				<input id="initials-input" name="initialsBox" type="text" placeholder="---" />
+				<div id="initials-input-caret-box">
+					<div id="initials-input-caret"></div>
+					<input id="initials-input" name="initials-input" type="text" maxlength="3" />
+				</div>
 			</form>
 		</div>
+
+		<ol id="high-scores"></ol>
 		<canvas id="game-screen" width="1600" height="900"></canvas>
 		<script src="/websocket-client" type="module"></script>
 		<script src="app/socket.js" type="module" defer></script>

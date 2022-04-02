@@ -12,7 +12,7 @@ import Config from "../helpers/config";
 import { Database } from "./db";
 import { Routes } from "../../shared/types/constants";
 import { IScore, ISocket } from "../../shared/types/abstract";
-import { validateScore, validateScoreSkipMsg } from "../helpers/score";
+import { validateScore, validateScoreSkipMsg, sendHighScoresToClient } from "../helpers/score";
 
 export default class App {
 	private static instance: Express;
@@ -63,13 +63,17 @@ export default class App {
 		const http = require("http").Server(App.instance);
 		const io = require("socket.io")(http);
 
-		io.on("connection", (socket: ISocket) => {
+		io.on("connect", (socket: ISocket) => {
 			socket.on("validate_score", async (score: IScore) => {
 				await validateScore(manager, score, socket);
 			});
 
 			socket.on("validate_score_skip_msg", async (score: IScore) => {
 				await validateScoreSkipMsg(manager, score, socket);
+			});
+
+			socket.on("high_scores_request", async () => {
+				await sendHighScoresToClient(manager, socket);
 			});
 		});
 

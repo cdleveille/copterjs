@@ -70,6 +70,7 @@ export default class Copter {
 	crash() {
 		this.game.endTime = now();
 		this.game.distance = Math.floor((this.game.endTime - this.game.startTime) / 30);
+		this.game.best = this.game.distance > this.game.best ? this.game.distance : this.game.best;
 		this.game.isOver = true;
 		this.game.reportScore();
 	}

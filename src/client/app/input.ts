@@ -43,8 +43,9 @@ export default class InputHandler {
 	press(game: Game) {
 		if (game.locked) return;
 		if (game.pausedAtStart) game.pausedAtStart = false;
-		if (game.isOver) game.reset();
+		if (game.isOver) return game.reset();
 		game.copter.climbing = true;
+		game.highScores.style.display = "none";
 	}
 
 	release(game: Game) {
