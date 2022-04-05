@@ -161,7 +161,7 @@ export default class Copter {
 		if (this.game.pausedAtStart) return;
 
 		// add new smoke puff
-		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40 * this.game.scale)) {
+		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 45 * this.game.scale)) {
 			this.smoke.push({ x: this.x - (23 * this.game.scale), y: this.y + (6 * this.game.scale) });
 		}
 

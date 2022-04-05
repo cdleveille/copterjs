@@ -2,11 +2,17 @@ import Game from "./game.js";
 
 export default class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
-		canvas.oncontextmenu = (e) => {
+		document.oncontextmenu = (e) => {
 			e.preventDefault();
 		};
 
 		canvas.addEventListener("mousedown", (e) => {
+			if (e.button == 0) {
+				this.press(game);
+			}
+		});
+
+		document.getElementById("backdrop").addEventListener("mousedown", (e) => {
 			if (e.button == 0) {
 				this.press(game);
 			}
@@ -18,14 +24,30 @@ export default class InputHandler {
 			}
 		});
 
+		document.getElementById("backdrop").addEventListener("mouseup", (e) => {
+			if (e.button == 0) {
+				this.release(game);
+			}
+		});
+
 		document.addEventListener("keydown", (e) => {
-			if (!e.repeat && e.code === "Space") {
-				this.press(game);
+			if (e.repeat) return;
+			switch (e.code) {
+				case "Space":
+					e.preventDefault();
+					return this.press(game);
+				case "Tab":
+					e.preventDefault();
+					return game.highScoresLabelClickHandler();
+				case "ShiftLeft":
+					e.preventDefault();
+					return game.pilotLabelClickHandler();
 			}
 		});
 
 		document.addEventListener("keyup", (e) => {
 			if (e.code === "Space") {
+				e.preventDefault();
 				this.release(game);
 			}
 		});

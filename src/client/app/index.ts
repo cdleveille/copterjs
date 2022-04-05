@@ -3,7 +3,7 @@ import { now } from "./util.js";
 import InputHandler from "./input.js";
 import WindowHandler from "./window.js";
 
-const canvas = document.getElementById("game-screen") as HTMLCanvasElement;
+const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
 const game = new Game();

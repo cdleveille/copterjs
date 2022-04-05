@@ -37,10 +37,11 @@
 				</div>
 			</form>
 		</div>
-
 		<ol id="high-scores"></ol>
-		<canvas id="game-screen" width="1600" height="900"></canvas>
-		<script src="/websocket-client" type="module"></script>
+		<div id="backdrop"></div>
+		<canvas id="game-canvas"></canvas>
+		<canvas id="ghost-canvas"></canvas>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="app/socket.js" type="module" defer></script>
 		<script src="app/index.js" type="module" defer></script>
 	</body>

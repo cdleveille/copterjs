@@ -187,13 +187,16 @@ export default class Game {
 		if (this.isOver && now() > this.endTime + 500) this.init();
 	}
 
-	resizeGameWindow(canvas: HTMLCanvasElement) {
-		this.width = canvas.width;
-		this.height = canvas.height;
+	resizeGameWindow(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
+		this.width = ghostCanvas.width;
+		this.height = ghostCanvas.height;
+
+		const transformX = (window.innerWidth - this.width) / 2;
+		const transformY = (window.innerHeight - this.height) / 2;
+
+		canvas.style.transform = `translate(${transformX}px, ${transformY}px)`;
 
 		this.scale = this.width / 1600;
-
-		const canvasDOMRect: DOMRect = canvas.getBoundingClientRect();
 
 		const fontSizeScaled = `${60 * this.scale}px`;
 		const intialsInputFontSizeScaled = `${166.153846 * this.scale}px`;
@@ -204,8 +207,10 @@ export default class Game {
 		const offsetHorizontalPct = 0.07;
 		const offsetVerticalPct = 0.013;
 
-		const offsetHorizontal = `${canvasDOMRect.x + (this.width * offsetHorizontalPct)}px`;
-		const offsetVertical = `${canvasDOMRect.y + (this.height * offsetVerticalPct)}px`;
+		const canvasDOMRect: DOMRect = ghostCanvas.getBoundingClientRect();
+
+		const offsetHorizontal = `${canvasDOMRect.x + (this.width * offsetHorizontalPct) + transformX}px`;
+		const offsetVertical = `${canvasDOMRect.y + (this.height * offsetVerticalPct) + transformY}px`;
 
 		this.pilotLabel.style.fontSize = fontSizeScaled;
 		this.pilotLabel.style.left = offsetHorizontal;

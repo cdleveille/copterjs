@@ -43,7 +43,7 @@ export default class App {
 		App.instance.use(compression());
 		App.instance.use(cors({
 			origin: "*",
-			methods: ["GET, POST"]
+			methods: ["GET"]
 		}));
 
 		App.instance.use(Routes.root, router);

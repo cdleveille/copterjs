@@ -4,14 +4,19 @@ import { IResolution } from "./types/abstract.js";
 export default class WindowHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
 		const gameWindowChangeHandler = () => {
-			const newRes = resizeCanvas();
-			canvas.width = newRes.width;
-			canvas.height = newRes.height;
-			game.resizeGameWindow(canvas);
+			const newRes = getNewGameResolution();
+			canvas.width = Math.max(screen.width, window.innerWidth);
+			canvas.height = Math.max(screen.height, window.innerHeight);
+
+			const ghostCanvas = document.getElementById("ghost-canvas") as HTMLCanvasElement;
+			ghostCanvas.width = newRes.width;
+			ghostCanvas.height = newRes.height;
+
+			game.resizeGameWindow(canvas, ghostCanvas);
 		};
 
 		// use max available 16:9 area in window
-		const resizeCanvas = (): IResolution => {
+		const getNewGameResolution = (): IResolution => {
 			const heightUsingMaxWidth = Math.floor(window.innerWidth * (9 / 16));
 			if (heightUsingMaxWidth <= window.innerHeight)
 				return { width: window.innerWidth, height: heightUsingMaxWidth };
