@@ -3,6 +3,7 @@ import Terrain from "./terrain.js";
 import { now } from "./util.js";
 import socket from "./socket.js";
 import { IScore } from "../../../build/shared/types/abstract";
+import { Color } from "./types/constant.js";
 
 export default class Game {
 	width: number;
@@ -31,6 +32,7 @@ export default class Game {
 	best: number;
 	player: string;
 	initialsRequested: boolean;
+	scale: number;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -48,15 +50,14 @@ export default class Game {
 		this.initialsInputCaret = document.getElementById("initials-input-caret") as HTMLDivElement;
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLOListElement;
-		this.best = 0;
 		this.player = window.localStorage.getItem("pilot");
+		this.best = 0;
 
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		this.initSocket();
 		this.initIntialsForm();
-		this.init();
 	}
 
 	init() {
@@ -73,11 +74,11 @@ export default class Game {
 	}
 
 	initSocket() {
-		socket.on("request_initials", () => this.getPlayerInitials(true));
-		socket.on("show_new_high_score_msg", () => this.showNewHighScoreMsg());
-		socket.on("high_scores_updated", (highScores) => this.updateHighScores(highScores));
+		socket.on("request-initials", () => this.getPlayerInitials(true));
+		socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
+		socket.on("high-scores-updated", (highScores) => this.updateHighScores(highScores));
 
-		socket.emit("high_scores_request");
+		socket.emit("high-scores-request");
 	}
 
 	initIntialsForm() {
@@ -126,12 +127,13 @@ export default class Game {
 
 	reportScore(justSubmittedInitials?: boolean) {
 		const score: IScore = { player: this.player, score: this.distance };
-		if (justSubmittedInitials) return socket.emit("validate_score_skip_msg", score);
-		socket.emit("validate_score", score);
+		if (justSubmittedInitials) return socket.emit("validate-score-skip-msg", score);
+		socket.emit("validate-score", score);
 	}
 
 	getPlayerInitials(onNewHighScore?: boolean) {
 		this.locked = true;
+		this.highScores.style.display = "none";
 
 		this.initialsInput.value = "";
 		this.initialsLabel.innerText = onNewHighScore ? "NEW HIGH SCORE!\nENTER YOUR INITIALS:" : "ENTER YOUR INITIALS:";
@@ -166,6 +168,7 @@ export default class Game {
 		this.initialsSection.style.display = "block";
 		this.initialsLabel.style.display = "block";
 		this.initialsForm.style.display = "none";
+		this.highScores.style.display = "none";
 	}
 
 	pilotLabelClickHandler() {
@@ -175,6 +178,7 @@ export default class Game {
 	}
 
 	highScoresLabelClickHandler() {
+		if (!this.initialsRequested) this.hideInitialsSection();
 		if (this.locked) return;
 		this.highScores.style.display = this.highScores.style.display === "block" ? "none" : "block";
 	}
@@ -187,20 +191,49 @@ export default class Game {
 		this.width = canvas.width;
 		this.height = canvas.height;
 
-		this.copter.x = this.width / 4;
-		this.copter.y = this.height / 2 - this.copter.img.height / 2;
+		this.scale = this.width / 1600;
 
-		this.distanceLabel.style.left = `${((window.innerWidth - canvas.width) / 2) + 100}px`;
-		this.distanceLabel.style.bottom = `${((window.innerHeight - canvas.height) / 2) + 10}px`;
+		const canvasDOMRect: DOMRect = canvas.getBoundingClientRect();
 
-		this.bestLabel.style.right = `${((window.innerWidth - canvas.width) / 2) + 100}px`;
-		this.bestLabel.style.bottom = `${((window.innerHeight - canvas.height) / 2) + 10}px`;
+		const fontSizeScaled = `${60 * this.scale}px`;
+		const intialsInputFontSizeScaled = `${166.153846 * this.scale}px`;
+		const initialsInputWidth = `${227 * this.scale}px`;
+		const initialsInputBorderWidth = `${4 * this.scale}px`;
+		const initialsFormMarginTop = `${16 * this.scale}px`;
 
-		this.pilotLabel.style.left = `${((window.innerWidth - canvas.width) / 2) + 100}px`;
-		this.pilotLabel.style.top = `${((window.innerHeight - canvas.height) / 2) + 10}px`;
+		const offsetHorizontalPct = 0.07;
+		const offsetVerticalPct = 0.013;
 
-		this.highScoresLabel.style.right = `${((window.innerWidth - canvas.width) / 2) + 100}px`;
-		this.highScoresLabel.style.top = `${((window.innerHeight - canvas.height) / 2) + 10}px`;
+		const offsetHorizontal = `${canvasDOMRect.x + (this.width * offsetHorizontalPct)}px`;
+		const offsetVertical = `${canvasDOMRect.y + (this.height * offsetVerticalPct)}px`;
+
+		this.pilotLabel.style.fontSize = fontSizeScaled;
+		this.pilotLabel.style.left = offsetHorizontal;
+		this.pilotLabel.style.top = offsetVertical;
+
+		this.highScoresLabel.style.fontSize = fontSizeScaled;
+		this.highScoresLabel.style.right = offsetHorizontal;
+		this.highScoresLabel.style.top = offsetVertical;
+
+		this.distanceLabel.style.fontSize = fontSizeScaled;
+		this.distanceLabel.style.left = offsetHorizontal;
+		this.distanceLabel.style.bottom = offsetVertical;
+
+		this.bestLabel.style.fontSize = fontSizeScaled;
+		this.bestLabel.style.right = offsetHorizontal;
+		this.bestLabel.style.bottom = offsetVertical;
+
+		this.highScores.style.fontSize = fontSizeScaled;
+		this.initialsSection.style.fontSize = fontSizeScaled;
+		this.initialsInput.style.fontSize = intialsInputFontSizeScaled;
+
+		this.initialsInput.style.width = initialsInputWidth;
+		this.initialsInput.style.borderWidth = initialsInputBorderWidth;
+
+		this.initialsForm.style.marginTop = initialsFormMarginTop;
+
+		this.copter.resize();
+		this.terrain.resize();
 	}
 
 	update(step: number) {
@@ -219,7 +252,7 @@ export default class Game {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
-		ctx.fillStyle = "#000000";
+		ctx.fillStyle = Color.black;
 		ctx.fillRect(0, 0, this.width, this.height);
 
 		this.copter.draw(ctx);

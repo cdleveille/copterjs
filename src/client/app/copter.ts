@@ -1,10 +1,12 @@
 import Game from "./game.js";
-import { ICoord, IRect, IHitboxOffset, loadImage, areRectanglesColliding, now } from "./util.js";
+import { loadImage, areRectanglesColliding, now } from "./util.js";
+import { ICoord, IRect, IHitboxOffset } from "./types/abstract";
 
 export default class Copter {
 	game: Game;
 	x: number;
 	y: number;
+	yPct: number;
 	width: number;
 	height: number;
 	xv: number;
@@ -22,19 +24,15 @@ export default class Copter {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.g = 3500;
-		this.power = 6500;
-		this.hitBoxOffset = { left: 10, right: 10, top: 5, bottom: 5 };
+		this.smoke = [];
 		this.loadAssets();
 	}
 
 	init() {
 		this.x = this.game.width / 4;
-		this.y = this.game.height / 2;
-		this.xv = 700;
+		this.y = this.game.height / 2 - this.height / 2;
+
 		this.yv = 0;
-		this.width = 124;
-		this.height = 57;
 		this.climbing = false;
 		this.smoke = [];
 		this.img = this.flyImgs[0];
@@ -63,7 +61,12 @@ export default class Copter {
 			loadImage("img/copter17.png"),
 			loadImage("img/copter18.png"),
 			loadImage("img/copter19.png"),
-			loadImage("img/copter20.png")
+			loadImage("img/copter20.png"),
+			loadImage("img/copter21.png"),
+			loadImage("img/copter22.png"),
+			loadImage("img/copter23.png"),
+			loadImage("img/copter24.png"),
+			loadImage("img/copter25.png")
 		];
 	}
 
@@ -75,8 +78,25 @@ export default class Copter {
 		this.game.reportScore();
 	}
 
+	resize() {
+		// constant
+		this.g = 3500 * this.game.scale;
+		this.power = 6500 * this.game.scale;
+		this.xv = 700 * this.game.scale;
+		this.width = 124 * this.game.scale;
+		this.height = 57 * this.game.scale;
+		this.hitBoxOffset = { left: 10 * this.game.scale, right: 10 * this.game.scale, top: 5 * this.game.scale, bottom: 5 * this.game.scale };
+
+		// variable
+		this.x = this.game.width / 4;
+		this.y = this.yPct * this.game.height;
+		this.yv = this.yv * this.game.scale;
+	}
+
 	update(step: number) {
 		this.updateImg();
+
+		this.yPct = this.y / this.game.height;
 
 		if (this.game.pausedAtStart) return;
 
@@ -101,13 +121,23 @@ export default class Copter {
 		};
 
 		// enforce maximum vertical speeds
-		if (this.yv < -500) this.yv = -500;
-		if (this.yv > 650) this.yv = 650;
+		if (this.yv < -500 * this.game.scale) this.yv = -500 * this.game.scale;
+		if (this.yv > 650 * this.game.scale) this.yv = 650 * this.game.scale;
 
 		// check for collision with tunnel
 		for (const segment of this.game.terrain.tunnel) {
-			const segmentTopRect: IRect = { x: segment.x, y: 0, width: segment.length, height: segment.topDepth };
-			const segmentBotRect: IRect = { x: segment.x, y: this.game.height - segment.botDepth, width: segment.length, height: segment.botDepth };
+			const segmentTopRect: IRect = {
+				x: segment.x,
+				y: 0,
+				width: (segment.lengthPct * this.game.width),
+				height: segment.topDepthPct * this.game.height
+			};
+			const segmentBotRect: IRect = {
+				x: segment.x,
+				y: this.game.height - (segment.botDepthPct * this.game.height),
+				width: (segment.lengthPct * this.game.width),
+				height: segment.botDepthPct * this.game.height
+			};
 
 			if (areRectanglesColliding(this.hitbox, segmentTopRect) || areRectanglesColliding(this.hitbox, segmentBotRect)) {
 				this.crash();
@@ -131,8 +161,8 @@ export default class Copter {
 		if (this.game.pausedAtStart) return;
 
 		// add new smoke puff
-		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40)) {
-			this.smoke.push({ x: this.x - this.smokeImg.width + 4, y: this.y + 6 });
+		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 40 * this.game.scale)) {
+			this.smoke.push({ x: this.x - (23 * this.game.scale), y: this.y + (6 * this.game.scale) });
 		}
 
 		if (this.smoke.length < 1) return;
@@ -153,10 +183,10 @@ export default class Copter {
 			ctx.save();
 			ctx.translate(this.x, this.y);
 			ctx.rotate(-5 * Math.PI / 180);
-			ctx.drawImage(this.img, 0, 0);
+			ctx.drawImage(this.img, 0, 0, 124 * this.game.scale, 57 * this.game.scale);
 			ctx.restore();
 		} else {
-			ctx.drawImage(this.img, this.x, this.y);
+			ctx.drawImage(this.img, this.x, this.y, 124 * this.game.scale, 57 * this.game.scale);
 		}
 
 		this.drawSmoke(ctx);
@@ -164,7 +194,7 @@ export default class Copter {
 
 	drawSmoke(ctx: CanvasRenderingContext2D) {
 		for (const s of this.smoke) {
-			ctx.drawImage(this.smokeImg, s.x, s.y);
+			ctx.drawImage(this.smokeImg, s.x, s.y, 19 * this.game.scale, 23 * this.game.scale);
 		}
 	}
 }

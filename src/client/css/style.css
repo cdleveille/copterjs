@@ -21,7 +21,6 @@ html {
 }
 
 #game-screen {
-	border: 2px solid black;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -37,7 +36,7 @@ html {
 #high-scores-label {
 	z-index: 1;
 	position: absolute;
-	font-size: 6.5vmin;
+	font-size: 60px;
 	background: transparent;
 	font-family: "digital-7";
 	color: #000000;
@@ -67,7 +66,7 @@ html {
 	justify-content: center;
 	align-items: center;
 	font-family: "digital-7";
-	font-size: 6.5vmin;
+	font-size: 60px;
 	color: #33ccff;
 	display: none;
 	pointer-events: none;
@@ -78,18 +77,16 @@ html {
 }
 
 #initials-form {
-	margin: 4px;
-	margin-top: 1rem;
 	background: transparent;
 }
 
 #initials-input {
 	font-family: "digital-7";
-	font-size: 18vmin;
+	font-size: 166.1538px;
 	color: #33ccff;
 	background: transparent;
-	width: 24.55vmin;
-	border: 0.45vmin solid #33ccff;
+	width: 228px;
+	border: 4px solid #33ccff;
 	outline: none;
 	pointer-events: all;
 }
@@ -115,7 +112,6 @@ html {
 	position: absolute;
 	z-index: 2;
 	background-color: #33ccff;
-	height: 100%;
 	animation: blink 1s infinite;
 	pointer-events: none;
 
@@ -134,10 +130,11 @@ html {
 	-webkit-transform: translateX(-50%) translateY(-50%);
 	transform: translateX(-50%) translateY(-50%);
 	font-family: "digital-7";
-	font-size: 6.5vmin;
+	font-size: 3.5rem;
 	color: #33ccff;
 	background: transparent;
 	display: none;
+	pointer-events: none;
 }
 
 @keyframes blink {

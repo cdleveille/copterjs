@@ -64,15 +64,15 @@ export default class App {
 		const io = require("socket.io")(http);
 
 		io.on("connect", (socket: ISocket) => {
-			socket.on("validate_score", async (score: IScore) => {
+			socket.on("validate-score", async (score: IScore) => {
 				await validateScore(manager, score, socket);
 			});
 
-			socket.on("validate_score_skip_msg", async (score: IScore) => {
+			socket.on("validate-score-skip-msg", async (score: IScore) => {
 				await validateScoreSkipMsg(manager, score, socket);
 			});
 
-			socket.on("high_scores_request", async () => {
+			socket.on("high-scores-request", async () => {
 				await sendHighScoresToClient(manager, socket);
 			});
 		});

@@ -3,14 +3,15 @@ import { now } from "./util.js";
 import InputHandler from "./input.js";
 import WindowHandler from "./window.js";
 
-const canvas = <HTMLCanvasElement>document.getElementById("game-screen");
+const canvas = document.getElementById("game-screen") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
 const game = new Game();
 new InputHandler(canvas, game);
 new WindowHandler(canvas, game);
+game.init();
 
-let dt, current, last = now();
+let dt: number, current: number, last = now();
 const step = 1 / 500;
 
 const frame = () => {

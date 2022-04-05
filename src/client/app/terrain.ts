@@ -1,6 +1,6 @@
 import Game from "./game.js";
-import { ITunnel } from "./util.js";
-import { IRect } from "./util";
+import { Color } from "./types/constant.js";
+import { ITunnel, IRect, } from "./types/abstract";
 
 export default class Terrain {
 	game: Game;
@@ -9,35 +9,71 @@ export default class Terrain {
 
 	constructor(game: Game) {
 		this.game = game;
+		this.tunnel = [];
+		this.blocks = [];
 	}
 
 	init() {
 		this.tunnel = [];
-		this.tunnel.push({ x: 0, length: 2000, topDepth: 80, botDepth: 80 });
-		this.tunnel.push({ x: 1999, length: 500, topDepth: 100, botDepth: 100 });
-		this.tunnel.push({ x: 2498, length: 500, topDepth: 120, botDepth: 120 });
-		this.tunnel.push({ x: 2997, length: 500, topDepth: 140, botDepth: 140 });
-		this.tunnel.push({ x: 3496, length: 500, topDepth: 120, botDepth: 120 });
-		this.tunnel.push({ x: 3995, length: 500, topDepth: 100, botDepth: 100 });
-		this.tunnel.push({ x: 4494, length: 999999999999999, topDepth: 80, botDepth: 80 });
-
 		this.blocks = [];
-		this.blocks.push({ x: 1500, y: 300, width: 50, height: 150 });
+	}
+
+	resize() {
+		this.resizeTunnel();
+		this.resizeBlocks();
+	}
+
+	resizeTunnel() {
+		for (let segment of this.tunnel) {
+			segment.x = segment.xPct * this.game.width;
+		}
+	}
+
+	resizeBlocks() {
+		for (let block of this.blocks) {
+			block.x = block.x * this.game.scale;
+			block.y = block.y * this.game.scale;
+			block.width = block.width * this.game.scale;
+			block.height = block.height * this.game.scale;
+		}
 	}
 
 	update(step: number) {
-		if (this.game.pausedAtStart || this.game.isOver) return;
+		if (this.game.isOver) return;
 
 		this.updateTunnel(step);
 		this.updateBlocks(step);
 	}
 
 	updateTunnel(step: number) {
+		this.maintainTunnel();
+
 		// update position of each tunnel segment, remove if offscreen
 		for (const segment of this.tunnel) {
-			segment.x -= this.game.copter.xv * step;
-			if (segment.x + segment.length < 0) this.tunnel.shift();
+			if (!this.game.pausedAtStart) segment.x -= this.game.copter.xv * step;
+			segment.xPct = segment.x / this.game.width;
+			if (segment.x + (segment.lengthPct * this.game.width) < 0) this.tunnel.shift();
 		}
+	}
+
+	maintainTunnel() {
+		if (this.game.pausedAtStart && this.tunnel.length === 0) {
+			this.createInitialTunnel();
+		}
+	}
+
+	createInitialTunnel() {
+		this.tunnel.push(this.newTunnelSegment(0, 100, 9, 9));
+	}
+
+	newTunnelSegment(x: number, lengthPct: number, topDepthPct: number, botDepthPct: number): ITunnel {
+		return {
+			x: x,
+			xPct: x / this.game.width,
+			lengthPct: lengthPct / 100,
+			topDepthPct: topDepthPct / 100,
+			botDepthPct: botDepthPct / 100
+		} as ITunnel;
 	}
 
 	updateBlocks(step: number) {
@@ -49,12 +85,12 @@ export default class Terrain {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
-		ctx.fillStyle = "#65fc65";
+		ctx.fillStyle = Color.green;
 
 		// draw tunnel
 		for (const segment of this.tunnel) {
-			ctx.fillRect(segment.x, 0, segment.length, segment.topDepth);
-			ctx.fillRect(segment.x, this.game.height - segment.botDepth, segment.length, segment.botDepth);
+			ctx.fillRect(segment.x, 0, (segment.lengthPct * this.game.width), segment.topDepthPct * this.game.height);
+			ctx.fillRect(segment.x, this.game.height - (segment.botDepthPct * this.game.height), (segment.lengthPct * this.game.width), segment.botDepthPct * this.game.height);
 		}
 
 		// draw blocks

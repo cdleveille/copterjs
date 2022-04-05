@@ -8,9 +8,9 @@ export const validateScore = async (manager: EntityManager, score: IScore, socke
 	const inTopTen = await isScoreInTopTen(manager, score.score);
 	if (!inTopTen) return;
 
-	if (!score.player) return socket.emit("request_initials");
+	if (!score.player) return socket.emit("request-initials");
 
-	if (!skipMsg) socket.emit("show_new_high_score_msg");
+	if (!skipMsg) socket.emit("show-new-high-score-msg");
 
 	await insertScore(manager, score, socket);
 };
@@ -32,10 +32,16 @@ const isScoreInTopTen = async (manager: EntityManager, score: number): Promise<b
 
 const insertScore = async (manager: EntityManager, score: IScore, socket: ISocket) => {
 	await ScoreRepository.InsertOne(manager, score);
-	await sendHighScoresToClient(manager, socket);
+	await broadcastHighScoresToAllClients(manager, socket);
 };
 
 export const sendHighScoresToClient = async (manager: EntityManager, socket: ISocket) => {
 	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
-	socket.emit("high_scores_updated", highScores);
+	socket.emit("high-scores-updated", highScores);
+};
+
+const broadcastHighScoresToAllClients = async (manager: EntityManager, socket: ISocket) => {
+	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
+	socket.broadcast.emit("high-scores-updated", highScores);
+	socket.emit("high-scores-updated", highScores);
 };
