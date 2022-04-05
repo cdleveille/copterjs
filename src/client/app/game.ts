@@ -25,6 +25,7 @@ export default class Game {
 	initialsInput: HTMLInputElement;
 	initialsInputCaret: HTMLDivElement;
 	highScores: HTMLOListElement;
+	overlay: HTMLDivElement;
 	isOver: boolean;
 	startTime: number;
 	endTime: number;
@@ -50,6 +51,7 @@ export default class Game {
 		this.initialsInputCaret = document.getElementById("initials-input-caret") as HTMLDivElement;
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLOListElement;
+		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("pilot");
 		this.best = 0;
 
@@ -187,7 +189,7 @@ export default class Game {
 		if (this.isOver && now() > this.endTime + 500) this.init();
 	}
 
-	resizeGameWindow(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
+	resize(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
 		this.width = ghostCanvas.width;
 		this.height = ghostCanvas.height;
 
@@ -195,6 +197,9 @@ export default class Game {
 		const transformY = (window.innerHeight - this.height) / 2;
 
 		canvas.style.transform = `translate(${transformX}px, ${transformY}px)`;
+
+		this.overlay.style.left = `${transformX + this.width}px`;
+		this.overlay.style.width = `${transformX}px`;
 
 		this.scale = this.width / 1600;
 

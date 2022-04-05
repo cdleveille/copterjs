@@ -28,7 +28,7 @@
 			BEST:
 			<span id="best-value">0</span>
 		</div>
-		<div id="initials-section">
+		<div id="initials-section" class="centered">
 			<span id="initials-label"></span>
 			<form id="initials-form" spellcheck="false">
 				<div id="initials-input-caret-box">
@@ -37,12 +37,12 @@
 				</div>
 			</form>
 		</div>
-		<ol id="high-scores"></ol>
+		<ol id="high-scores" class="centered"></ol>
 		<div id="backdrop"></div>
+		<div id="overlay"></div>
 		<canvas id="game-canvas"></canvas>
-		<canvas id="ghost-canvas"></canvas>
+		<canvas id="ghost-canvas" class="centered"></canvas>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="app/socket.js" type="module" defer></script>
-		<script src="app/index.js" type="module" defer></script>
+		<script src="app/index.js" type="module"></script>
 	</body>
 </html>

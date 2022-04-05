@@ -3,15 +3,12 @@ export interface ICoord {
 	y: number
 }
 
-export interface IRect extends ICoord {
+export interface IArea {
 	width: number,
 	height: number
 }
 
-export interface IResolution {
-	width: number,
-	height: number
-}
+export interface IRect extends ICoord, IArea { }
 
 export interface ITunnel {
 	x: number,

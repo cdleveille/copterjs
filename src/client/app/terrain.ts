@@ -63,7 +63,7 @@ export default class Terrain {
 	}
 
 	createInitialTunnel() {
-		this.tunnel.push(this.newTunnelSegment(0, 100, 9, 9));
+		this.tunnel.push(this.newTunnelSegment(0, 999999999999999, 9, 9));
 	}
 
 	newTunnelSegment(x: number, lengthPct: number, topDepthPct: number, botDepthPct: number): ITunnel {

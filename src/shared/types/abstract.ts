@@ -8,10 +8,9 @@ export interface IResponse {
 	status: number,
 	data: any
 }
-export interface ISocket {
+export interface ISocket extends ISocketBroadcast {
 	connect: (params: ISocketParams) => ISocket,
 	on: (listener: string, callback: (...params: any) => any) => void,
-	emit: (listener: string, data?: any) => void,
 	broadcast: ISocketBroadcast
 }
 
