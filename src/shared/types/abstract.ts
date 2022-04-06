@@ -10,15 +10,15 @@ export interface IResponse {
 }
 export interface ISocket extends ISocketBroadcast {
 	connect: (params: ISocketParams) => ISocket;
-	on: (listener: string, callback: (...params: any) => any) => void;
+	on: (listener: string, callback: (...params: any[]) => any) => void;
 	broadcast: ISocketBroadcast;
+}
+
+interface ISocketBroadcast {
+	emit: (listener: string, data?: any) => void;
 }
 
 interface ISocketParams {
 	reconnectionDelay: number;
 	reconnectionAttempts: number;
-}
-
-interface ISocketBroadcast {
-	emit: (listener: string, data?: any) => void;
 }

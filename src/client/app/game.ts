@@ -1,4 +1,4 @@
-import { IScore } from "../../../build/shared/types/abstract";
+import { IScore } from "../../../build/shared/types/abstract.js";
 import Copter from "./copter.js";
 import socket from "./socket.js";
 import Terrain from "./terrain.js";

@@ -9,8 +9,6 @@ export default class Terrain {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.tunnel = [];
-		this.blocks = [];
 	}
 
 	init() {
@@ -24,12 +22,14 @@ export default class Terrain {
 	}
 
 	resizeTunnel() {
+		if (!this.tunnel) return;
 		for (const segment of this.tunnel) {
 			segment.x = segment.xPct * this.game.width;
 		}
 	}
 
 	resizeBlocks() {
+		if (!this.blocks) return;
 		for (const block of this.blocks) {
 			block.x = block.x * this.game.scale;
 			block.y = block.y * this.game.scale;

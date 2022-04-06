@@ -24,8 +24,7 @@ export default class Copter {
 
 	constructor(game: Game) {
 		this.game = game;
-		this.smoke = [];
-		this.loadAssets();
+		this.loadImages();
 	}
 
 	init() {
@@ -38,7 +37,7 @@ export default class Copter {
 		this.img = this.flyImgs[0];
 	}
 
-	loadAssets() {
+	loadImages() {
 		this.smokeImg = loadImage("img/smoke.png");
 		this.stoppedImg = loadImage("img/copter_stopped.png");
 		this.flyImgs = [
@@ -137,6 +136,7 @@ export default class Copter {
 				width: segment.lengthPct * this.game.width,
 				height: segment.topDepthPct * this.game.height
 			};
+
 			const segmentBotRect: IRect = {
 				x: segment.x,
 				y: this.game.height - segment.botDepthPct * this.game.height,
