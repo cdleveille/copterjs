@@ -1,84 +1,84 @@
 {
-	"namespaces": ["public"],
-	"name": "public",
-	"tables": [
-		{
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"unsigned": true,
-					"autoincrement": true,
-					"primary": true,
-					"nullable": false,
-					"mappedType": "integer"
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "timestamptz(0)",
-					"unsigned": false,
-					"autoincrement": false,
-					"primary": false,
-					"nullable": false,
-					"length": 6,
-					"mappedType": "datetime"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "timestamptz(0)",
-					"unsigned": false,
-					"autoincrement": false,
-					"primary": false,
-					"nullable": false,
-					"length": 6,
-					"mappedType": "datetime"
-				},
-				"player": {
-					"name": "player",
-					"type": "varchar(255)",
-					"unsigned": false,
-					"autoincrement": false,
-					"primary": false,
-					"nullable": false,
-					"mappedType": "string"
-				},
-				"score": {
-					"name": "score",
-					"type": "int",
-					"unsigned": false,
-					"autoincrement": false,
-					"primary": false,
-					"nullable": false,
-					"mappedType": "integer"
-				}
-			},
-			"name": "score",
-			"schema": "public",
-			"indexes": [
-				{
-					"columnNames": ["player"],
-					"composite": false,
-					"keyName": "score_player_index",
-					"primary": false,
-					"unique": false
-				},
-				{
-					"columnNames": ["score"],
-					"composite": false,
-					"keyName": "score_score_index",
-					"primary": false,
-					"unique": false
-				},
-				{
-					"keyName": "score_pkey",
-					"columnNames": ["id"],
-					"composite": false,
-					"primary": true,
-					"unique": true
-				}
-			],
-			"checks": [],
-			"foreignKeys": {}
-		}
-	]
+  "namespaces": ["public"],
+  "name": "public",
+  "tables": [
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "player": {
+          "name": "player",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "score": {
+          "name": "score",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "score",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": ["player"],
+          "composite": false,
+          "keyName": "score_player_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": ["score"],
+          "composite": false,
+          "keyName": "score_score_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "score_pkey",
+          "columnNames": ["id"],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    }
+  ]
 }

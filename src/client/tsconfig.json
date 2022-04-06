@@ -1,23 +1,23 @@
 {
-	"compilerOptions": {
-		"target": "ES2019",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"sourceMap": true,
-		"skipLibCheck": true,
-		"allowSyntheticDefaultImports": true,
-		"isolatedModules": true,
-		"outDir": "../../build/client",
-		"lib": ["ES2019", "DOM"],
-		"types": [],
-		"composite": true
-	},
-	"include": ["**/*.ts", "**/*.tsx"],
-	"exclude": ["**/*.test.ts", "**/*.test.tsx"],
-	"references": [
-		{
-			"path": "../shared"
-		}
-	]
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "outDir": "../../build/client",
+    "lib": ["ES2019", "DOM"],
+    "types": [],
+    "composite": true
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
 }
