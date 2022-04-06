@@ -143,7 +143,9 @@ export default class Game {
 		this.highScores.style.display = "none";
 
 		this.initialsInput.value = "";
-		this.initialsLabel.innerText = onNewHighScore ? "NEW HIGH SCORE!\nENTER YOUR INITIALS:" : "ENTER YOUR INITIALS:";
+		this.initialsLabel.innerText = onNewHighScore
+			? "NEW HIGH SCORE!\nENTER YOUR INITIALS:"
+			: "ENTER YOUR INITIALS:";
 		if (onNewHighScore) this.initialsRequested = true;
 
 		this.initialsSection.style.display = "block";
@@ -219,8 +221,8 @@ export default class Game {
 
 		const canvasDOMRect: DOMRect = ghostCanvas.getBoundingClientRect();
 
-		const offsetHorizontal = `${canvasDOMRect.x + (this.width * offsetHorizontalPct) + transformX}px`;
-		const offsetVertical = `${canvasDOMRect.y + (this.height * offsetVerticalPct) + transformY}px`;
+		const offsetHorizontal = `${canvasDOMRect.x + this.width * offsetHorizontalPct + transformX}px`;
+		const offsetVertical = `${canvasDOMRect.y + this.height * offsetVerticalPct + transformY}px`;
 
 		this.pilotLabel.style.fontSize = fontSizeScaled;
 		this.pilotLabel.style.left = offsetHorizontal;
@@ -257,9 +259,12 @@ export default class Game {
 	}
 
 	updateHighScores(highScores: IScore[]) {
-		let content = "", count = 1;
+		let content = "",
+			count = 1;
 		for (const highScore of highScores) {
-			content += `<li style="background: transparent;">${count < 10 ? "&nbsp;" + count : count}.&nbsp;${highScore.player}&nbsp;${highScore.score}</li>`;
+			content += `<li style="background: transparent;">${count < 10 ? "&nbsp;" + count : count}.&nbsp;${
+				highScore.player
+			}&nbsp;${highScore.score}</li>`;
 			count++;
 		}
 

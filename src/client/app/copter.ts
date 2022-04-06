@@ -42,11 +42,31 @@ export default class Copter {
 		this.smokeImg = loadImage("img/smoke.png");
 		this.stoppedImg = loadImage("img/copter_stopped.png");
 		this.flyImgs = [
-			loadImage("img/copter1.png"), loadImage("img/copter2.png"), loadImage("img/copter3.png"), loadImage("img/copter4.png"), loadImage("img/copter5.png"),
-			loadImage("img/copter6.png"), loadImage("img/copter7.png"), loadImage("img/copter8.png"), loadImage("img/copter9.png"), loadImage("img/copter10.png"),
-			loadImage("img/copter11.png"), loadImage("img/copter12.png"), loadImage("img/copter13.png"), loadImage("img/copter14.png"), loadImage("img/copter15.png"),
-			loadImage("img/copter16.png"), loadImage("img/copter17.png"), loadImage("img/copter18.png"), loadImage("img/copter19.png"), loadImage("img/copter20.png"),
-			loadImage("img/copter21.png"), loadImage("img/copter22.png"), loadImage("img/copter23.png"), loadImage("img/copter24.png"), loadImage("img/copter25.png")
+			loadImage("img/copter1.png"),
+			loadImage("img/copter2.png"),
+			loadImage("img/copter3.png"),
+			loadImage("img/copter4.png"),
+			loadImage("img/copter5.png"),
+			loadImage("img/copter6.png"),
+			loadImage("img/copter7.png"),
+			loadImage("img/copter8.png"),
+			loadImage("img/copter9.png"),
+			loadImage("img/copter10.png"),
+			loadImage("img/copter11.png"),
+			loadImage("img/copter12.png"),
+			loadImage("img/copter13.png"),
+			loadImage("img/copter14.png"),
+			loadImage("img/copter15.png"),
+			loadImage("img/copter16.png"),
+			loadImage("img/copter17.png"),
+			loadImage("img/copter18.png"),
+			loadImage("img/copter19.png"),
+			loadImage("img/copter20.png"),
+			loadImage("img/copter21.png"),
+			loadImage("img/copter22.png"),
+			loadImage("img/copter23.png"),
+			loadImage("img/copter24.png"),
+			loadImage("img/copter25.png")
 		];
 	}
 
@@ -65,7 +85,12 @@ export default class Copter {
 		this.xv = 700 * this.game.scale;
 		this.width = 124 * this.game.scale;
 		this.height = 57 * this.game.scale;
-		this.hitBoxOffset = { left: 10 * this.game.scale, right: 10 * this.game.scale, top: 5 * this.game.scale, bottom: 5 * this.game.scale };
+		this.hitBoxOffset = {
+			left: 10 * this.game.scale,
+			right: 10 * this.game.scale,
+			top: 5 * this.game.scale,
+			bottom: 5 * this.game.scale
+		};
 
 		// variable
 		this.x = this.game.width / 4;
@@ -109,17 +134,20 @@ export default class Copter {
 			const segmentTopRect: IRect = {
 				x: segment.x,
 				y: 0,
-				width: (segment.lengthPct * this.game.width),
+				width: segment.lengthPct * this.game.width,
 				height: segment.topDepthPct * this.game.height
 			};
 			const segmentBotRect: IRect = {
 				x: segment.x,
-				y: this.game.height - (segment.botDepthPct * this.game.height),
-				width: (segment.lengthPct * this.game.width),
+				y: this.game.height - segment.botDepthPct * this.game.height,
+				width: segment.lengthPct * this.game.width,
 				height: segment.botDepthPct * this.game.height
 			};
 
-			if (areRectanglesColliding(this.hitbox, segmentTopRect) || areRectanglesColliding(this.hitbox, segmentBotRect)) {
+			if (
+				areRectanglesColliding(this.hitbox, segmentTopRect) ||
+				areRectanglesColliding(this.hitbox, segmentBotRect)
+			) {
 				this.crash();
 			}
 		}
@@ -133,7 +161,7 @@ export default class Copter {
 	}
 
 	updateImg() {
-		if (this.game.isOver) return this.img = this.stoppedImg;
+		if (this.game.isOver) return (this.img = this.stoppedImg);
 		this.img = this.flyImgs[Math.floor(Math.random() * this.flyImgs.length)];
 	}
 
@@ -141,8 +169,11 @@ export default class Copter {
 		if (this.game.pausedAtStart) return;
 
 		// add new smoke puff
-		if (!this.game.isOver && (this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 45 * this.game.scale)) {
-			this.smoke.push({ x: this.x - (23 * this.game.scale), y: this.y + (6 * this.game.scale) });
+		if (
+			!this.game.isOver &&
+			(this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 45 * this.game.scale)
+		) {
+			this.smoke.push({ x: this.x - 23 * this.game.scale, y: this.y + 6 * this.game.scale });
 		}
 
 		if (this.smoke.length < 1) return;
@@ -162,7 +193,7 @@ export default class Copter {
 		if (this.climbing && !this.game.pausedAtStart && !this.game.isOver) {
 			ctx.save();
 			ctx.translate(this.x, this.y);
-			ctx.rotate(-5 * Math.PI / 180);
+			ctx.rotate((-5 * Math.PI) / 180);
 			ctx.drawImage(this.img, 0, 0, 124 * this.game.scale, 57 * this.game.scale);
 			ctx.restore();
 		} else {

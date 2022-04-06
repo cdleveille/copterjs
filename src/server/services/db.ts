@@ -6,7 +6,6 @@ import Config, { Db } from "../helpers/config";
 import log from "./log";
 
 export class Database {
-
 	public static orm: MikroORM<IDatabaseDriver<Connection>>;
 
 	/**

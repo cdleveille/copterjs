@@ -1,7 +1,6 @@
 import { PrimaryKey, Property } from "@mikro-orm/core";
 
 export abstract class Base {
-
 	@PrimaryKey({ hidden: true })
 	id?: number;
 

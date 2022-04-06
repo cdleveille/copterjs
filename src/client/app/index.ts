@@ -11,7 +11,9 @@ new InputHandler(canvas, game);
 new WindowHandler(canvas, game);
 game.init();
 
-let dt: number, current: number, last = now();
+let dt: number,
+	current: number,
+	last = now();
 const step = 1 / 500;
 
 const frame = () => {

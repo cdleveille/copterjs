@@ -37,18 +37,22 @@ export default class App {
 					"style-src": ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"],
 					"font-src": ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "fonts.gstatic.com"],
 					"img-src": ["'self' blob: data:"]
-				},
+				}
 			})
 		);
 		App.instance.use(compression());
-		App.instance.use(cors({
-			origin: "*",
-			methods: ["GET"]
-		}));
+		App.instance.use(
+			cors({
+				origin: "*",
+				methods: ["GET"]
+			})
+		);
 
 		App.instance.use(Routes.root, router);
 
-		App.instance.use(express.static(path.join(process.cwd(), Config.IS_PROD ? "build/client.min" : "build/client")));
+		App.instance.use(
+			express.static(path.join(process.cwd(), Config.IS_PROD ? "build/client.min" : "build/client"))
+		);
 
 		App.instance.set("json spaces", 2);
 		App.instance.disabled("x-powered-by");

@@ -1,6 +1,6 @@
 import Game from "./game.js";
 import { Color } from "./types/constant.js";
-import { ITunnel, IRect, } from "./types/abstract";
+import { ITunnel, IRect } from "./types/abstract";
 
 export default class Terrain {
 	game: Game;
@@ -52,7 +52,7 @@ export default class Terrain {
 		for (const segment of this.tunnel) {
 			if (!this.game.pausedAtStart) segment.x -= this.game.copter.xv * step;
 			segment.xPct = segment.x / this.game.width;
-			if (segment.x + (segment.lengthPct * this.game.width) < 0) this.tunnel.shift();
+			if (segment.x + segment.lengthPct * this.game.width < 0) this.tunnel.shift();
 		}
 	}
 
@@ -89,9 +89,18 @@ export default class Terrain {
 
 		// draw tunnel
 		for (const segment of this.tunnel) {
-			ctx.fillRect(Math.floor(segment.x), 0, Math.floor(segment.lengthPct * this.game.width), Math.floor(segment.topDepthPct * this.game.height));
-			ctx.fillRect(Math.floor(segment.x), Math.floor(this.game.height - (segment.botDepthPct * this.game.height)),
-				Math.floor(segment.lengthPct * this.game.width), Math.floor(segment.botDepthPct * this.game.height));
+			ctx.fillRect(
+				Math.floor(segment.x),
+				0,
+				Math.floor(segment.lengthPct * this.game.width),
+				Math.floor(segment.topDepthPct * this.game.height)
+			);
+			ctx.fillRect(
+				Math.floor(segment.x),
+				Math.floor(this.game.height - segment.botDepthPct * this.game.height),
+				Math.floor(segment.lengthPct * this.game.width),
+				Math.floor(segment.botDepthPct * this.game.height)
+			);
 		}
 
 		// draw blocks
