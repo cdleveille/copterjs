@@ -1,15 +1,18 @@
-*,
-body,
-html {
+* {
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	font-family: "digital-7";
+}
+
+body,
+html {
 	overflow: hidden;
 	-webkit-touch-callout: none;
 	-webkit-text-size-adjust: none;
 	-webkit-user-select: none;
 	user-select: none;
 	touch-action: none;
-	font-family: "digital-7";
 }
 
 @font-face {
@@ -89,6 +92,7 @@ html {
 	outline: none;
 	pointer-events: all;
 	background: transparent;
+	text-transform: uppercase;
 }
 
 #initials-input:focus {
@@ -115,6 +119,7 @@ html {
 }
 
 #high-scores {
+	list-style: none;
 	z-index: 1;
 	font-size: 60px;
 	color: #33ccff;

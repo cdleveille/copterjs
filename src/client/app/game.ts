@@ -24,7 +24,7 @@ export default class Game {
 	initialsForm: HTMLFormElement;
 	initialsInput: HTMLInputElement;
 	initialsInputCaret: HTMLDivElement;
-	highScores: HTMLOListElement;
+	highScores: HTMLUListElement;
 	tenthPlaceScore: number;
 	overlay: HTMLDivElement;
 	isOver: boolean;
@@ -51,7 +51,7 @@ export default class Game {
 		this.initialsInput = document.getElementById("initials-input") as HTMLInputElement;
 		this.initialsInputCaret = document.getElementById("initials-input-caret") as HTMLDivElement;
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
-		this.highScores = document.getElementById("high-scores") as HTMLOListElement;
+		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("pilot");
 		this.best = 0;
@@ -89,20 +89,23 @@ export default class Game {
 			e.preventDefault();
 			if (this.initialsInput.value.length !== 3) return;
 
-			this.player = this.initialsInput.value.toUpperCase();
+			this.player = this.initialsInput.value;
 			window.localStorage.setItem("pilot", this.player);
 			this.initialsSubmitted();
 		});
 
 		this.initialsInput.addEventListener("input", (e) => {
+			this.initialsInput.value = this.initialsInput.value.toUpperCase();
+
 			if (this.initialsInput.value.length === 0) {
 				this.initialsInputCaret.style.display = "block";
 				this.initialsInputCaret.style.left = "4%";
 				return;
 			}
+
 			const lastChar = this.initialsInput.value[this.initialsInput.value.length - 1];
-			if (!"ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(lastChar.toUpperCase()))
-				this.initialsInput.value = this.initialsInput.value.toUpperCase().substring(0, this.initialsInput.value.length - 1);
+			if (!"ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(lastChar))
+				this.initialsInput.value = this.initialsInput.value.substring(0, this.initialsInput.value.length - 1);
 
 			switch (this.initialsInput.value.length) {
 				case 0:
@@ -207,7 +210,7 @@ export default class Game {
 
 		const fontSizeScaled = `${60 * this.scale}px`;
 		const intialsInputFontSizeScaled = `${166.153846 * this.scale}px`;
-		const initialsInputWidth = `${227 * this.scale}px`;
+		const initialsInputWidth = `${234 * this.scale}px`;
 		const initialsInputBorderWidth = `${4 * this.scale}px`;
 		const initialsFormMarginTop = `${16 * this.scale}px`;
 
