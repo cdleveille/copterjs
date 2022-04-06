@@ -89,8 +89,9 @@ export default class Terrain {
 
 		// draw tunnel
 		for (const segment of this.tunnel) {
-			ctx.fillRect(segment.x, 0, (segment.lengthPct * this.game.width), segment.topDepthPct * this.game.height);
-			ctx.fillRect(segment.x, this.game.height - (segment.botDepthPct * this.game.height), (segment.lengthPct * this.game.width), segment.botDepthPct * this.game.height);
+			ctx.fillRect(Math.floor(segment.x), 0, Math.floor(segment.lengthPct * this.game.width), Math.floor(segment.topDepthPct * this.game.height));
+			ctx.fillRect(Math.floor(segment.x), Math.floor(this.game.height - (segment.botDepthPct * this.game.height)),
+				Math.floor(segment.lengthPct * this.game.width), Math.floor(segment.botDepthPct * this.game.height));
 		}
 
 		// draw blocks

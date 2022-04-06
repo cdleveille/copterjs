@@ -25,6 +25,7 @@ export default class Game {
 	initialsInput: HTMLInputElement;
 	initialsInputCaret: HTMLDivElement;
 	highScores: HTMLOListElement;
+	tenthPlaceScore: number;
 	overlay: HTMLDivElement;
 	isOver: boolean;
 	startTime: number;
@@ -129,6 +130,7 @@ export default class Game {
 
 	reportScore(justSubmittedInitials?: boolean) {
 		const score: IScore = { player: this.player, score: this.distance };
+		if (this.tenthPlaceScore && score.score < this.tenthPlaceScore) return;
 		if (justSubmittedInitials) return socket.emit("validate-score-skip-msg", score);
 		socket.emit("validate-score", score);
 	}
@@ -258,6 +260,7 @@ export default class Game {
 			count++;
 		}
 
+		if (highScores.length >= 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
 		this.highScores.innerHTML = content;
 	}
 

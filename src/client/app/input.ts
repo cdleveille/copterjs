@@ -2,32 +2,24 @@ import Game from "./game.js";
 
 export default class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
-		document.oncontextmenu = (e) => {
-			e.preventDefault();
-		};
+		// document.oncontextmenu = (e) => {
+		// 	e.preventDefault();
+		// };
 
 		canvas.addEventListener("mousedown", (e) => {
-			if (e.button == 0) {
-				this.press(game);
-			}
+			if (e.button == 0) this.press(game);
 		});
 
 		document.getElementById("backdrop").addEventListener("mousedown", (e) => {
-			if (e.button == 0) {
-				this.press(game);
-			}
+			if (e.button == 0) this.press(game);
 		});
 
 		canvas.addEventListener("mouseup", (e) => {
-			if (e.button == 0) {
-				this.release(game);
-			}
+			if (e.button == 0) this.release(game);
 		});
 
 		document.getElementById("backdrop").addEventListener("mouseup", (e) => {
-			if (e.button == 0) {
-				this.release(game);
-			}
+			if (e.button == 0) this.release(game);
 		});
 
 		document.addEventListener("keydown", (e) => {
@@ -56,7 +48,16 @@ export default class InputHandler {
 			this.press(game);
 		});
 
+		document.getElementById("backdrop").addEventListener("touchstart", (e) => {
+			this.press(game);
+		});
+
 		canvas.addEventListener("touchend", (e) => {
+			e.preventDefault();
+			this.release(game);
+		});
+
+		document.getElementById("backdrop").addEventListener("touchend", (e) => {
 			e.preventDefault();
 			this.release(game);
 		});
