@@ -44,11 +44,11 @@ export default class InputHandler {
 			}
 		});
 
-		canvas.addEventListener("touchstart", (e) => {
+		canvas.addEventListener("touchstart", () => {
 			this.press(game);
 		});
 
-		document.getElementById("backdrop").addEventListener("touchstart", (e) => {
+		document.getElementById("backdrop").addEventListener("touchstart", () => {
 			this.press(game);
 		});
 

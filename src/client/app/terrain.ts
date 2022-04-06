@@ -24,13 +24,13 @@ export default class Terrain {
 	}
 
 	resizeTunnel() {
-		for (let segment of this.tunnel) {
+		for (const segment of this.tunnel) {
 			segment.x = segment.xPct * this.game.width;
 		}
 	}
 
 	resizeBlocks() {
-		for (let block of this.blocks) {
+		for (const block of this.blocks) {
 			block.x = block.x * this.game.scale;
 			block.y = block.y * this.game.scale;
 			block.width = block.width * this.game.scale;

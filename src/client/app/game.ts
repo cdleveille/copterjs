@@ -94,7 +94,7 @@ export default class Game {
 			this.initialsSubmitted();
 		});
 
-		this.initialsInput.addEventListener("input", (e) => {
+		this.initialsInput.addEventListener("input", () => {
 			this.initialsInput.value = this.initialsInput.value.toUpperCase();
 
 			if (this.initialsInput.value.length === 0) {
@@ -126,7 +126,7 @@ export default class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusout", (e) => {
+		this.initialsInput.addEventListener("focusout", () => {
 			if (this.locked) this.initialsInput.focus();
 		});
 	}

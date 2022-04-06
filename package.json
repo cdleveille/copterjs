@@ -16,7 +16,7 @@
     "clear-client": "rimraf build/client",
     "copy": "copyfiles -u 1 -e \"**/*.ts\" -e \"**/tsconfig.json\" src/client/**/* build",
     "min": "rimraf build/client.min && copyfiles -u 2 -e \"**/*.ts\" -e \"**/*.map\" build/client/**/* build/client.min && javascript-obfuscator build/client.min --output build/client.min",
-    "lint": "eslint --fix --ext .ts,.tsx .",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx . && prettier --write .",
     "build": "yarn clear && yarn build-server && yarn build-client-min",
     "build-server": "tsc -b src/server",
     "build-client": "yarn clear-client && yarn copy && tsc -b src/client",

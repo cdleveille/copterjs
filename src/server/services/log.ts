@@ -1,6 +1,6 @@
 export default {
-	info: (msg: any, msg2?: any) => console.info(msg, msg2 ? msg2 : ""),
-	error: (msg: any, msg2?: any) => console.error(msg, msg2 ? msg2 : ""),
+	info: (msg: unknown, msg2?: unknown) => console.info(msg, msg2 ? msg2 : ""),
+	error: (msg: unknown, msg2?: unknown) => console.error(msg, msg2 ? msg2 : ""),
 	query: (msg: string) => logQuery(msg)
 };
 
