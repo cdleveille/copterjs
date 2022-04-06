@@ -16,7 +16,7 @@ Also recommended:
 Set up environment:
 
 -   Clone repo and open root folder in VS Code.
--   Install recommended VS Code extensions `Docker` and `ESLint`.
+-   Install recommended VS Code extensions `Docker`, `ESLint`, `Prettier`, `EditorConfig`, and `TypeScript Import Sorter`.
 -   Run `yarn install` to install package dependencies.
 -   Create and populate a `.env` file in the root folder based on the `.env.example` file.
 
@@ -30,8 +30,8 @@ Set up database:
 
 Launch:
 
--   Run `yarn build` to compile both the server and client, and `yarn start` to start the server (client accessible at [localhost:3000](http://localhost:3000/)).
+-   Run `yarn build` to compile both the server and client, and then `yarn start` to start the server. The client will be served on [localhost:3000](http://localhost:3000/).
 
--   Alternatively, run `yarn dev` to concurrently run the server via ts-node-dev and the client via nodemon, which will cause each to automatically restart whenever a change is made to their respective files.
+-   Alternatively, run `yarn dev` to concurrently run the server via ts-node-dev and the client via nodemon, which will cause each to automatically restart whenever a change is made to any of their respective source code files.
 
 -   You can also start the `debug` launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` and attaches a debugger to the back end.
