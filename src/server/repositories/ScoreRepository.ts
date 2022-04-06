@@ -1,7 +1,7 @@
-import { QueryOrder, EntityManager } from "@mikro-orm/core";
+import { EntityManager, QueryOrder } from "@mikro-orm/core";
 
-import { Score } from "../models/Score";
 import { IScore } from "../../shared/types/abstract";
+import { Score } from "../models/Score";
 
 export class ScoreRepository {
 	private static readonly CacheSize = 3000;

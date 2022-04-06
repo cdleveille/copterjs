@@ -1,6 +1,6 @@
 import Game from "./game.js";
-import { now } from "./util.js";
 import InputHandler from "./input.js";
+import { now } from "./util.js";
 import WindowHandler from "./window.js";
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;

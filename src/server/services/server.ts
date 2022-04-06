@@ -6,13 +6,13 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import log from "./log";
+import { IScore, ISocket } from "../../shared/types/abstract";
+import { Routes } from "../../shared/types/constants";
 import router from "../controllers/index";
 import Config from "../helpers/config";
+import { sendHighScoresToClient, validateScore, validateScoreSkipMsg } from "../helpers/score";
 import { Database } from "./db";
-import { Routes } from "../../shared/types/constants";
-import { IScore, ISocket } from "../../shared/types/abstract";
-import { validateScore, validateScoreSkipMsg, sendHighScoresToClient } from "../helpers/score";
+import log from "./log";
 
 export default class App {
 	private static instance: Express;

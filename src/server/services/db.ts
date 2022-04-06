@@ -1,6 +1,7 @@
 import path from "path";
 import { cwd } from "process";
-import { Connection, IDatabaseDriver, MikroORM, ConnectionOptions, EntityManager } from "@mikro-orm/core";
+
+import { Connection, ConnectionOptions, EntityManager, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 
 import Config, { Db } from "../helpers/config";
 import log from "./log";

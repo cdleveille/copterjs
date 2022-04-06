@@ -1,6 +1,6 @@
 import { IRect } from "./types/abstract";
 
-export const now = () => {
+export const now = (): number => {
 	return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
 };
 

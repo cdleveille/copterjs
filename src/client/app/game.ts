@@ -1,9 +1,9 @@
-import Copter from "./copter.js";
-import Terrain from "./terrain.js";
-import { now } from "./util.js";
-import socket from "./socket.js";
 import { IScore } from "../../../build/shared/types/abstract";
+import Copter from "./copter.js";
+import socket from "./socket.js";
+import Terrain from "./terrain.js";
 import { Color } from "./types/constant.js";
+import { now } from "./util.js";
 
 export default class Game {
 	width: number;
@@ -211,7 +211,7 @@ export default class Game {
 		this.scale = this.width / 1600;
 
 		const fontSizeScaled = `${60 * this.scale}px`;
-		const intialsInputFontSizeScaled = `${166.153846 * this.scale}px`;
+		const intialsInputFontSizeScaled = `${166 * this.scale}px`;
 		const initialsInputWidth = `${234 * this.scale}px`;
 		const initialsInputBorderWidth = `${4 * this.scale}px`;
 		const initialsFormMarginTop = `${16 * this.scale}px`;
@@ -262,9 +262,9 @@ export default class Game {
 		let content = "",
 			count = 1;
 		for (const highScore of highScores) {
-			content += `<li style="background: transparent;">${count < 10 ? "&nbsp;" + count : count}.&nbsp;${
-				highScore.player
-			}&nbsp;${highScore.score}</li>`;
+			content += `<li style="background: transparent;">
+				${count < 10 ? "&nbsp;" + count : count}.&nbsp;
+				${highScore.player}&nbsp;${highScore.score}</li>`;
 			count++;
 		}
 

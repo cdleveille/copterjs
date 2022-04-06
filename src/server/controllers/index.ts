@@ -1,9 +1,10 @@
-import { EntityManager } from "@mikro-orm/core";
-import { Request, Response, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
+import { EntityManager } from "@mikro-orm/core";
+
+import { IResponse } from "../../shared/types/abstract";
 import { Routes } from "../../shared/types/constants";
 import { ScoreRepository } from "../repositories/ScoreRepository";
-import { IResponse } from "../../shared/types/abstract";
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 import { EntityManager } from "@mikro-orm/core";
 
 import { IScore, ISocket } from "../../shared/types/abstract";
-import { ScoreRepository } from "../repositories/ScoreRepository";
 import { Score } from "../models/Score";
+import { ScoreRepository } from "../repositories/ScoreRepository";
 
 export const validateScore = async (manager: EntityManager, score: IScore, socket: ISocket, skipMsg?: boolean) => {
 	if (!score.player) return socket.emit("request-initials");

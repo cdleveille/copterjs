@@ -1,6 +1,6 @@
 import Game from "./game.js";
+import { IRect, ITunnel } from "./types/abstract";
 import { Color } from "./types/constant.js";
-import { ITunnel, IRect } from "./types/abstract";
 
 export default class Terrain {
 	game: Game;

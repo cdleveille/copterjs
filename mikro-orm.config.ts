@@ -1,5 +1,6 @@
 import "dotenv/config";
 import "reflect-metadata";
+
 import { ConnectionConfig } from "@mikro-orm/core";
 
 import Config, { Db } from "./src/server/helpers/config";
