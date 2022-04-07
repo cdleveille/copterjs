@@ -39,6 +39,8 @@ export default class Game {
 	constructor() {
 		this.copter = new Copter(this);
 		this.terrain = new Terrain(this);
+		this.best = 0;
+
 		this.distanceLabel = document.getElementById("distance-label") as HTMLDivElement;
 		this.distanceValue = document.getElementById("distance-value") as HTMLDivElement;
 		this.bestLabel = document.getElementById("best-label") as HTMLDivElement;
@@ -54,7 +56,11 @@ export default class Game {
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("pilot");
-		this.best = 0;
+
+		this.pilotLabel.style.display = "block";
+		this.highScoresLabel.style.display = "block";
+		this.distanceLabel.style.display = "block";
+		this.bestLabel.style.display = "block";
 
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
