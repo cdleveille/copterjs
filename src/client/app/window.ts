@@ -17,6 +17,14 @@ export default class WindowHandler {
 			this.resize();
 		});
 
+		window.addEventListener("online", () => {
+			game.goOnline();
+		});
+
+		window.addEventListener("offline", () => {
+			game.goOffline();
+		});
+
 		this.resize();
 	}
 

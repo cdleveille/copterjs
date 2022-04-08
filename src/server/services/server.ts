@@ -43,7 +43,7 @@ export default class App {
 					"style-src": ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"],
 					"font-src": ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "fonts.gstatic.com"],
 					"img-src": ["'self' blob: data:"],
-					"connect-src": ["'self'", "googletagmanager.com"]
+					"connect-src": ["'self'"]
 				}
 			})
 		);

@@ -1,6 +1,6 @@
+import { ISocket } from "../../../build/shared/types/abstract";
 import { IScore } from "../../../build/shared/types/abstract.js";
 import Copter from "./copter.js";
-import socket from "./socket.js";
 import Terrain from "./terrain.js";
 import { Color } from "./types/constant.js";
 import { now } from "./util.js";
@@ -35,6 +35,7 @@ export default class Game {
 	player: string;
 	initialsRequested: boolean;
 	scale: number;
+	socket: ISocket;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -83,11 +84,17 @@ export default class Game {
 	}
 
 	initSocket() {
-		socket.on("request-initials", () => this.getPlayerInitials(true));
-		socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
-		socket.on("high-scores-updated", (highScores) => this.updateHighScores(highScores));
+		if (!navigator.onLine) return;
 
-		socket.emit("high-scores-request");
+		// @ts-ignore
+		const socketIO: ISocket = io;
+		this.socket = socketIO.connect({ reconnectionDelay: 1000, reconnectionAttempts: 10 });
+
+		this.socket.on("request-initials", () => this.getPlayerInitials(true));
+		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
+		this.socket.on("high-scores-updated", (highScores) => this.updateHighScores(highScores));
+
+		this.socket.emit("high-scores-request");
 	}
 
 	initIntialsForm() {
@@ -140,8 +147,9 @@ export default class Game {
 	reportScore(justSubmittedInitials?: boolean) {
 		const score: IScore = { player: this.player, score: this.distance };
 		if (this.tenthPlaceScore && score.score < this.tenthPlaceScore) return;
-		if (justSubmittedInitials) return socket.emit("validate-score-skip-msg", score);
-		socket.emit("validate-score", score);
+		if (!navigator.onLine) return;
+		if (justSubmittedInitials) return this.socket.emit("validate-score-skip-msg", score);
+		this.socket.emit("validate-score", score);
 	}
 
 	getPlayerInitials(onNewHighScore?: boolean) {
@@ -259,11 +267,6 @@ export default class Game {
 		this.terrain.resize();
 	}
 
-	update(step: number) {
-		this.terrain.update(step);
-		this.copter.update(step);
-	}
-
 	updateHighScores(highScores: IScore[]) {
 		let content = "",
 			count = 1;
@@ -276,6 +279,19 @@ export default class Game {
 
 		if (highScores.length >= 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
 		this.highScores.innerHTML = content;
+	}
+
+	goOnline() {
+		this.initSocket();
+	}
+
+	goOffline() {
+		//
+	}
+
+	update(step: number) {
+		this.terrain.update(step);
+		this.copter.update(step);
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
