@@ -314,7 +314,7 @@ export default class Game {
 		}
 
 		this.highScores.innerHTML = content;
-		if (highScores.length >= 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
+		if (highScores.length === 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
 		window.localStorage.setItem("high-scores", JSON.stringify(highScores));
 	}
 
@@ -323,9 +323,7 @@ export default class Game {
 		this.initSocket();
 
 		if (!this.offlineScores) return;
-		for (const score of this.offlineScores) {
-			this.reportScore(score, true);
-		}
+		this.reportScores(this.offlineScores, true);
 		this.offlineScores = [];
 	}
 

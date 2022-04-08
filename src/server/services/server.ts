@@ -33,15 +33,9 @@ export default class App {
 				directives: {
 					"default-src": ["'self'"],
 					"object-src": ["'none'"],
-					"script-src": [
-						"'self'",
-						"'unsafe-inline'",
-						"'unsafe-eval'",
-						"code.jquery.com",
-						"cdnjs.cloudflare.com"
-					],
-					"style-src": ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"],
-					"font-src": ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "fonts.gstatic.com"],
+					"script-src": ["'self'"],
+					"style-src": ["'self'", "'unsafe-inline'"],
+					"font-src": ["'self'"],
 					"img-src": ["'self' blob: data:"],
 					"connect-src": ["'self'"]
 				}

@@ -4,8 +4,6 @@ import { IScore } from "../../shared/types/abstract";
 import { Score } from "../models/Score";
 
 export class ScoreRepository {
-	private static readonly CacheSize = 3000;
-
 	public static async InsertOne(manager: EntityManager, score: IScore): Promise<Score> {
 		try {
 			const newScore = new Score({ player: score.player, score: score.score });

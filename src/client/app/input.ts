@@ -44,13 +44,21 @@ export default class InputHandler {
 			}
 		});
 
-		canvas.addEventListener("touchstart", () => {
-			this.press(game);
-		});
+		canvas.addEventListener(
+			"touchstart",
+			() => {
+				this.press(game);
+			},
+			{ passive: true }
+		);
 
-		document.getElementById("backdrop").addEventListener("touchstart", () => {
-			this.press(game);
-		});
+		document.getElementById("backdrop").addEventListener(
+			"touchstart",
+			() => {
+				this.press(game);
+			},
+			{ passive: true }
+		);
 
 		canvas.addEventListener("touchend", (e) => {
 			e.preventDefault();
