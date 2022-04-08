@@ -24,7 +24,7 @@ export default class App {
 		App.instance.use(morgan("combined", { stream: logStream }));
 
 		App.instance.use((req: Request, res: Response, next: NextFunction) => {
-			res.locals.em = Database.Manager.fork();
+			res.locals.em = Config.CONNECT_TO_DB ? Database.Manager.fork() : null;
 			next();
 		});
 
@@ -66,10 +66,10 @@ export default class App {
 	}
 
 	public static async start() {
-		await Database.Connect();
+		if (Config.CONNECT_TO_DB) await Database.Connect();
 		await App.setup();
 
-		const manager = Database.Manager.fork();
+		const manager = Config.CONNECT_TO_DB ? Database.Manager.fork() : null;
 
 		const http = require("http").Server(App.instance);
 		const io = require("socket.io")(http);
@@ -85,6 +85,10 @@ export default class App {
 
 			socket.on("high-scores-request", async () => {
 				await sendHighScoresToClient(manager, socket);
+			});
+
+			socket.on("connected-to-db-request", async () => {
+				socket.emit("connected-to-db", Config.CONNECT_TO_DB);
 			});
 		});
 

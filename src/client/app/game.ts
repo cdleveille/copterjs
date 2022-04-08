@@ -36,6 +36,7 @@ export default class Game {
 	initialsRequested: boolean;
 	scale: number;
 	socket: ISocket;
+	noDB: boolean;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -66,7 +67,7 @@ export default class Game {
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
-		this.initSocket();
+		navigator.onLine ? this.goOnline() : this.goOffline();
 		this.initIntialsForm();
 	}
 
@@ -90,11 +91,20 @@ export default class Game {
 		const socketIO: ISocket = io;
 		this.socket = socketIO.connect({ reconnectionDelay: 1000, reconnectionAttempts: 10 });
 
-		this.socket.on("request-initials", () => this.getPlayerInitials(true));
+		this.socket.on("initials-request", () => this.getPlayerInitials(true));
 		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
-		this.socket.on("high-scores-updated", (highScores) => this.updateHighScores(highScores));
+		this.socket.on("high-scores-updated", (highScores: IScore[]) => this.updateHighScores(highScores));
+		this.socket.on("connected-to-db", (connected: boolean) => {
+			if (connected) {
+				console.log("server is connected to db");
+				this.socket.emit("high-scores-request");
+			} else {
+				console.log("server is not connected to db");
+				this.noDB = true;
+			}
+		});
 
-		this.socket.emit("high-scores-request");
+		this.socket.emit("connected-to-db-request");
 	}
 
 	initIntialsForm() {
@@ -147,7 +157,7 @@ export default class Game {
 	reportScore(justSubmittedInitials?: boolean) {
 		const score: IScore = { player: this.player, score: this.distance };
 		if (this.tenthPlaceScore && score.score < this.tenthPlaceScore) return;
-		if (!navigator.onLine) return;
+		if (!navigator.onLine || this.noDB) return;
 		if (justSubmittedInitials) return this.socket.emit("validate-score-skip-msg", score);
 		this.socket.emit("validate-score", score);
 	}
@@ -203,7 +213,14 @@ export default class Game {
 	highScoresLabelClickHandler() {
 		if (!this.initialsRequested) this.hideInitialsSection();
 		if (this.locked) return;
-		this.highScores.style.display = this.highScores.style.display === "block" ? "none" : "block";
+
+		if (this.highScores.style.display === "block") return (this.highScores.style.display = "none");
+		this.highScores.style.display = "block";
+
+		if (!navigator.onLine || this.noDB) {
+			const localHighScores = window.localStorage.getItem("high-scores");
+			this.updateHighScores(JSON.parse(localHighScores) as IScore[]);
+		}
 	}
 
 	reset() {
@@ -277,16 +294,18 @@ export default class Game {
 			count++;
 		}
 
-		if (highScores.length >= 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
 		this.highScores.innerHTML = content;
+		if (highScores.length >= 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
+		window.localStorage.setItem("high-scores", JSON.stringify(highScores));
 	}
 
 	goOnline() {
+		console.log("network: online");
 		this.initSocket();
 	}
 
 	goOffline() {
-		//
+		console.log("network: offline");
 	}
 
 	update(step: number) {

@@ -5,7 +5,7 @@ import { Score } from "../models/Score";
 import { ScoreRepository } from "../repositories/ScoreRepository";
 
 export const validateScore = async (manager: EntityManager, score: IScore, socket: ISocket, skipMsg?: boolean) => {
-	if (!score.player) return socket.emit("request-initials");
+	if (!score.player) return socket.emit("initials-request");
 	if (!skipMsg) socket.emit("show-new-high-score-msg");
 	await insertScore(manager, score, socket);
 };
