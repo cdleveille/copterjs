@@ -4,18 +4,21 @@ import { IScore, ISocket } from "../../shared/types/abstract";
 import { Score } from "../models/Score";
 import { ScoreRepository } from "../repositories/ScoreRepository";
 
-export const validateScore = async (manager: EntityManager, score: IScore, socket: ISocket, skipMsg?: boolean) => {
-	if (!score.player) return socket.emit("initials-request");
-	if (!skipMsg) socket.emit("show-new-high-score-msg");
-	await insertScore(manager, score, socket);
+export const validateScores = async (manager: EntityManager, scores: IScore[], socket: ISocket, skipMsg?: boolean) => {
+	for (const score of scores) {
+		if (!score.player) return socket.emit("initials-request");
+	}
+
+	if (!skipMsg && scores.length === 1) socket.emit("show-new-high-score-msg");
+	await insertScores(manager, scores, socket);
 };
 
-export const validateScoreSkipMsg = async (manager: EntityManager, score: IScore, socket: ISocket) => {
-	await validateScore(manager, score, socket, true);
+export const validateScoresSkipMsg = async (manager: EntityManager, scores: IScore[], socket: ISocket) => {
+	await validateScores(manager, scores, socket, true);
 };
 
-const insertScore = async (manager: EntityManager, score: IScore, socket: ISocket) => {
-	await ScoreRepository.InsertOne(manager, score);
+const insertScores = async (manager: EntityManager, scores: IScore[], socket: ISocket) => {
+	await ScoreRepository.InsertMany(manager, scores);
 	await broadcastHighScoresToAllClients(manager, socket);
 };
 

@@ -37,6 +37,7 @@ export default class Game {
 	scale: number;
 	socket: ISocket;
 	noDB: boolean;
+	offlineScores: IScore[];
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -154,12 +155,29 @@ export default class Game {
 		});
 	}
 
-	reportScore(justSubmittedInitials?: boolean) {
-		const score: IScore = { player: this.player, score: this.distance };
-		if (this.tenthPlaceScore && score.score < this.tenthPlaceScore) return;
-		if (!navigator.onLine || this.noDB) return;
-		if (justSubmittedInitials) return this.socket.emit("validate-score-skip-msg", score);
-		this.socket.emit("validate-score", score);
+	reportScore(score: IScore, skipMsg?: boolean) {
+		this.reportScores([score], skipMsg);
+	}
+
+	reportScores(scores: IScore[], skipMsg?: boolean) {
+		if (this.noDB) return;
+
+		const scoresToReport: IScore[] = [];
+		for (const score of scores) {
+			if (!this.tenthPlaceScore || score.score >= this.tenthPlaceScore) {
+				if (!navigator.onLine) {
+					if (score.player) this.offlineScores.push(score);
+				} else {
+					scoresToReport.push(score);
+				}
+			}
+		}
+
+		if (scoresToReport.length === 0 || !navigator.onLine) return;
+
+		skipMsg
+			? this.socket.emit("validate-scores-skip-msg", scoresToReport)
+			: this.socket.emit("validate-scores", scoresToReport);
 	}
 
 	getPlayerInitials(onNewHighScore?: boolean) {
@@ -183,7 +201,8 @@ export default class Game {
 
 	initialsSubmitted() {
 		if (this.initialsRequested) {
-			this.reportScore(true);
+			const score: IScore = { player: this.player, score: this.distance };
+			this.reportScore(score, true);
 			this.init();
 		} else {
 			this.hideInitialsSection();
@@ -302,10 +321,17 @@ export default class Game {
 	goOnline() {
 		console.log("network: online");
 		this.initSocket();
+
+		if (!this.offlineScores) return;
+		for (const score of this.offlineScores) {
+			this.reportScore(score, true);
+		}
+		this.offlineScores = [];
 	}
 
 	goOffline() {
 		console.log("network: offline");
+		this.offlineScores = [];
 	}
 
 	update(step: number) {

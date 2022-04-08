@@ -17,6 +17,20 @@ export class ScoreRepository {
 		}
 	}
 
+	public static async InsertMany(manager: EntityManager, scores: IScore[]): Promise<boolean> {
+		try {
+			for (const score of scores) {
+				const newScore = new Score({ player: score.player, score: score.score });
+				manager.persist(newScore);
+			}
+
+			await manager.flush();
+			return true;
+		} catch (error) {
+			throw Error(error);
+		}
+	}
+
 	public static async FindTopTen(manager: EntityManager): Promise<Score[]> {
 		try {
 			const repo = manager.getRepository(Score);

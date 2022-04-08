@@ -1,3 +1,4 @@
+import { IScore } from "../../shared/types/abstract.js";
 import Game from "./game.js";
 import { ICoord, IHitboxOffset, IRect } from "./types/abstract";
 import { areRectanglesColliding, loadImage, now } from "./util.js";
@@ -74,7 +75,8 @@ export default class Copter {
 		this.game.distance = Math.floor((this.game.endTime - this.game.startTime) / 30);
 		this.game.best = this.game.distance > this.game.best ? this.game.distance : this.game.best;
 		this.game.isOver = true;
-		this.game.reportScore();
+		const score: IScore = { player: this.game.player, score: this.game.distance };
+		this.game.reportScore(score);
 	}
 
 	resize() {
