@@ -13,10 +13,6 @@ export const validateScores = async (manager: EntityManager, scores: IScore[], s
 	await insertScores(manager, scores, socket);
 };
 
-export const validateScoresSkipMsg = async (manager: EntityManager, scores: IScore[], socket: ISocket) => {
-	await validateScores(manager, scores, socket, true);
-};
-
 const insertScores = async (manager: EntityManager, scores: IScore[], socket: ISocket) => {
 	await ScoreRepository.InsertMany(manager, scores);
 	await broadcastHighScoresToAllClients(manager, socket);

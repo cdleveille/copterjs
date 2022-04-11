@@ -9,7 +9,7 @@ Install prerequisites:
 -   [Visual Studio Code](https://code.visualstudio.com/download)
 -   [Yarn](https://classic.yarnpkg.com/en/) (`npm i -g yarn`)
 
-Also recommended:
+Also recommended (for database-related development only):
 
 -   [Azure Data Studio](https://azure.microsoft.com/en-us/services/developer-tools/data-studio/) (plus [PostgreSQL extension](https://docs.microsoft.com/en-us/sql/azure-data-studio/extensions/postgres-extension?view=sql-server-ver15))
 
@@ -19,8 +19,9 @@ Set up environment:
 -   Install recommended VS Code extensions `Docker`, `ESLint`, `Prettier`, `EditorConfig`, and `TypeScript Import Sorter`.
 -   Run `yarn install` to install package dependencies.
 -   Create and populate a `.env` file in the root folder based on the `.env.example` file.
+    -   If you want to play locally without a high scores database, set the `USE_DB` environment variable to `false` and skip the "Set up database" instructions below.
 
-Set up database:
+Set up database (only needed if `USE_DB=true` in .env file):
 
 -   Open Docker Desktop and leave it running in the background.
 -   Run `docker network create helicopter-dev-network` to create the Docker network.
@@ -30,6 +31,5 @@ Set up database:
 
 Launch:
 
--   Run `yarn build` to compile both the server and client, and then `yarn start` to start the server. The client will be served on [localhost:3000](http://localhost:3000/).
--   Alternatively, run `yarn dev` to concurrently run the server via ts-node-dev and the client via nodemon, which will cause each to automatically restart whenever a change is made to any of their respective source code files.
--   You can also start the `debug` launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` and attaches a debugger to the back end.
+-   Run `yarn dev` to concurrently run the server via ts-node-dev and the client via nodemon, which will cause either to automatically restart whenever a change is made to any of their respective source code files. The client will be accessible on [localhost:3000](http://localhost:3000).
+-   Alternatively, start the "`debug`" launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` with the degugger attached to the server.

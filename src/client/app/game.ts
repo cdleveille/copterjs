@@ -155,12 +155,9 @@ export default class Game {
 		});
 	}
 
-	reportScore(score: IScore, skipMsg?: boolean) {
-		this.reportScores([score], skipMsg);
-	}
-
-	reportScores(scores: IScore[], skipMsg?: boolean) {
+	reportScores(scores: IScore[] | IScore, skipMsg?: boolean) {
 		if (this.noDB) return;
+		if (!Array.isArray(scores)) scores = [scores];
 
 		const scoresToReport: IScore[] = [];
 		for (const score of scores) {
@@ -174,10 +171,7 @@ export default class Game {
 		}
 
 		if (scoresToReport.length === 0 || !navigator.onLine) return;
-
-		skipMsg
-			? this.socket.emit("validate-scores-skip-msg", scoresToReport)
-			: this.socket.emit("validate-scores", scoresToReport);
+		this.socket.emit("validate-scores", { scores: scoresToReport, skipMsg });
 	}
 
 	getPlayerInitials(onNewHighScore?: boolean) {
@@ -202,7 +196,7 @@ export default class Game {
 	initialsSubmitted() {
 		if (this.initialsRequested) {
 			const score: IScore = { player: this.player, score: this.distance };
-			this.reportScore(score, true);
+			this.reportScores(score, true);
 			this.init();
 		} else {
 			this.hideInitialsSection();

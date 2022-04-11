@@ -10,7 +10,7 @@ import { IScore, ISocket } from "../../shared/types/abstract";
 import { Routes } from "../../shared/types/constants";
 import router from "../controllers/index";
 import Config from "../helpers/config";
-import { sendHighScoresToClient, validateScores, validateScoresSkipMsg } from "../helpers/score";
+import { sendHighScoresToClient, validateScores } from "../helpers/score";
 import { Database } from "./db";
 import log from "./log";
 
@@ -24,7 +24,7 @@ export default class App {
 		App.instance.use(morgan("combined", { stream: logStream }));
 
 		App.instance.use((req: Request, res: Response, next: NextFunction) => {
-			res.locals.em = Config.CONNECT_TO_DB ? Database.Manager.fork() : null;
+			res.locals.em = Config.USE_DB ? Database.Manager.fork() : null;
 			next();
 		});
 
@@ -41,7 +41,9 @@ export default class App {
 				}
 			})
 		);
+
 		App.instance.use(compression());
+
 		App.instance.use(
 			cors({
 				origin: "*",
@@ -56,25 +58,22 @@ export default class App {
 		);
 
 		App.instance.set("json spaces", 2);
+
 		App.instance.disabled("x-powered-by");
 	}
 
 	public static async start() {
-		if (Config.CONNECT_TO_DB) await Database.Connect();
+		if (Config.USE_DB) await Database.Connect();
 		await App.setup();
 
-		const manager = Config.CONNECT_TO_DB ? Database.Manager.fork() : null;
+		const manager = Config.USE_DB ? Database.Manager.fork() : null;
 
 		const http = require("http").Server(App.instance);
 		const io = require("socket.io")(http);
 
 		io.on("connect", (socket: ISocket) => {
-			socket.on("validate-scores", async (scores: IScore[]) => {
-				await validateScores(manager, scores, socket);
-			});
-
-			socket.on("validate-scores-skip-msg", async (scores: IScore[]) => {
-				await validateScoresSkipMsg(manager, scores, socket);
+			socket.on("validate-scores", async (data: { scores: IScore[]; skipMsg: boolean }) => {
+				await validateScores(manager, data.scores, socket, data.skipMsg);
 			});
 
 			socket.on("high-scores-request", async () => {
@@ -82,7 +81,7 @@ export default class App {
 			});
 
 			socket.on("connected-to-db-request", async () => {
-				socket.emit("connected-to-db", Config.CONNECT_TO_DB);
+				socket.emit("connected-to-db", Config.USE_DB);
 			});
 		});
 

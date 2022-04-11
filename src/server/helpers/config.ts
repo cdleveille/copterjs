@@ -5,7 +5,7 @@ import { Host } from "../types/constants";
 
 const Config = {
 	IS_PROD: <boolean>(process.env.NODE_ENV.toLowerCase() === Env.prod),
-	CONNECT_TO_DB: <boolean>(process.env.CONNECT_TO_DB.toLowerCase() === "true"),
+	USE_DB: <boolean>(process.env.USE_DB.toLowerCase() === "true"),
 	PORT: <number>(parseInt(process.env.PORT) || 3000),
 	HOST: <string>(process.env.NODE_ENV === Env.prod ? process.env.HOST : Host.local || Host.ip)
 };
