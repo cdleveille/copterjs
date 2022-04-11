@@ -14,11 +14,11 @@ export const startRun = (socket: ISocket) => {
 export const endRun = async (manager: EntityManager, player: string, clientDistance: number, socket: ISocket) => {
 	if (!activeRuns[socket.id]) return;
 	activeRuns[socket.id].endTime = new Date().getTime();
-	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 2000) return;
+	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 2000) return deleteRun(socket.id);
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
-	if (Math.abs(distance - clientDistance) > 1) return;
+	if (Math.abs(distance - clientDistance) > 1) return deleteRun(socket.id);
 
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
@@ -29,14 +29,19 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 };
 
 export const submitScore = async (manager: EntityManager, player: string, socket: ISocket) => {
+	if (!activeRuns[socket.id]) return;
+
 	const distance = computeDistance(socket);
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
+
 	const score: IScore = { player, score: distance };
-	deleteRun(socket.id);
 	await insertScore(manager, score, socket);
+
+	deleteRun(socket.id);
 };
 
 export const deleteRun = (id: string) => {
+	if (!activeRuns[id]) return;
 	delete activeRuns[id];
 };
 
@@ -44,8 +49,10 @@ const computeDistance = (socket: ISocket): number => {
 	return Math.floor((activeRuns[socket.id].endTime - activeRuns[socket.id].startTime) / 30);
 };
 
-export const ping = () => {
-	lastPlayerInputPing = new Date().getTime();
+export const ping = (socket: ISocket) => {
+	if (!activeRuns[socket.id]) return;
+	const newPing = new Date().getTime();
+	if (newPing - lastPlayerInputPing > 2000) deleteRun(socket.id);
 };
 
 const insertScore = async (manager: EntityManager, score: IScore, socket: ISocket) => {

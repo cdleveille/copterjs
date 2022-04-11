@@ -88,7 +88,7 @@ export default class App {
 			});
 
 			socket.on("player-input-ping", () => {
-				ping();
+				ping(socket);
 			});
 
 			socket.on("high-scores-request", async () => {

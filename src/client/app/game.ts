@@ -170,7 +170,7 @@ export default class Game {
 	}
 
 	ping() {
-		if (this.noDB || !navigator.onLine) return;
+		if (this.noDB || !navigator.onLine || this.pausedAtStart || this.isOver) return;
 		this.socket.emit("player-input-ping");
 	}
 
