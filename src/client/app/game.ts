@@ -25,7 +25,6 @@ export default class Game {
 	initialsInput: HTMLInputElement;
 	initialsInputCaret: HTMLDivElement;
 	highScores: HTMLUListElement;
-	tenthPlaceScore: number;
 	overlay: HTMLDivElement;
 	isOver: boolean;
 	startTime: number;
@@ -37,7 +36,6 @@ export default class Game {
 	scale: number;
 	socket: ISocket;
 	noDB: boolean;
-	offlineScores: IScore[];
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -95,6 +93,7 @@ export default class Game {
 		this.socket.on("initials-request", () => this.getPlayerInitials(true));
 		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
 		this.socket.on("high-scores-updated", (highScores: IScore[]) => this.updateHighScores(highScores));
+		this.socket.on("report-distance-to-client", (distance: number) => this.updateDistance(distance));
 		this.socket.on("connected-to-db", (connected: boolean) => {
 			if (connected) {
 				console.log("server is connected to db");
@@ -155,23 +154,24 @@ export default class Game {
 		});
 	}
 
-	reportScores(scores: IScore[] | IScore, skipMsg?: boolean) {
-		if (this.noDB) return;
-		if (!Array.isArray(scores)) scores = [scores];
+	endRun(distance: number) {
+		if (this.noDB || !navigator.onLine) return;
+		this.socket.emit("end-run", { player: this.player, score: distance });
+	}
 
-		const scoresToReport: IScore[] = [];
-		for (const score of scores) {
-			if (!this.tenthPlaceScore || score.score >= this.tenthPlaceScore) {
-				if (!navigator.onLine) {
-					if (score.player) this.offlineScores.push(score);
-				} else {
-					scoresToReport.push(score);
-				}
-			}
-		}
+	submitScore() {
+		if (this.noDB || !navigator.onLine) return;
+		this.socket.emit("submit-score", this.player);
+	}
 
-		if (scoresToReport.length === 0 || !navigator.onLine) return;
-		this.socket.emit("validate-scores", { scores: scoresToReport, skipMsg });
+	updateDistance(distance: number) {
+		this.distance = distance;
+		this.best = this.distance > this.best ? this.distance : this.best;
+	}
+
+	ping() {
+		if (this.noDB || !navigator.onLine) return;
+		this.socket.emit("player-input-ping");
 	}
 
 	getPlayerInitials(onNewHighScore?: boolean) {
@@ -195,8 +195,7 @@ export default class Game {
 
 	initialsSubmitted() {
 		if (this.initialsRequested) {
-			const score: IScore = { player: this.player, score: this.distance };
-			this.reportScores(score, true);
+			this.submitScore();
 			this.init();
 		} else {
 			this.hideInitialsSection();
@@ -308,22 +307,16 @@ export default class Game {
 		}
 
 		this.highScores.innerHTML = content;
-		if (highScores.length === 10) this.tenthPlaceScore = highScores[highScores.length - 1].score;
 		window.localStorage.setItem("high-scores", JSON.stringify(highScores));
 	}
 
 	goOnline() {
 		console.log("network: online");
 		this.initSocket();
-
-		if (!this.offlineScores) return;
-		this.reportScores(this.offlineScores, true);
-		this.offlineScores = [];
 	}
 
 	goOffline() {
 		console.log("network: offline");
-		this.offlineScores = [];
 	}
 
 	update(step: number) {

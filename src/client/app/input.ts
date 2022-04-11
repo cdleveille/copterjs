@@ -77,9 +77,11 @@ export default class InputHandler {
 		if (game.isOver) return game.reset();
 		game.copter.climbing = true;
 		game.highScores.style.display = "none";
+		game.ping();
 	}
 
 	release(game: Game) {
 		game.copter.climbing = false;
+		game.ping();
 	}
 }

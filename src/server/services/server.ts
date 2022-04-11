@@ -6,11 +6,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import { IScore, ISocket } from "../../shared/types/abstract";
+import { IScore } from "../../../build/shared/types/abstract";
+import { ISocket } from "../../shared/types/abstract";
 import { Routes } from "../../shared/types/constants";
 import router from "../controllers/index";
 import Config from "../helpers/config";
-import { sendHighScoresToClient, validateScores } from "../helpers/score";
+import { deleteRun, endRun, ping, sendHighScoresToClient, startRun, submitScore } from "../helpers/score";
 import { Database } from "./db";
 import log from "./log";
 
@@ -72,8 +73,22 @@ export default class App {
 		const io = require("socket.io")(http);
 
 		io.on("connect", (socket: ISocket) => {
-			socket.on("validate-scores", async (data: { scores: IScore[]; skipMsg: boolean }) => {
-				await validateScores(manager, data.scores, socket, data.skipMsg);
+			deleteRun(socket.id);
+
+			socket.on("start-run", () => {
+				startRun(socket);
+			});
+
+			socket.on("end-run", async (data: IScore) => {
+				await endRun(manager, data.player, data.score, socket);
+			});
+
+			socket.on("submit-score", async (player: string) => {
+				await submitScore(manager, player, socket);
+			});
+
+			socket.on("player-input-ping", () => {
+				ping();
 			});
 
 			socket.on("high-scores-request", async () => {
@@ -82,6 +97,10 @@ export default class App {
 
 			socket.on("connected-to-db-request", async () => {
 				socket.emit("connected-to-db", Config.USE_DB);
+			});
+
+			socket.on("disconnect", () => {
+				deleteRun(socket.id);
 			});
 		});
 

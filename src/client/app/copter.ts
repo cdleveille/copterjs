@@ -1,4 +1,3 @@
-import { IScore } from "../../shared/types/abstract.js";
 import Game from "./game.js";
 import { ICoord, IHitboxOffset, IRect } from "./types/abstract";
 import { areRectanglesColliding, loadImage, now } from "./util.js";
@@ -71,11 +70,9 @@ export default class Copter {
 
 	crash() {
 		this.game.endTime = now();
-		this.game.distance = Math.floor((this.game.endTime - this.game.startTime) / 30);
-		this.game.best = this.game.distance > this.game.best ? this.game.distance : this.game.best;
+		this.game.updateDistance(Math.floor((this.game.endTime - this.game.startTime) / 30));
 		this.game.isOver = true;
-		const score: IScore = { player: this.game.player, score: this.game.distance };
-		this.game.reportScores(score);
+		this.game.endRun(this.game.distance);
 	}
 
 	resize() {
@@ -109,7 +106,10 @@ export default class Copter {
 
 		if (this.game.isOver) return;
 
-		if (this.game.startTime === undefined) this.game.startTime = now();
+		if (this.game.startTime === undefined) {
+			this.game.startTime = now();
+			this.game.socket.emit("start-run");
+		}
 		this.game.distance = Math.floor((now() - this.game.startTime) / 30);
 
 		// update position
