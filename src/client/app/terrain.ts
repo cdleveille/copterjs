@@ -1,11 +1,13 @@
 import Game from "./game.js";
-import { IRect, ITunnel } from "./types/abstract";
+import { IBlock, ITunnel } from "./types/abstract";
 import { Color } from "./types/constant.js";
+import { randomInt } from "./util.js";
 
 export default class Terrain {
 	game: Game;
 	tunnel: ITunnel[];
-	blocks: IRect[];
+	blocks: IBlock[];
+	newBlockNeeded: boolean;
 
 	constructor(game: Game) {
 		this.game = game;
@@ -31,10 +33,8 @@ export default class Terrain {
 	resizeBlocks() {
 		if (!this.blocks) return;
 		for (const block of this.blocks) {
-			block.x = block.x * this.game.scale;
-			block.y = block.y * this.game.scale;
-			block.width = block.width * this.game.scale;
-			block.height = block.height * this.game.scale;
+			block.x = block.xPct * this.game.width;
+			block.y = block.yPct * this.game.height;
 		}
 	}
 
@@ -57,13 +57,57 @@ export default class Terrain {
 	}
 
 	maintainTunnel() {
-		if (this.game.pausedAtStart && this.tunnel.length === 0) {
-			this.createInitialTunnel();
+		if (this.game.pausedAtStart && this.tunnel.length === 0) this.createInitialTunnelSegment();
+
+		// if last tunnel segment is on the game screen, generate another
+		const lastSegment = this.tunnel[this.tunnel.length - 1];
+		if (lastSegment.x < this.game.width) {
+			this.createNewTunnelSegment(lastSegment);
 		}
 	}
 
-	createInitialTunnel() {
-		this.tunnel.push(this.newTunnelSegment(0, 999999999999999, 9, 9));
+	createInitialTunnelSegment() {
+		this.tunnel.push(this.newTunnelSegment(0, 110, 9, 9));
+	}
+
+	createNewTunnelSegment(lastSegment: ITunnel) {
+		const x = lastSegment.x + lastSegment.lengthPct * this.game.width;
+		const topDirection = randomInt(0, 3);
+		const botDirection = randomInt(0, 3);
+		const lengthPct = randomInt(1, 11);
+
+		let topDepthPct: number, botDepthPct: number;
+
+		switch (topDirection) {
+			case 0:
+				topDepthPct = lastSegment.topDepthPct * 100 + 1;
+				break;
+			case 1:
+				topDepthPct = lastSegment.topDepthPct * 100;
+				break;
+			case 2:
+				topDepthPct = lastSegment.topDepthPct * 100 - 1;
+				break;
+		}
+
+		switch (botDirection) {
+			case 0:
+				botDepthPct = lastSegment.botDepthPct * 100 + 1;
+				break;
+			case 1:
+				botDepthPct = lastSegment.botDepthPct * 100;
+				break;
+			case 2:
+				botDepthPct = lastSegment.botDepthPct * 100 - 1;
+				break;
+		}
+
+		if (topDepthPct < 9) topDepthPct = 9;
+		if (botDepthPct < 9) botDepthPct = 9;
+
+		if (this.newBlockNeeded) this.createNewBlock(x, topDepthPct, botDepthPct);
+
+		this.tunnel.push(this.newTunnelSegment(x, lengthPct, topDepthPct, botDepthPct));
 	}
 
 	newTunnelSegment(x: number, lengthPct: number, topDepthPct: number, botDepthPct: number): ITunnel {
@@ -77,11 +121,53 @@ export default class Terrain {
 	}
 
 	updateBlocks(step: number) {
+		this.maintainBlocks();
+
 		// update position of each block, remove if offscreen
 		for (const block of this.blocks) {
-			block.x -= this.game.copter.xv * step;
-			if (block.x + block.width < 0) this.blocks.shift();
+			if (!this.game.pausedAtStart) block.x -= this.game.copter.xv * step;
+			block.xPct = block.x / this.game.width;
+			block.yPct = block.y / this.game.height;
+			if (block.x + block.widthPct * this.game.width < 0) this.blocks.shift();
 		}
+	}
+
+	maintainBlocks() {
+		// if last block has gone off the game screen or there are no blocks, generate another
+		if (
+			this.blocks.length === 0 ||
+			this.blocks[this.blocks.length - 1].x + this.blocks[this.blocks.length - 1].xPct * this.game.width < 0
+		) {
+			this.newBlockNeeded = true;
+		}
+	}
+
+	createNewBlock(x: number, topDepthPct: number, botDepthPct: number) {
+		const widthPct = 3;
+		const heightPct = 18;
+
+		const yMin = Math.floor((topDepthPct / 100 + 0.01) * this.game.height);
+		const yMax = Math.floor(
+			this.game.height - (botDepthPct / 100 + 0.01) * this.game.height - (heightPct / 100) * this.game.height
+		);
+
+		// const yMin = 0;
+		// const yMax = this.game.height;
+
+		const y = randomInt(yMin, yMax + 1);
+		this.blocks.push(this.newBlock(x, y, widthPct, heightPct));
+		this.newBlockNeeded = false;
+	}
+
+	newBlock(x: number, y: number, widthPct: number, heightPct: number): IBlock {
+		return {
+			x,
+			y,
+			xPct: x / this.game.width,
+			yPct: y / this.game.height,
+			widthPct: widthPct / 100,
+			heightPct: heightPct / 100
+		} as IBlock;
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
@@ -92,20 +178,20 @@ export default class Terrain {
 			ctx.fillRect(
 				Math.floor(segment.x),
 				0,
-				Math.floor(segment.lengthPct * this.game.width),
+				Math.floor(segment.lengthPct * this.game.width) + 1,
 				Math.floor(segment.topDepthPct * this.game.height)
 			);
 			ctx.fillRect(
 				Math.floor(segment.x),
-				Math.floor(this.game.height - segment.botDepthPct * this.game.height),
-				Math.floor(segment.lengthPct * this.game.width),
-				Math.floor(segment.botDepthPct * this.game.height)
+				Math.floor(this.game.height - segment.botDepthPct * this.game.height) + 1,
+				Math.floor(segment.lengthPct * this.game.width) + 1,
+				Math.floor(segment.botDepthPct * this.game.height) + 1
 			);
 		}
 
 		// draw blocks
 		for (const block of this.blocks) {
-			ctx.fillRect(block.x, block.y, block.width, block.height);
+			ctx.fillRect(block.x, block.y, block.widthPct * this.game.width, block.heightPct * this.game.height);
 		}
 	}
 }

@@ -18,3 +18,10 @@ export const areRectanglesColliding = (rect1: IRect, rect2: IRect): boolean => {
 		rect1.y + rect1.height > rect2.y
 	);
 };
+
+// generate random integer in specified range (min inclusive, max exclusive)
+export const randomInt = (min: number, max: number): number => {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min) + min);
+};

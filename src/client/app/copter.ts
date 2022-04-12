@@ -79,7 +79,7 @@ export default class Copter {
 		// constant
 		this.g = 3500 * this.game.scale;
 		this.power = 6500 * this.game.scale;
-		this.xv = 700 * this.game.scale;
+		this.xv = 800 * this.game.scale;
 		this.width = 124 * this.game.scale;
 		this.height = 57 * this.game.scale;
 		this.hitBoxOffset = {
@@ -155,7 +155,14 @@ export default class Copter {
 
 		// check for collision with blocks
 		for (const block of this.game.terrain.blocks) {
-			if (areRectanglesColliding(this.hitbox, block)) {
+			const blockRect: IRect = {
+				x: block.x,
+				y: block.y,
+				width: block.widthPct * this.game.width,
+				height: block.heightPct * this.game.height
+			};
+
+			if (areRectanglesColliding(this.hitbox, blockRect)) {
 				this.crash();
 			}
 		}

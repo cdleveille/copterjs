@@ -18,6 +18,13 @@ export interface ITunnel {
 	botDepthPct: number;
 }
 
+export interface IBlock extends ICoord {
+	xPct: number;
+	yPct: number;
+	widthPct: number;
+	heightPct: number;
+}
+
 export interface IHitboxOffset {
 	left: number;
 	right: number;

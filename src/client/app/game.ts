@@ -56,7 +56,7 @@ export default class Game {
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
-		this.player = window.localStorage.getItem("pilot");
+		this.player = window.localStorage.getItem("player");
 
 		this.pilotLabel.style.display = "block";
 		this.highScoresLabel.style.display = "block";
@@ -113,7 +113,7 @@ export default class Game {
 			if (this.initialsInput.value.length !== 3) return;
 
 			this.player = this.initialsInput.value;
-			window.localStorage.setItem("pilot", this.player);
+			window.localStorage.setItem("player", this.player);
 			this.initialsSubmitted();
 		});
 
@@ -302,7 +302,7 @@ export default class Game {
 		for (const highScore of highScores) {
 			content += `<li style="background: transparent;">
 				${count < 10 ? "&nbsp;" + count : count}.&nbsp;
-				${highScore.player}&nbsp;${highScore.score}</li>`;
+				${highScore.player}&nbsp;&nbsp;${highScore.score}</li>`;
 			count++;
 		}
 
@@ -326,7 +326,7 @@ export default class Game {
 
 	draw(ctx: CanvasRenderingContext2D) {
 		ctx.fillStyle = Color.black;
-		ctx.fillRect(0, 0, this.width, this.height);
+		ctx.fillRect(0, 0, this.width + 1, this.height);
 
 		this.copter.draw(ctx);
 		this.terrain.draw(ctx);
