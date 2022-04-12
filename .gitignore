@@ -5,3 +5,4 @@
 *.log
 /helicopter-dev-container/data
 /__db_cache__
+.DS_Store

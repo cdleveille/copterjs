@@ -34,7 +34,7 @@ export default class App {
 				directives: {
 					"default-src": ["'self'"],
 					"object-src": ["'none'"],
-					"script-src": ["'self'"],
+					"script-src": ["'self'", "'unsafe-eval'"],
 					"style-src": ["'self'", "'unsafe-inline'"],
 					"font-src": ["'self'"],
 					"img-src": ["'self' blob: data:"],
