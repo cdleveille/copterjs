@@ -1,5 +1,4 @@
-import { ISocket } from "../../../build/shared/types/abstract";
-import { IScore } from "../../../build/shared/types/abstract.js";
+import { IEnvVars, IScore, ISocket } from "../../../build/shared/types/abstract.js";
 import Copter from "./copter.js";
 import Terrain from "./terrain.js";
 import { Color } from "./types/constant.js";
@@ -83,7 +82,7 @@ export default class Game {
 		this.terrain.init();
 	}
 
-	initSocket() {
+	initNetwork() {
 		if (!navigator.onLine) return;
 
 		// @ts-ignore
@@ -94,17 +93,23 @@ export default class Game {
 		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
 		this.socket.on("high-scores-updated", (highScores: IScore[]) => this.updateHighScores(highScores));
 		this.socket.on("report-distance-to-client", (distance: number) => this.updateDistance(distance));
-		this.socket.on("connected-to-db", (connected: boolean) => {
-			if (connected) {
-				console.log("server is connected to db");
-				this.socket.emit("high-scores-request");
-			} else {
-				console.log("server is not connected to db");
-				this.noDB = true;
-			}
-		});
+		this.socket.on("env-var-send", (data: IEnvVars) => this.processEnvVars(data));
 
-		this.socket.emit("connected-to-db-request");
+		this.socket.emit("env-var-request");
+	}
+
+	processEnvVars(data: IEnvVars) {
+		// overwrite console.log in prod
+		if (data.IS_PROD) console.log = () => undefined;
+		console.log("network: online");
+
+		if (data.USE_DB) {
+			console.log("db: connected");
+			this.socket.emit("high-scores-request");
+		} else {
+			console.log("db: disconnected");
+			this.noDB = true;
+		}
 	}
 
 	initIntialsForm() {
@@ -311,8 +316,7 @@ export default class Game {
 	}
 
 	goOnline() {
-		console.log("network: online");
-		this.initSocket();
+		this.initNetwork();
 	}
 
 	goOffline() {

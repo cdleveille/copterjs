@@ -108,7 +108,7 @@ export default class Copter {
 
 		if (this.game.startTime === undefined) {
 			this.game.startTime = now();
-			this.game.socket.emit("start-run");
+			if (!this.game.noDB && navigator.onLine) this.game.socket.emit("start-run");
 		}
 		this.game.distance = Math.floor((now() - this.game.startTime) / 30);
 

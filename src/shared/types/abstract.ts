@@ -30,3 +30,8 @@ interface ISocketParams {
 	reconnectionDelay: number;
 	reconnectionAttempts: number;
 }
+
+export interface IEnvVars {
+	IS_PROD: boolean;
+	USE_DB: boolean;
+}

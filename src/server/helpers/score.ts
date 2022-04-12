@@ -57,18 +57,12 @@ export const ping = (socket: ISocket) => {
 
 const insertScore = async (manager: EntityManager, score: IScore, socket: ISocket) => {
 	await ScoreRepository.InsertOne(manager, score);
-	await broadcastHighScoresToAllClients(manager, socket);
+	await sendHighScoresToClient(manager, socket, true);
 };
 
-export const sendHighScoresToClient = async (manager: EntityManager, socket: ISocket) => {
+export const sendHighScoresToClient = async (manager: EntityManager, socket: ISocket, broadcast?: boolean) => {
 	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
-	if (highScores.length === 10) tenthPlaceScore = highScores[9].score;
+	if (highScores.length === 10) tenthPlaceScore = highScores[highScores.length - 1].score;
 	socket.emit("high-scores-updated", highScores);
-};
-
-const broadcastHighScoresToAllClients = async (manager: EntityManager, socket: ISocket) => {
-	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
-	if (highScores.length === 10) tenthPlaceScore = highScores[9].score;
-	socket.broadcast.emit("high-scores-updated", highScores);
-	socket.emit("high-scores-updated", highScores);
+	if (broadcast) socket.broadcast.emit("high-scores-updated", highScores);
 };

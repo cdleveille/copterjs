@@ -151,9 +151,6 @@ export default class Terrain {
 			this.game.height - (botDepthPct / 100 + 0.01) * this.game.height - (heightPct / 100) * this.game.height
 		);
 
-		// const yMin = 0;
-		// const yMax = this.game.height;
-
 		const y = randomInt(yMin, yMax + 1);
 		this.blocks.push(this.newBlock(x, y, widthPct, heightPct));
 		this.newBlockNeeded = false;

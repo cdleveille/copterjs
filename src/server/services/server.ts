@@ -6,12 +6,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import { IScore } from "../../../build/shared/types/abstract";
+import { IEnvVars, IScore } from "../../../build/shared/types/abstract";
 import { ISocket } from "../../shared/types/abstract";
-import { Routes } from "../../shared/types/constants";
 import router from "../controllers/index";
 import Config from "../helpers/config";
 import { deleteRun, endRun, ping, sendHighScoresToClient, startRun, submitScore } from "../helpers/score";
+import { Routes } from "../types/constants";
 import { Database } from "./db";
 import log from "./log";
 
@@ -95,8 +95,8 @@ export default class App {
 				await sendHighScoresToClient(manager, socket);
 			});
 
-			socket.on("connected-to-db-request", async () => {
-				socket.emit("connected-to-db", Config.USE_DB);
+			socket.on("env-var-request", async () => {
+				socket.emit("env-var-send", { IS_PROD: Config.IS_PROD, USE_DB: Config.USE_DB } as IEnvVars);
 			});
 
 			socket.on("disconnect", () => {

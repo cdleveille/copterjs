@@ -16,6 +16,7 @@ self.addEventListener("install", (event) => {
 				"./app/game.js",
 				"./app/index.js",
 				"./app/input.js",
+				"./app/log.js",
 				"./app/sw.js",
 				"./app/terrain.js",
 				"./app/util.js",
