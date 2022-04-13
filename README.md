@@ -1,5 +1,7 @@
 # helicopter
 
+Modern remake of the classic addicting flash game.
+
 ## Local Setup
 
 Install prerequisites:
