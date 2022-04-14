@@ -1,5 +1,7 @@
+import { Socket } from "socket.io";
+
 import { EntityManager } from "@mikro-orm/core";
-import { IScore, ISocket } from "@shared/types/abstract";
+import { IScore } from "@shared/types/abstract";
 
 import { Score } from "../models/Score";
 import { ScoreRepository } from "../repositories/ScoreRepository";
@@ -8,11 +10,11 @@ import { IRun } from "../types/abstract";
 const activeRuns: { [id: string]: IRun } = {};
 let tenthPlaceScore: number, lastPlayerInputPing: number;
 
-export const startRun = (socket: ISocket) => {
+export const startRun = (socket: Socket) => {
 	activeRuns[socket.id] = { startTime: new Date().getTime(), endTime: undefined };
 };
 
-export const endRun = async (manager: EntityManager, player: string, clientDistance: number, socket: ISocket) => {
+export const endRun = async (manager: EntityManager, player: string, clientDistance: number, socket: Socket) => {
 	if (!activeRuns[socket.id]) return;
 	activeRuns[socket.id].endTime = new Date().getTime();
 	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 2000) return deleteRun(socket.id);
@@ -29,7 +31,7 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 	await submitScore(manager, player, socket);
 };
 
-export const submitScore = async (manager: EntityManager, player: string, socket: ISocket) => {
+export const submitScore = async (manager: EntityManager, player: string, socket: Socket) => {
 	if (!activeRuns[socket.id]) return;
 
 	const distance = computeDistance(socket);
@@ -46,22 +48,22 @@ export const deleteRun = (id: string) => {
 	delete activeRuns[id];
 };
 
-const computeDistance = (socket: ISocket): number => {
+const computeDistance = (socket: Socket): number => {
 	return Math.floor((activeRuns[socket.id].endTime - activeRuns[socket.id].startTime) / 30);
 };
 
-export const ping = (socket: ISocket) => {
+export const ping = (socket: Socket) => {
 	if (!activeRuns[socket.id]) return;
 	const newPing = new Date().getTime();
 	if (newPing - lastPlayerInputPing > 2000) deleteRun(socket.id);
 };
 
-const insertScore = async (manager: EntityManager, score: IScore, socket: ISocket) => {
+const insertScore = async (manager: EntityManager, score: IScore, socket: Socket) => {
 	await ScoreRepository.InsertOne(manager, score);
 	await sendHighScoresToClient(manager, socket, true);
 };
 
-export const sendHighScoresToClient = async (manager: EntityManager, socket: ISocket, broadcast?: boolean) => {
+export const sendHighScoresToClient = async (manager: EntityManager, socket: Socket, broadcast?: boolean) => {
 	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
 	if (highScores.length === 10) tenthPlaceScore = highScores[highScores.length - 1].score;
 	socket.emit("high-scores-updated", highScores);

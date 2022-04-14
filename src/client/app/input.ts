@@ -1,4 +1,4 @@
-import { Game } from "./game.js";
+import { Game } from "./game";
 
 export class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {

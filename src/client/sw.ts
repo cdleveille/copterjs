@@ -10,16 +10,6 @@ self.addEventListener("install", (event) => {
 	event.waitUntil(
 		caches.open(version + cacheName).then((cache) => {
 			return cache.addAll([
-				"./app/types/abstract.js",
-				"./app/types/constant.js",
-				"./app/copter.js",
-				"./app/game.js",
-				"./app/index.js",
-				"./app/input.js",
-				"./app/sw.js",
-				"./app/terrain.js",
-				"./app/util.js",
-				"./app/window.js",
 				"./css/style.css",
 				"./font/digital-7 (mono).ttf",
 				"./img/icons/icon_16x16.png",
@@ -72,10 +62,11 @@ self.addEventListener("install", (event) => {
 				"./img/copter25.png",
 				"./img/smoke.png",
 				"./browserconfig.xml",
+				"./bundle.js",
 				"./favicon.ico",
 				"./index.html",
 				"./manifest.json",
-				"./service-worker.js"
+				"./sw.js"
 			]);
 		})
 	);

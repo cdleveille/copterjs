@@ -5,8 +5,9 @@ import fs from "fs";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import { Socket } from "socket.io";
 
-import { IEnvVars, IScore, ISocket } from "@shared/types/abstract";
+import { IEnvVars, IScore } from "@shared/types/abstract";
 
 import router from "../controllers/index";
 import Config from "../helpers/config";
@@ -72,7 +73,7 @@ export default class App {
 		const http = require("http").Server(App.instance);
 		const io = require("socket.io")(http);
 
-		io.on("connect", (socket: ISocket) => {
+		io.on("connect", (socket: Socket) => {
 			deleteRun(socket.id);
 
 			socket.on("start-run", () => {

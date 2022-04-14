@@ -1,9 +1,11 @@
-import { IEnvVars, IScore, ISocket } from "@shared/types/abstract.js";
+import { io, Socket } from "socket.io-client";
 
-import { Copter } from "./copter.js";
-import { Terrain } from "./terrain.js";
-import { Color } from "./types/constant.js";
-import { now } from "./util.js";
+import { IEnvVars, IScore } from "@shared/types/abstract";
+
+import { Copter } from "./copter";
+import { Terrain } from "./terrain";
+import { Color } from "./types/constant";
+import { now } from "./util";
 
 export class Game {
 	width: number;
@@ -34,7 +36,7 @@ export class Game {
 	player: string;
 	initialsRequested: boolean;
 	scale: number;
-	socket: ISocket;
+	socket: Socket;
 	noDB: boolean;
 
 	constructor() {
@@ -86,9 +88,7 @@ export class Game {
 	initNetwork() {
 		if (!navigator.onLine) return;
 
-		// @ts-ignore
-		const socketIO: ISocket = io;
-		this.socket = socketIO.connect({ reconnectionDelay: 1000, reconnectionAttempts: 10 });
+		this.socket = io();
 
 		this.socket.on("initials-request", () => this.getPlayerInitials(true));
 		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());

@@ -1,7 +1,9 @@
-import { Game } from "./game.js";
-import { InputHandler } from "./input.js";
-import { now } from "./util.js";
-import { WindowHandler } from "./window.js";
+import { Game } from "./game";
+import { InputHandler } from "./input";
+import { now } from "./util";
+import { WindowHandler } from "./window";
+
+if (!navigator.serviceWorker.controller) navigator.serviceWorker.register("sw.js");
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");

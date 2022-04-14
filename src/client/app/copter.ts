@@ -1,6 +1,6 @@
-import { Game } from "./game.js";
-import { ICoord, IHitboxOffset, IRect } from "./types/abstract.js";
-import { areRectanglesColliding, loadImage, now } from "./util.js";
+import { Game } from "./game";
+import { ICoord, IHitboxOffset, IRect } from "./types/abstract";
+import { areRectanglesColliding, loadImage, now } from "./util";
 
 export class Copter {
 	game: Game;

@@ -1,7 +1,7 @@
-import { Game } from "./game.js";
-import { IBlock, ITunnel } from "./types/abstract.js";
-import { Color } from "./types/constant.js";
-import { randomInt } from "./util.js";
+import { Game } from "./game";
+import { IBlock, ITunnel } from "./types/abstract";
+import { Color } from "./types/constant";
+import { randomInt } from "./util";
 
 export class Terrain {
 	game: Game;

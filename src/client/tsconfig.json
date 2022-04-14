@@ -1,23 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "ESNext",
+    "target": "es2019",
+    "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "outDir": "../../build/client",
-    "lib": ["ES2019", "DOM"],
+    "outDir": "../../build",
+    "lib": ["es2019", "dom"],
+    "rootDir": "../",
     "types": [],
-    "composite": true,
     "paths": {
+      "*": ["../../node_modules/*"],
       "@shared/*": ["../shared/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx"],
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/server/*"],
   "references": [
     {
       "path": "../shared"
