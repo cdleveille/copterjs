@@ -1,4 +1,4 @@
-# helicopter
+# copterjs
 
 Modern remake of the classic addicting flash game.
 
@@ -19,7 +19,7 @@ Set up environment:
 
 -   Clone repo and open root folder in VS Code.
 -   Install recommended VS Code extensions `Docker`, `ESLint`, `Prettier`, `EditorConfig`, and `TypeScript Import Sorter`.
--   Run `yarn install` to install package dependencies.
+-   Run `yarn` to install package dependencies.
 -   Create and populate a `.env` file in the root folder based on the `.env.example` file.
     -   If you want to play locally without a high scores database, set the `USE_DB` environment variable to `false` and skip the "Set up database" instructions below.
 
@@ -33,5 +33,5 @@ Set up database (only needed if `USE_DB=true` in .env file):
 
 Launch:
 
--   Run `yarn dev` to concurrently run the server via ts-node-dev and the client via nodemon, which will cause either to automatically restart whenever a change is made to any of their respective source code files. The client will be accessible on [localhost:3000](http://localhost:3000).
+-   Run `yarn dev` to concurrently run the server via ts-node-dev and the client via webpack in watch mode, which will cause either to automatically restart whenever a change is made to any of their respective source code files. The client will be accessible on [localhost:3000](http://localhost:3000).
 -   Alternatively, start the "`debug`" launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` with the degugger attached to the server.
