@@ -4,7 +4,7 @@ import { Copter } from "./copter";
 import { Terrain } from "./terrain";
 import { ISocket } from "./types/abstract";
 import { Color } from "./types/constant";
-import { now } from "./util";
+import { Counter, now } from "./util";
 
 export class Game {
 	width: number;
@@ -37,6 +37,7 @@ export class Game {
 	scale: number;
 	socket: ISocket;
 	noDB: boolean;
+	counter: Counter;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -69,6 +70,8 @@ export class Game {
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
 		this.initIntialsForm();
+
+		this.counter = new Counter(1000, "updates/sec");
 	}
 
 	init() {
@@ -325,6 +328,7 @@ export class Game {
 	}
 
 	update(step: number) {
+		// this.counter.update();
 		this.terrain.update(step);
 		this.copter.update(step);
 	}

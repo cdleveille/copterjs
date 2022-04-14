@@ -25,3 +25,29 @@ export const randomInt = (min: number, max: number): number => {
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min);
 };
+
+export class Counter {
+	count: number;
+	timestamp: number;
+	msLimit: number;
+	label: string;
+
+	constructor(msLimit: number, label: string) {
+		this.msLimit = msLimit;
+		this.label = label;
+	}
+
+	update(): Counter {
+		if (!this.timestamp) {
+			this.timestamp = now();
+			this.count = 1;
+		} else {
+			this.count++;
+			if (now() - this.timestamp >= this.msLimit) {
+				console.log(`${this.label}: ${this.count}`);
+				this.timestamp = undefined;
+			}
+		}
+		return this;
+	}
+}

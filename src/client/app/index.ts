@@ -3,6 +3,7 @@ import { InputHandler } from "./input";
 import { now } from "./util";
 import { WindowHandler } from "./window";
 
+// @ts-ignore
 if (!navigator.serviceWorker.controller) navigator.serviceWorker.register("sw.js");
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
@@ -13,21 +14,19 @@ new InputHandler(canvas, game);
 new WindowHandler(canvas, game);
 game.init();
 
-let dt: number,
-	current: number,
-	last = now();
-const step = 1 / 500;
+let current: number,
+	delta: number,
+	last: number = now();
+// const counter = new Counter(1000, "frames/sec");
 
 const frame = () => {
+	// counter.update();
 	current = now();
-	dt = Math.min(1, (current - last) / 1000);
-	while (dt > step) {
-		dt = dt - step;
-		game.update(step);
-	}
-	game.draw(ctx);
-	last = current - (dt % step);
+	delta = (current - last) / 1000;
 	requestAnimationFrame(frame);
+	game.update(delta);
+	game.draw(ctx);
+	last = current;
 };
 
 requestAnimationFrame(frame);
