@@ -1,6 +1,6 @@
 import { EntityManager, QueryOrder } from "@mikro-orm/core";
+import { IScore } from "@shared/types/abstract";
 
-import { IScore } from "../../shared/types/abstract";
 import { Score } from "../models/Score";
 
 export class ScoreRepository {

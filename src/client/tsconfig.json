@@ -11,7 +11,10 @@
     "outDir": "../../build/client",
     "lib": ["ES2019", "DOM"],
     "types": [],
-    "composite": true
+    "composite": true,
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx"],

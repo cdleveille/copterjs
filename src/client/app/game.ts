@@ -1,4 +1,5 @@
-import { IEnvVars, IScore, ISocket } from "../../../build/shared/types/abstract.js";
+import { IEnvVars, IScore, ISocket } from "@shared/types/abstract.js";
+
 import { Copter } from "./copter.js";
 import { Terrain } from "./terrain.js";
 import { Color } from "./types/constant.js";

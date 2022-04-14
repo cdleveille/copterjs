@@ -1,8 +1,9 @@
 import { EntityManager } from "@mikro-orm/core";
+import { IScore, ISocket } from "@shared/types/abstract";
 
-import { IRun, IScore, ISocket } from "../../shared/types/abstract";
 import { Score } from "../models/Score";
 import { ScoreRepository } from "../repositories/ScoreRepository";
+import { IRun } from "../types/abstract";
 
 const activeRuns: { [id: string]: IRun } = {};
 let tenthPlaceScore: number, lastPlayerInputPing: number;

@@ -6,8 +6,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
-import { IEnvVars, IScore } from "../../../build/shared/types/abstract";
-import { ISocket } from "../../shared/types/abstract";
+import { IEnvVars, IScore, ISocket } from "@shared/types/abstract";
+
 import router from "../controllers/index";
 import Config from "../helpers/config";
 import { deleteRun, endRun, ping, sendHighScoresToClient, startRun, submitScore } from "../helpers/score";

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
+    "target": "es2019",
     "sourceMap": true,
     "module": "commonjs",
     "esModuleInterop": true,
@@ -12,9 +12,10 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "outDir": "../../build/server",
-    "lib": ["ES2019"],
+    "lib": ["es2019"],
     "paths": {
-      "*": ["../../node_modules/*"]
+      "*": ["../../node_modules/*"],
+      "@shared/*": ["../shared/*"]
     },
     "moduleResolution": "node",
     "types": ["node"],

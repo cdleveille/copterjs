@@ -3,16 +3,6 @@ export interface IScore {
 	score: number;
 }
 
-export interface IRun {
-	startTime: number;
-	endTime: number;
-}
-
-export interface IResponse {
-	ok: boolean;
-	status: number;
-	data: any;
-}
 export interface ISocket extends ISocketBroadcast {
 	id: string;
 	connected: boolean;
