@@ -2,10 +2,6 @@ import { Game } from "./game.js";
 
 export class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
-		// document.oncontextmenu = (e) => {
-		// 	e.preventDefault();
-		// };
-
 		canvas.addEventListener("mousedown", (e) => {
 			if (e.button == 0) this.press(game);
 		});
