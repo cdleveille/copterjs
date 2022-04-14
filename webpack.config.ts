@@ -5,8 +5,6 @@ import WebpackObfuscator from "webpack-obfuscator";
 
 import Config from "./src/server/helpers/config";
 
-const nodeModulesPath = path.resolve(__dirname, "node_modules");
-
 const plugins: WebpackPluginInstance[] = [
 	new CopyPlugin({
 		patterns: [
@@ -39,9 +37,9 @@ export default {
 	module: {
 		rules: [
 			{
-				test: /\.[jt]sx?$/,
-				use: "ts-loader",
-				exclude: [/node_modules/, nodeModulesPath]
+				test: /\.[jt]s$/,
+				use: ["babel-loader", "ts-loader"],
+				exclude: /node_modules/
 			}
 		]
 	},
@@ -53,6 +51,7 @@ export default {
 	resolve: {
 		extensions: [".ts", ".js", ".tsx", ".jsx"]
 	},
+	target: ["web", "es5"],
 	optimization: {
 		minimize: Config.IS_PROD
 	},
