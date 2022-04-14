@@ -1,10 +1,10 @@
 import { IEnvVars, IScore, ISocket } from "../../../build/shared/types/abstract.js";
-import Copter from "./copter.js";
-import Terrain from "./terrain.js";
+import { Copter } from "./copter.js";
+import { Terrain } from "./terrain.js";
 import { Color } from "./types/constant.js";
 import { now } from "./util.js";
 
-export default class Game {
+export class Game {
 	width: number;
 	height: number;
 	copter: Copter;
@@ -101,13 +101,13 @@ export default class Game {
 	processEnvVars(data: IEnvVars) {
 		// overwrite console.log in prod
 		if (data.IS_PROD) console.log = () => undefined;
-		console.log("network: online");
 
+		const online = "network: online";
 		if (data.USE_DB) {
-			console.log("db: connected");
+			console.log(`${online} (db connected)`);
 			this.socket.emit("high-scores-request");
 		} else {
-			console.log("db: disconnected");
+			console.log(`${online} (db disconnected)`);
 			this.noDB = true;
 		}
 	}
@@ -320,7 +320,7 @@ export default class Game {
 	}
 
 	goOffline() {
-		console.log("network: offline");
+		console.log("network: offline (db disconnected)");
 	}
 
 	update(step: number) {

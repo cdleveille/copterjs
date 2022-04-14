@@ -1,7 +1,7 @@
-import Game from "./game.js";
-import InputHandler from "./input.js";
+import { Game } from "./game.js";
+import { InputHandler } from "./input.js";
 import { now } from "./util.js";
-import WindowHandler from "./window.js";
+import { WindowHandler } from "./window.js";
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");

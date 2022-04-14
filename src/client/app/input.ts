@@ -1,6 +1,6 @@
-import Game from "./game.js";
+import { Game } from "./game.js";
 
-export default class InputHandler {
+export class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
 		// document.oncontextmenu = (e) => {
 		// 	e.preventDefault();

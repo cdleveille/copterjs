@@ -1,8 +1,8 @@
-import Game from "./game.js";
-import { ICoord, IHitboxOffset, IRect } from "./types/abstract";
+import { Game } from "./game.js";
+import { ICoord, IHitboxOffset, IRect } from "./types/abstract.js";
 import { areRectanglesColliding, loadImage, now } from "./util.js";
 
-export default class Copter {
+export class Copter {
 	game: Game;
 	x: number;
 	y: number;

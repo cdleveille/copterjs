@@ -1,7 +1,7 @@
-import Game from "./game.js";
+import { Game } from "./game.js";
 import { IArea } from "./types/abstract.js";
 
-export default class WindowHandler {
+export class WindowHandler {
 	canvas: HTMLCanvasElement;
 	game: Game;
 

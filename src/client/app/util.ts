@@ -1,4 +1,4 @@
-import { IRect } from "./types/abstract";
+import { IRect } from "./types/abstract.js";
 
 export const now = (): number => {
 	return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
