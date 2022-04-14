@@ -14,10 +14,10 @@
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx . && prettier --write .",
     "build": "rimraf build && yarn build-server && yarn build-client",
     "build-server": "rimraf build/server && rimraf build/shared && tsc -b src/server",
-    "build-client": "rimraf build/client && cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack",
+    "build-client": "rimraf build/client && webpack",
     "dev": "concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev-server\" \"yarn dev-client\"",
     "dev-server": "ts-node-dev --respawn --transpile-only --project src/server/tsconfig.json src/server/index.ts",
-    "dev-client": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --watch",
+    "dev-client": "webpack --watch",
     "start": "node ."
   },
   "dependencies": {

@@ -1,5 +1,7 @@
 {
-  "namespaces": ["public"],
+  "namespaces": [
+    "public"
+  ],
   "name": "public",
   "tables": [
     {
@@ -56,14 +58,18 @@
       "schema": "public",
       "indexes": [
         {
-          "columnNames": ["player"],
+          "columnNames": [
+            "player"
+          ],
           "composite": false,
           "keyName": "score_player_index",
           "primary": false,
           "unique": false
         },
         {
-          "columnNames": ["score"],
+          "columnNames": [
+            "score"
+          ],
           "composite": false,
           "keyName": "score_score_index",
           "primary": false,
@@ -71,7 +77,9 @@
         },
         {
           "keyName": "score_pkey",
-          "columnNames": ["id"],
+          "columnNames": [
+            "id"
+          ],
           "composite": false,
           "primary": true,
           "unique": true
