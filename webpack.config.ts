@@ -5,6 +5,8 @@ import WebpackObfuscator from "webpack-obfuscator";
 
 import Config from "./src/server/helpers/config";
 
+const esLoaders: string[] = ["babel-loader", "ts-loader"];
+
 const plugins: WebpackPluginInstance[] = [
 	new CopyPlugin({
 		patterns: [
@@ -19,13 +21,14 @@ const plugins: WebpackPluginInstance[] = [
 	})
 ];
 
-// only obfuscate js bundle in production
-if (Config.IS_PROD)
+// obfuscate js bundle in production only
+if (Config.IS_PROD) {
 	plugins.push(
 		new WebpackObfuscator({
 			rotateStringArray: true
 		})
 	);
+}
 
 export default {
 	mode: Config.IS_PROD ? "production" : "development",
@@ -38,7 +41,7 @@ export default {
 		rules: [
 			{
 				test: /\.[jt]s$/,
-				use: ["babel-loader", "ts-loader"],
+				use: esLoaders,
 				exclude: /node_modules/
 			}
 		]
@@ -49,7 +52,7 @@ export default {
 		sourceMapFilename: "[name].js.map"
 	},
 	resolve: {
-		extensions: [".ts", ".js", ".tsx", ".jsx"]
+		extensions: [".ts", ".js"]
 	},
 	target: ["web", "es5"],
 	optimization: {

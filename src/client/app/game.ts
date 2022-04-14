@@ -1,9 +1,8 @@
-import { io, Socket } from "socket.io-client";
-
 import { IEnvVars, IScore } from "@shared/types/abstract";
 
 import { Copter } from "./copter";
 import { Terrain } from "./terrain";
+import { ISocket } from "./types/abstract";
 import { Color } from "./types/constant";
 import { now } from "./util";
 
@@ -36,7 +35,7 @@ export class Game {
 	player: string;
 	initialsRequested: boolean;
 	scale: number;
-	socket: Socket;
+	socket: ISocket;
 	noDB: boolean;
 
 	constructor() {
@@ -88,6 +87,7 @@ export class Game {
 	initNetwork() {
 		if (!navigator.onLine) return;
 
+		// @ts-ignore
 		this.socket = io();
 
 		this.socket.on("initials-request", () => this.getPlayerInitials(true));
