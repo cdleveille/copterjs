@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 export enum Host {
-	local = "localhost",
-	ip = "127.0.0.1"
+	dev = "localhost",
+	prod = "copterjs.herokuapp.com"
 }
 
 export enum Env {

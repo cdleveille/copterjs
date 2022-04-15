@@ -6,7 +6,7 @@ const Config = {
 	IS_PROD: <boolean>(process.env.NODE_ENV === Env.prod),
 	USE_DB: <boolean>(process.env.USE_DB === "true"),
 	PORT: <number>(parseInt(process.env.PORT) || 3000),
-	HOST: <string>(process.env.NODE_ENV === Env.prod ? process.env.HOST : Host.local || Host.ip)
+	HOST: <string>(process.env.NODE_ENV === Env.prod ? Host.prod : Host.dev)
 };
 
 export const Db = {

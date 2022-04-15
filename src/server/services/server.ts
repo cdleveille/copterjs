@@ -104,7 +104,11 @@ export default class App {
 		});
 
 		http.listen(Config.PORT, () => {
-			log.info(`Server started - listening on http://${Config.HOST}:${Config.PORT}`);
+			log.info(
+				`Server started - listening on http${Config.IS_PROD ? "s" : ""}://${Config.HOST}${
+					Config.IS_PROD ? "" : ":" + Config.PORT
+				}`
+			);
 		});
 	}
 }
