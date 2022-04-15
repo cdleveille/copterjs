@@ -2,6 +2,8 @@
 
 Modern remake of the classic addicting flash game.
 
+![screenshot](https://user-images.githubusercontent.com/1410481/163527678-81424b2c-81ef-4a53-8e29-d24b8802e021.png)
+
 ## Local Setup
 
 Install prerequisites:
