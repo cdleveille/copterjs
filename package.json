@@ -1,8 +1,9 @@
 {
-  "name": "helicopter",
+  "name": "copterjs",
+  "description": "Modern remake of the classic addicting flash game.",
   "version": "1.0.0",
   "main": "build/server/index.js",
-  "repository": "https://github.com/cdleveille/helicopter.git",
+  "repository": "https://github.com/cdleveille/copterjs.git",
   "author": "Chris Leveille",
   "license": "MIT",
   "scripts": {
