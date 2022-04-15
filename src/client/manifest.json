@@ -1,6 +1,6 @@
 {
-  "name": "helicopter",
-  "short_name": "helicopter",
+  "name": "copterjs",
+  "short_name": "copterjs",
   "description": "Modern remake of the classic addicting flash game!",
   "id": "/",
   "start_url": "/",
