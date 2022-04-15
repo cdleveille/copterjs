@@ -16,22 +16,22 @@
 		<script src="/socket.io/socket.io.js" defer></script>
 		<title><%= htmlWebpackPlugin.options.title %></title>
 	</head>
-	<body>
+	<body style="background-color: #333333">
 		<noscript>Sorry, your browser does not support JavaScript! :(</noscript>
-		<div id="pilot-label">
+		<div id="pilot-label" style="display: none">
 			PILOT:
 			<span id="pilot-value"></span>
 		</div>
-		<div id="high-scores-label">TOP 10</div>
-		<div id="distance-label">
+		<div id="high-scores-label" style="display: none">TOP 10</div>
+		<div id="distance-label" style="display: none">
 			DISTANCE:
 			<span id="distance-value"></span>
 		</div>
-		<div id="best-label">
+		<div id="best-label" style="display: none">
 			BEST:
 			<span id="best-value"></span>
 		</div>
-		<div id="initials-section" class="centered">
+		<div id="initials-section" class="centered" style="display: none">
 			<span id="initials-label"></span>
 			<form id="initials-form" spellcheck="false">
 				<div id="initials-input-caret-box">

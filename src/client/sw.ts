@@ -5,10 +5,10 @@ declare const self: ServiceWorkerGlobalScope;
 const cacheName = "::swcache";
 const version = "v0.0.1";
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", (event: ExtendableEvent) => {
 	self.skipWaiting();
 	event.waitUntil(
-		caches.open(version + cacheName).then((cache) => {
+		caches.open(version + cacheName).then((cache: Cache) => {
 			return cache.addAll([
 				"./img/icons/icon_16x16.png",
 				"./img/icons/icon_32x32.png",
@@ -71,16 +71,16 @@ self.addEventListener("install", (event) => {
 	);
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", (event: ExtendableEvent) => {
 	event.waitUntil(
-		caches.keys().then((keys) => {
+		caches.keys().then((keys: string[]) => {
 			// remove caches whose name is no longer valid
 			return Promise.all(
 				keys
-					.filter((key) => {
+					.filter((key: string) => {
 						return key.indexOf(version) !== 0;
 					})
-					.map((key) => {
+					.map((key: string) => {
 						return caches.delete(key);
 					})
 			);
@@ -88,18 +88,19 @@ self.addEventListener("activate", (event) => {
 	);
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", (event: FetchEvent) => {
 	// fetch from network first, falling back to cache on error
 	event.respondWith(
 		(async () => {
 			try {
 				const networkResponse = await fetch(event.request);
+				console.log(networkResponse);
 				const cache = await caches.open(version + cacheName);
 				if (event.request.method !== "POST") {
 					event.waitUntil(cache.put(event.request, networkResponse.clone()));
 				}
 				return networkResponse;
-			} catch (err) {
+			} catch (error) {
 				return caches.match(event.request);
 			}
 		})()

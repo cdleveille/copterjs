@@ -3,7 +3,7 @@ export interface IScore {
 	score: number;
 }
 
-export interface IEnvVars {
+export interface IEnv {
 	IS_PROD: boolean;
 	USE_DB: boolean;
 }

@@ -1,8 +1,9 @@
-import { IEnvVars, IScore } from "@shared/types/abstract";
+import { io, Socket } from "socket.io-client";
+
+import { IEnv, IScore } from "@shared/types/abstract";
 
 import { Copter } from "./copter";
 import { Terrain } from "./terrain";
-import { ISocket } from "./types/abstract";
 import { Color } from "./types/constant";
 import { now } from "./util";
 
@@ -35,7 +36,7 @@ export class Game {
 	player: string;
 	initialsRequested: boolean;
 	scale: number;
-	socket: ISocket;
+	socket: Socket;
 	noDB: boolean;
 
 	constructor() {
@@ -87,24 +88,20 @@ export class Game {
 	initNetwork() {
 		if (!navigator.onLine) return;
 
-		// @ts-ignore
 		this.socket = io();
 
 		this.socket.on("initials-request", () => this.getPlayerInitials(true));
 		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
 		this.socket.on("high-scores-updated", (highScores: IScore[]) => this.updateHighScores(highScores));
 		this.socket.on("report-distance-to-client", (distance: number) => this.updateDistance(distance));
-		this.socket.on("env-var-send", (data: IEnvVars) => this.processEnvVars(data));
+		this.socket.on("env-var-send", (env: IEnv) => this.processEnvVars(env));
 
 		this.socket.emit("env-var-request");
 	}
 
-	processEnvVars(data: IEnvVars) {
-		// overwrite console.log in prod
-		if (data.IS_PROD) console.log = () => undefined;
-
+	processEnvVars(env: IEnv) {
 		const online = "network: online";
-		if (data.USE_DB) {
+		if (env.USE_DB) {
 			console.log(`${online} (db connected)`);
 			this.socket.emit("high-scores-request");
 		} else {

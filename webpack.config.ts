@@ -1,3 +1,5 @@
+// https://webpack.js.org/configuration/
+
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
@@ -29,7 +31,31 @@ const plugins: WebpackPluginInstance[] = [
 if (Config.IS_PROD) {
 	plugins.push(
 		new WebpackObfuscator({
-			rotateStringArray: true
+			compact: true,
+			controlFlowFlattening: true,
+			controlFlowFlatteningThreshold: 1,
+			disableConsoleOutput: true,
+			identifierNamesGenerator: "hexadecimal",
+			log: false,
+			numbersToExpressions: true,
+			renameGlobals: false,
+			selfDefending: true,
+			simplify: true,
+			splitStrings: true,
+			splitStringsChunkLength: 5,
+			stringArray: true,
+			stringArrayCallsTransform: true,
+			stringArrayEncoding: ["rc4"],
+			stringArrayIndexShift: true,
+			stringArrayRotate: true,
+			stringArrayShuffle: true,
+			stringArrayWrappersCount: 5,
+			stringArrayWrappersChainedCalls: true,
+			stringArrayWrappersParametersMaxCount: 5,
+			stringArrayWrappersType: "function",
+			stringArrayThreshold: 1,
+			transformObjectKeys: true,
+			unicodeEscapeSequence: false
 		})
 	);
 }
@@ -37,16 +63,26 @@ if (Config.IS_PROD) {
 export default {
 	mode: Config.IS_PROD ? "production" : "development",
 	entry: {
-		bundle: "./src/client/app/index.ts",
-		sw: "./src/client/sw.ts"
+		bundle: path.resolve(__dirname, "src/client/app/index.ts"),
+		sw: path.resolve(__dirname, "src/client/sw.ts")
 	},
 	devtool: Config.IS_PROD ? false : "inline-source-map",
 	module: {
 		rules: [
 			{
 				test: /\.[jt]s$/,
-				use: ["babel-loader", "ts-loader"],
-				exclude: /node_modules/
+				use: [
+					{
+						loader: "babel-loader",
+						options: {
+							presets: [["@babel/preset-env", { debug: !Config.IS_PROD }]],
+							plugins: ["@babel/plugin-transform-runtime"],
+							targets: "defaults"
+						}
+					},
+					{ loader: "ts-loader" }
+				],
+				exclude: path.resolve(__dirname, "node_modules")
 			},
 			{
 				test: /\.css$/,
@@ -66,7 +102,10 @@ export default {
 		clean: true
 	},
 	resolve: {
-		extensions: [".ts", ".js"]
+		extensions: [".ts", ".js"],
+		alias: {
+			"socket.io-client": path.resolve(__dirname, "node_modules/socket.io-client/dist/socket.io.js")
+		}
 	},
 	target: ["web", "es5"],
 	optimization: {

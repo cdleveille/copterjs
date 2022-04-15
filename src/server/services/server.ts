@@ -7,7 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import { Socket } from "socket.io";
 
-import { IEnvVars, IScore } from "@shared/types/abstract";
+import { IEnv, IScore } from "@shared/types/abstract";
 
 import router from "../controllers/index";
 import Config from "../helpers/config";
@@ -95,7 +95,7 @@ export default class App {
 			});
 
 			socket.on("env-var-request", async () => {
-				socket.emit("env-var-send", { IS_PROD: Config.IS_PROD, USE_DB: Config.USE_DB } as IEnvVars);
+				socket.emit("env-var-send", { IS_PROD: Config.IS_PROD, USE_DB: Config.USE_DB } as IEnv);
 			});
 
 			socket.on("disconnect", () => {
