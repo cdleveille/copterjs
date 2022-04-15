@@ -17,10 +17,8 @@ game.init();
 let current: number,
 	delta: number,
 	last: number = now();
-// const counter = new Counter(1000, "frames/sec");
 
 const frame = () => {
-	// counter.update();
 	current = now();
 	delta = (current - last) / 1000;
 	requestAnimationFrame(frame);
