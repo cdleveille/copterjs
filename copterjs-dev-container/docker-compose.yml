@@ -1,7 +1,7 @@
 version: "3.7"
 services:
-    helicopter-dev-container:
-        container_name: helicopter-dev-container
+    copterjs-dev-container:
+        container_name: copterjs-dev-container
         image: postgres
         restart: unless-stopped
         volumes:
@@ -11,8 +11,8 @@ services:
         ports:
             - "6668:5432"
         networks:
-            - helicopter-dev-network
+            - copterjs-dev-network
 networks:
-    helicopter-dev-network:
+    copterjs-dev-network:
         driver: bridge
-# Run 'docker network create helicopter-dev-network' before composing up
+# Run 'docker network create copterjs-dev-network' before composing up

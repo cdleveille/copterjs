@@ -2,7 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
-    "esModuleInterop": true
+    "sourceMap": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": ["**/mikro-orm.config.ts"]
 }

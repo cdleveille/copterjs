@@ -3,6 +3,6 @@
 .env
 *.tsbuildinfo
 *.log
-/helicopter-dev-container/data
+/copterjs-dev-container/data
 /__db_cache__
 .DS_Store

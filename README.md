@@ -26,8 +26,8 @@ Set up environment:
 Set up database (only needed if `USE_DB=true` in .env file):
 
 -   Open Docker Desktop and leave it running in the background.
--   Run `docker network create helicopter-dev-network` to create the Docker network.
--   In VS Code, right-click on `helicopter-dev-container\docker-compose.yml` and select `Compose Up`.
+-   Run `docker network create copterjs-dev-network` to create the Docker network.
+-   In VS Code, right-click on `copterjs-dev-container\docker-compose.yml` and select `Compose Up`.
 -   Run `yarn db:up` to execute the default database migration checked into source control.
     -   If schema changes are subsequently made, run `yarn db:create` to generate a new migration and `yarn db:up` to execute it.
 
