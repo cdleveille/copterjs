@@ -57,6 +57,7 @@ export class Database {
 	public static async Connect(): Promise<void> {
 		try {
 			Database.orm = await MikroORM.init(Config.IS_PROD ? Database.ConnectorProd : Database.ConnectorDev);
+			if (Config.IS_PROD) log.info("Successfully connected to database.");
 			Database.Manager = Database.orm.em.fork();
 		} catch (e) {
 			throw new Error(`Error connecting to database: ${e}`);

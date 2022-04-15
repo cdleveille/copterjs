@@ -55,9 +55,7 @@ export default class App {
 
 		App.instance.use(Routes.root, router);
 
-		App.instance.use(
-			express.static(path.join(process.cwd(), Config.IS_PROD ? "build/client.min" : "build/client"))
-		);
+		App.instance.use(express.static(path.join(process.cwd(), "build/client")));
 
 		App.instance.set("json spaces", 2);
 
