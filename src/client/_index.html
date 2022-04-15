@@ -11,27 +11,25 @@
 		<meta name="description" content="Modern remake of the classic addicting flash game!" />
 		<meta name="author" content="Chris Leveille" />
 		<meta name="theme-color" content="#333333" />
-		<link rel="stylesheet" href="css/style.css" defer />
 		<link rel="manifest" href="manifest.json" />
 		<link rel="apple-touch-icon" href="img/icons/icon_180x180.png" />
 		<script src="/socket.io/socket.io.js" defer></script>
-		<script src="bundle.js" type="module"></script>
-		<title>copterjs</title>
+		<title><%= htmlWebpackPlugin.options.title %></title>
 	</head>
 	<body>
 		<noscript>Sorry, your browser does not support JavaScript! :(</noscript>
 		<div id="pilot-label">
 			PILOT:
-			<span id="pilot-value">?</span>
+			<span id="pilot-value"></span>
 		</div>
 		<div id="high-scores-label">TOP 10</div>
 		<div id="distance-label">
 			DISTANCE:
-			<span id="distance-value">0</span>
+			<span id="distance-value"></span>
 		</div>
 		<div id="best-label">
 			BEST:
-			<span id="best-value">0</span>
+			<span id="best-value"></span>
 		</div>
 		<div id="initials-section" class="centered">
 			<span id="initials-label"></span>

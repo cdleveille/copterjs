@@ -10,8 +10,6 @@ self.addEventListener("install", (event) => {
 	event.waitUntil(
 		caches.open(version + cacheName).then((cache) => {
 			return cache.addAll([
-				"./css/style.css",
-				"./font/digital-7 (mono).ttf",
 				"./img/icons/icon_16x16.png",
 				"./img/icons/icon_32x32.png",
 				"./img/icons/icon_48x48.png",
@@ -63,6 +61,7 @@ self.addEventListener("install", (event) => {
 				"./img/smoke.png",
 				"./browserconfig.xml",
 				"./bundle.js",
+				"./digital-7 (mono).ttf",
 				"./favicon.ico",
 				"./index.html",
 				"./manifest.json",

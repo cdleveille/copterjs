@@ -1,3 +1,5 @@
+import "../css/style.css";
+
 import { Game } from "./game";
 import { InputHandler } from "./input";
 import { now } from "./util";

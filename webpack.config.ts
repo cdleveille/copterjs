@@ -1,11 +1,10 @@
 import CopyPlugin from "copy-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import { Configuration, WebpackPluginInstance } from "webpack";
 import WebpackObfuscator from "webpack-obfuscator";
 
 import Config from "./src/server/helpers/config";
-
-const esLoaders: string[] = ["babel-loader", "ts-loader"];
 
 const plugins: WebpackPluginInstance[] = [
 	new CopyPlugin({
@@ -14,10 +13,15 @@ const plugins: WebpackPluginInstance[] = [
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.css", "**/*.html", "**/*.ttf"]
 				}
 			}
 		]
+	}),
+	new HtmlWebpackPlugin({
+		title: "copterjs",
+		filename: "index.html",
+		template: path.resolve(__dirname, "src/client/_index.html")
 	})
 ];
 
@@ -41,15 +45,25 @@ export default {
 		rules: [
 			{
 				test: /\.[jt]s$/,
-				use: esLoaders,
+				use: ["babel-loader", "ts-loader"],
 				exclude: /node_modules/
+			},
+			{
+				test: /\.css$/,
+				use: ["style-loader", "css-loader"]
+			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				type: "asset/resource"
 			}
 		]
 	},
 	output: {
 		path: path.resolve(__dirname, "build/client"),
 		filename: "[name].js",
-		sourceMapFilename: "[name].js.map"
+		sourceMapFilename: "[name].js.map",
+		assetModuleFilename: "[name][ext]",
+		clean: true
 	},
 	resolve: {
 		extensions: [".ts", ".js"]

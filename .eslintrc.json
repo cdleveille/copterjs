@@ -1,8 +1,12 @@
+// https://eslint.org/docs/user-guide/configuring/
+
 {
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "commonjs": true,
+    "shared-node-browser": true
   },
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "parser": "@typescript-eslint/parser",
@@ -14,14 +18,10 @@
   "rules": {
     "quotes": ["warn", "double"],
     "semi": ["warn", "always"],
-    "no-unused-vars": [
-      2,
-      {
-        "args": "none"
-      }
-    ],
-    "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/ban-ts-comment": 0,
-    "@typescript-eslint/no-explicit-any": 0
+    "no-unused-vars": ["warn", { "args": "none" }],
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }
