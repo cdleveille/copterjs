@@ -31,3 +31,9 @@ export interface IHitboxOffset {
 	top: number;
 	bottom: number;
 }
+
+export interface ICopterImgs {
+	copterStopped: HTMLImageElement;
+	smoke: HTMLImageElement;
+	flyImgs: HTMLImageElement[];
+}

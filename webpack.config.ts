@@ -15,7 +15,7 @@ const plugins: WebpackPluginInstance[] = [
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.css", "**/*.html", "**/*.ttf"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.css", "**/*.html", "**/*.ttf", "**/img/*.png"]
 				}
 			}
 		]
@@ -24,12 +24,9 @@ const plugins: WebpackPluginInstance[] = [
 		title: "copterjs",
 		filename: "index.html",
 		template: path.resolve(__dirname, "src/client/_index.html")
-	})
-];
-
-// obfuscate js bundle in production only
-if (Config.IS_PROD) {
-	plugins.push(
+	}),
+	// obfuscate js bundle in production only
+	Config.IS_PROD &&
 		new WebpackObfuscator({
 			compact: true,
 			controlFlowFlattening: true,
@@ -57,8 +54,7 @@ if (Config.IS_PROD) {
 			transformObjectKeys: true,
 			unicodeEscapeSequence: false
 		})
-	);
-}
+].filter((n) => n);
 
 export default {
 	mode: Config.IS_PROD ? "production" : "development",
@@ -100,7 +96,7 @@ export default {
 			return pathData.chunk.name === "sw" ? "[name].js" : "[name]-[contenthash].js";
 		},
 		sourceMapFilename: "[name].js.map",
-		assetModuleFilename: "[name][ext]",
+		assetModuleFilename: "assets/[name][ext]",
 		clean: true
 	},
 	resolve: {
