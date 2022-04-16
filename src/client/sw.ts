@@ -60,7 +60,6 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 				"./img/copter25.png",
 				"./img/smoke.png",
 				"./browserconfig.xml",
-				"./bundle.js",
 				"./digital-7 (mono).ttf",
 				"./favicon.ico",
 				"./index.html",
@@ -89,22 +88,40 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 });
 
 self.addEventListener("fetch", (event: FetchEvent) => {
-	// fetch from network first, falling back to cache on error
 	event.respondWith(
 		(async () => {
-			try {
-				const networkResponse = await fetch(event.request);
-				console.log(networkResponse);
-				const cache = await caches.open(version + cacheName);
-				if (event.request.method !== "POST") {
-					event.waitUntil(cache.put(event.request, networkResponse.clone()));
-				}
-				return networkResponse;
-			} catch (error) {
-				return caches.match(event.request);
-			}
+			if (event.request.url.includes("bundle-")) return cacheFirst(event);
+			return networkFirst(event);
 		})()
 	);
 });
+
+const networkFirst = async (event: FetchEvent): Promise<Response> => {
+	try {
+		const networkResponse = await fetch(event.request);
+		const cache = await caches.open(version + cacheName);
+		if (event.request.method !== "POST" && !event.request.url.includes("socket.io")) {
+			if (event.request.url.includes("bundle-")) {
+				(await cache.keys()).map(async (key: Request) => {
+					if (key.url.includes("bundle-")) await cache.delete(key);
+				});
+			}
+			event.waitUntil(cache.put(event.request, networkResponse.clone()));
+		}
+		return networkResponse;
+	} catch (error) {
+		return cacheFirst(event);
+	}
+};
+
+const cacheFirst = async (event: FetchEvent): Promise<Response> => {
+	try {
+		const cache = await caches.open(version + cacheName);
+		const cacheResponse = await cache.match(event.request);
+		return cacheResponse || networkFirst(event);
+	} catch (error) {
+		return networkFirst(event);
+	}
+};
 
 export type {};

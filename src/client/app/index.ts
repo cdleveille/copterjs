@@ -6,7 +6,13 @@ import { now } from "./util";
 import { WindowHandler } from "./window";
 
 // @ts-ignore
-if (!navigator.serviceWorker.controller) navigator.serviceWorker.register("sw.js");
+if (!navigator.serviceWorker.controller) {
+	window.addEventListener("load", async () => {
+		// @ts-ignore
+		await navigator.serviceWorker.register("sw.js");
+		console.log("service worker registered");
+	});
+} else console.log("active service worker found");
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");

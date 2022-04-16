@@ -70,7 +70,7 @@ export default {
 	module: {
 		rules: [
 			{
-				test: /\.[jt]s$/,
+				test: /\.[jt]sx?$/i,
 				use: [
 					{
 						loader: "babel-loader",
@@ -85,18 +85,20 @@ export default {
 				exclude: path.resolve(__dirname, "node_modules")
 			},
 			{
-				test: /\.css$/,
+				test: /\.css$/i,
 				use: ["style-loader", "css-loader"]
 			},
 			{
-				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
 				type: "asset/resource"
 			}
 		]
 	},
 	output: {
 		path: path.resolve(__dirname, "build/client"),
-		filename: "[name].js",
+		filename: (pathData) => {
+			return pathData.chunk.name === "sw" ? "[name].js" : "[name]-[contenthash].js";
+		},
 		sourceMapFilename: "[name].js.map",
 		assetModuleFilename: "[name][ext]",
 		clean: true
