@@ -45,6 +45,7 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 self.addEventListener("fetch", (event: FetchEvent) => {
 	event.respondWith(
 		(async () => {
+			if (event.request.url.includes("googletagmanager.com")) return;
 			if (event.request.url.includes("_hash_")) return cacheFirst(event);
 			return networkFirst(event);
 		})()
