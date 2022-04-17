@@ -1,6 +1,7 @@
 import "../css/style.css";
 
 import { Game } from "./game";
+import { areAllImagesLoaded } from "./img";
 import { InputHandler } from "./input";
 import { now } from "./util";
 import { WindowHandler } from "./window";
@@ -13,7 +14,7 @@ window.addEventListener("load", async () => {
 	if (!navigator.serviceWorker.controller) {
 		// @ts-ignore
 		await navigator.serviceWorker.register("sw.js");
-		console.log("new service worker registeredz");
+		console.log("new service worker registered");
 	} else console.log("active service worker found");
 
 	canvas.style.display = "block";
@@ -26,14 +27,18 @@ game.init();
 
 let current: number,
 	delta: number,
-	last: number = now();
+	last: number = now(),
+	allImagesLoaded = false;
 
 const frame = () => {
 	current = now();
 	delta = (current - last) / 1000;
 	requestAnimationFrame(frame);
 	game.update(delta);
-	game.draw(ctx);
+	if (allImagesLoaded || areAllImagesLoaded()) {
+		allImagesLoaded = true;
+		game.draw(ctx);
+	}
 	last = current;
 };
 

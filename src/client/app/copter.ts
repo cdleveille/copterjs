@@ -18,9 +18,6 @@ export class Copter {
 	hitbox: IRect;
 	hitBoxOffset: IHitboxOffset;
 	img: HTMLImageElement;
-	stoppedImg: HTMLImageElement;
-	flyImgs: HTMLImageElement[];
-	smokeImg: HTMLImageElement;
 	smoke: ICoord[];
 
 	constructor(game: Game) {

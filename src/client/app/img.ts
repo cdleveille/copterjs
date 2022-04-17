@@ -61,3 +61,11 @@ export const imgs: ICopterImgs = {
 		loadImage(copter25)
 	]
 };
+
+export const areAllImagesLoaded = (): boolean => {
+	for (const img of imgs.flyImgs) {
+		if (!img || !img.isLoaded) return false;
+	}
+
+	return imgs.copterStopped.isLoaded && imgs.smoke.isLoaded;
+};
