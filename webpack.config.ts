@@ -39,8 +39,7 @@ const plugins: WebpackPluginInstance[] = [
 export default {
 	mode: Config.IS_PROD ? "production" : "development",
 	entry: {
-		bundle: path.resolve(__dirname, "src/client/app/index.ts")
-		//sw: path.resolve(__dirname, "src/client/sw.ts")
+		main: path.resolve(__dirname, "src/client/app/index.ts")
 	},
 	devtool: Config.IS_PROD ? false : "inline-source-map",
 	module: {
@@ -72,9 +71,8 @@ export default {
 	},
 	output: {
 		path: path.resolve(__dirname, "build/client"),
-		//filename: "[name]_hash_[contenthash].js",
 		filename: (pathData) => {
-			return pathData.chunk.name === "sw" ? "[name].js" : "[name]_hash_[contenthash].js";
+			return "[name]_hash_[contenthash]_bundle.js";
 		},
 		sourceMapFilename: "[name].js.map",
 		assetModuleFilename: "assets/[name]_hash_[contenthash][ext]",
@@ -88,7 +86,17 @@ export default {
 	},
 	target: ["web", "es5"],
 	optimization: {
-		minimize: Config.IS_PROD
+		minimize: Config.IS_PROD,
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/]/,
+					name: "vendor",
+					chunks: "all",
+					priority: 10
+				}
+			}
+		}
 	},
 	plugins: plugins
 } as Configuration;
