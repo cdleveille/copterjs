@@ -1,96 +1,49 @@
 /// <reference lib="WebWorker" />
 
+import { PrecacheEntry } from "workbox-precaching";
+
+// @ts-ignore
 declare const self: ServiceWorkerGlobalScope;
 
-const cacheName = "::swcache";
-const version = "v0.0.1";
+const cacheName = "swcache_" + new Date().toISOString();
 
 self.addEventListener("install", (event: ExtendableEvent) => {
 	self.skipWaiting();
 	event.waitUntil(
-		caches.open(version + cacheName).then((cache: Cache) => {
-			return cache.addAll([
-				"./img/icons/icon_16x16.png",
-				"./img/icons/icon_32x32.png",
-				"./img/icons/icon_48x48.png",
-				"./img/icons/icon_64x64.png",
-				"./img/icons/icon_72x72.png",
-				"./img/icons/icon_96x96.png",
-				"./img/icons/icon_128x128.png",
-				"./img/icons/icon_144x144.png",
-				"./img/icons/icon_168x168.png",
-				"./img/icons/icon_180x180.png",
-				"./img/icons/icon_192x192_maskable.png",
-				"./img/icons/icon_192x192.png",
-				"./img/icons/icon_256x256.png",
-				"./img/icons/icon_384x384.png",
-				"./img/icons/icon_512x512_maskable.png",
-				"./img/icons/icon_512x512.png",
-				"./img/icons/msapplication-icon-144x144.png",
-				"./img/icons/mstile-150x150.png",
-				"./img/icons/tile70x70.png",
-				"./img/icons/tile150x150.png",
-				"./img/icons/tile310x150.png",
-				"./img/icons/tile310x310.png",
-				"./assets/copter_stopped.png",
-				"./assets/copter1.png",
-				"./assets/copter2.png",
-				"./assets/copter3.png",
-				"./assets/copter4.png",
-				"./assets/copter5.png",
-				"./assets/copter6.png",
-				"./assets/copter7.png",
-				"./assets/copter8.png",
-				"./assets/copter9.png",
-				"./assets/copter10.png",
-				"./assets/copter11.png",
-				"./assets/copter12.png",
-				"./assets/copter13.png",
-				"./assets/copter14.png",
-				"./assets/copter15.png",
-				"./assets/copter16.png",
-				"./assets/copter17.png",
-				"./assets/copter18.png",
-				"./assets/copter19.png",
-				"./assets/copter20.png",
-				"./assets/copter21.png",
-				"./assets/copter22.png",
-				"./assets/copter23.png",
-				"./assets/copter24.png",
-				"./assets/copter25.png",
-				"./assets/digital-7 (mono).ttf",
-				"./assets/smoke.png",
-				"./browserconfig.xml",
-				"./favicon.ico",
-				"./index.html",
-				"./manifest.json",
-				"./sw.js"
-			]);
-		})
+		(async () => {
+			// once page is loaded and service worker is installed, immediately fetch and cache every
+			// entry in the manifest so offline play is possible without a subsequent page refresh
+			const cache = await caches.open(cacheName);
+
+			for (const entry of self.__WB_MANIFEST as PrecacheEntry[]) {
+				const response = await fetch(entry.url);
+				await cache.put(entry.url, response.clone());
+			}
+
+			const rootResponse = await fetch("/");
+			await cache.put("/", rootResponse.clone());
+		})()
 	);
 });
 
 self.addEventListener("activate", (event: ExtendableEvent) => {
+	// remove old caches
 	event.waitUntil(
-		caches.keys().then((keys: string[]) => {
-			// remove caches whose name is no longer valid
-			return Promise.all(
-				keys
-					.filter((key: string) => {
-						return key.indexOf(version) !== 0;
-					})
-					.map((key: string) => {
-						return caches.delete(key);
-					})
-			);
-		})
+		(async () => {
+			const keys = await caches.keys();
+			return keys.map(async (cache) => {
+				if (cache !== cacheName) {
+					return await caches.delete(cache);
+				}
+			});
+		})()
 	);
 });
 
 self.addEventListener("fetch", (event: FetchEvent) => {
 	event.respondWith(
 		(async () => {
-			if (event.request.url.includes("bundle-")) return cacheFirst(event);
+			if (event.request.url.includes("_hash_")) return cacheFirst(event);
 			return networkFirst(event);
 		})()
 	);
@@ -100,13 +53,9 @@ const networkFirst = async (event: FetchEvent): Promise<Response> => {
 	try {
 		const networkResponse = await fetch(event.request);
 		if (event.request.method !== "POST" && !event.request.url.includes("socket.io")) {
-			const cache = await caches.open(version + cacheName);
-			if (event.request.url.includes("bundle-")) {
-				(await cache.keys()).map(async (key: Request) => {
-					if (key.url.includes("bundle-")) await cache.delete(key);
-				});
-			}
-			event.waitUntil(cache.put(event.request, networkResponse.clone()));
+			const cache = await caches.open(cacheName);
+			await cleanCache(event, cache);
+			event.waitUntil(await cache.put(event.request, networkResponse.clone()));
 		}
 		return networkResponse;
 	} catch (error) {
@@ -116,11 +65,21 @@ const networkFirst = async (event: FetchEvent): Promise<Response> => {
 
 const cacheFirst = async (event: FetchEvent): Promise<Response> => {
 	try {
-		const cache = await caches.open(version + cacheName);
+		const cache = await caches.open(cacheName);
 		const cacheResponse = await cache.match(event.request);
 		return cacheResponse || networkFirst(event);
 	} catch (error) {
 		return networkFirst(event);
+	}
+};
+
+// clean up old versions of files with hashed filenames when a new version is fetched over the network
+const cleanCache = async (event: FetchEvent, cache: Cache) => {
+	if (event.request.url.includes("_hash_")) {
+		const prefix = event.request.url.split("_hash_")[0];
+		(await cache.keys()).map(async (key: Request) => {
+			if (key.url.startsWith(prefix)) await cache.delete(key);
+		});
 	}
 };
 

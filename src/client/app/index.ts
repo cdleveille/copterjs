@@ -10,7 +10,7 @@ if (!navigator.serviceWorker.controller) {
 	window.addEventListener("load", async () => {
 		// @ts-ignore
 		await navigator.serviceWorker.register("sw.js");
-		console.log("service worker registered");
+		console.log("new service worker registered");
 	});
 } else console.log("active service worker found");
 
