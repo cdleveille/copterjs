@@ -8,7 +8,7 @@ export const loadImage = (url: string): HTMLImageElement => {
 	const img = new Image();
 	img.src = url;
 	// @ts-ignore
-	img.isLoaded = true;
+	img.onload = () => (img.isLoaded = true);
 	return img;
 };
 
