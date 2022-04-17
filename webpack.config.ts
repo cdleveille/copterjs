@@ -41,7 +41,7 @@ export default {
 	entry: {
 		main: path.resolve(__dirname, "src/client/app/index.ts")
 	},
-	devtool: Config.IS_PROD ? false : "inline-source-map",
+	devtool: "inline-source-map", //Config.IS_PROD ? false : "inline-source-map",
 	module: {
 		rules: [
 			{
@@ -86,7 +86,7 @@ export default {
 	},
 	target: ["web", "es5"],
 	optimization: {
-		minimize: Config.IS_PROD,
+		minimize: false, //Config.IS_PROD,
 		splitChunks: {
 			cacheGroups: {
 				vendor: {
