@@ -9,6 +9,15 @@ const manifest = self.__WB_MANIFEST as PrecacheEntry[];
 
 const cacheName = "swcache_" + new Date().toISOString();
 
+const cacheFirstFilePatterns: string[] = [".bundle.js", "favicon.ico", "/font/", "/img/", "browserconfig.xml"];
+
+const isCacheFirstFile = (url: string) => {
+	for (const pattern of cacheFirstFilePatterns) {
+		if (url.includes(pattern)) return true;
+	}
+	return false;
+};
+
 self.addEventListener("install", (event: ExtendableEvent) => {
 	self.skipWaiting();
 	event.waitUntil(
@@ -47,8 +56,8 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 self.addEventListener("fetch", (event: FetchEvent) => {
 	event.respondWith(
 		(async () => {
-			if (event.request.url.includes("googletagmanager.com")) return;
-			if (event.request.url.includes("_hash_")) return cacheFirst(event);
+			if (event.request.url.includes("googletagmanager.com")) return {} as Response;
+			if (isCacheFirstFile(event.request.url)) return cacheFirst(event);
 			return networkFirst(event);
 		})()
 	);

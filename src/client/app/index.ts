@@ -1,5 +1,3 @@
-import "../css/style.css";
-
 import { Game } from "./game";
 import { areAllImagesLoaded } from "./img";
 import { InputHandler } from "./input";
@@ -8,6 +6,11 @@ import { WindowHandler } from "./window";
 
 const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
+
+const game = new Game();
+new InputHandler(canvas, game);
+const windowHandler = new WindowHandler(canvas, game);
+game.init();
 
 window.addEventListener("load", async () => {
 	// @ts-ignore
@@ -18,12 +21,8 @@ window.addEventListener("load", async () => {
 	} else console.log("active service worker found");
 
 	canvas.style.display = "block";
+	windowHandler.resize();
 });
-
-const game = new Game();
-new InputHandler(canvas, game);
-new WindowHandler(canvas, game);
-game.init();
 
 let current: number,
 	delta: number,

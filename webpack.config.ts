@@ -19,12 +19,8 @@ const plugins: WebpackPluginInstance[] = [
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/css/**/*", "**/font/**/*", "**/img/**/*"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html"]
 				}
-			},
-			{
-				from: path.resolve(__dirname, "src/client/img"),
-				to: path.resolve(__dirname, "build/client/assets")
 			}
 		]
 	}),
@@ -58,24 +54,13 @@ export default {
 					{ loader: "ts-loader" }
 				],
 				exclude: path.resolve(__dirname, "node_modules")
-			},
-			{
-				test: /\.css$/i,
-				use: ["style-loader", "css-loader"]
-			},
-			{
-				test: /\.(png|svg|jpg|jpeg|gif|webp|ttf)$/i,
-				type: "asset/resource"
 			}
 		]
 	},
 	output: {
 		path: path.resolve(__dirname, "build/client"),
-		filename: (pathData) => {
-			return "[name]_hash_[contenthash]_bundle.js";
-		},
+		filename: "[name].[contenthash].bundle.js",
 		sourceMapFilename: "[name].js.map",
-		assetModuleFilename: "assets/[name]_hash_[contenthash][ext]",
 		clean: true
 	},
 	resolve: {
