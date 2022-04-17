@@ -4,12 +4,15 @@ import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import { Configuration, WebpackPluginInstance } from "webpack";
-import WebpackObfuscator from "webpack-obfuscator";
 import { InjectManifest } from "workbox-webpack-plugin";
 
 import Config from "./src/server/helpers/config";
 
 const plugins: WebpackPluginInstance[] = [
+	new InjectManifest({
+		swSrc: path.resolve(__dirname, "src/client/sw.ts")
+	}),
+
 	new CopyPlugin({
 		patterns: [
 			{
@@ -25,42 +28,11 @@ const plugins: WebpackPluginInstance[] = [
 			}
 		]
 	}),
+
 	new HtmlWebpackPlugin({
 		title: "copterjs",
 		filename: "index.html",
 		template: path.resolve(__dirname, "src/client/_index.html")
-	}),
-	// obfuscate js bundle in production only
-	Config.IS_PROD &&
-		new WebpackObfuscator({
-			compact: true,
-			controlFlowFlattening: true,
-			controlFlowFlatteningThreshold: 1,
-			disableConsoleOutput: true,
-			identifierNamesGenerator: "hexadecimal",
-			log: false,
-			numbersToExpressions: true,
-			renameGlobals: false,
-			selfDefending: true,
-			simplify: true,
-			splitStrings: true,
-			splitStringsChunkLength: 5,
-			stringArray: true,
-			stringArrayCallsTransform: true,
-			stringArrayEncoding: ["rc4"],
-			stringArrayIndexShift: true,
-			stringArrayRotate: true,
-			stringArrayShuffle: true,
-			stringArrayWrappersCount: 5,
-			stringArrayWrappersChainedCalls: true,
-			stringArrayWrappersParametersMaxCount: 5,
-			stringArrayWrappersType: "function",
-			stringArrayThreshold: 1,
-			transformObjectKeys: true,
-			unicodeEscapeSequence: false
-		}),
-	new InjectManifest({
-		swSrc: path.resolve(__dirname, "src/client/sw.ts")
 	})
 ].filter((n) => n);
 
@@ -100,6 +72,7 @@ export default {
 	},
 	output: {
 		path: path.resolve(__dirname, "build/client"),
+		//filename: "[name]_hash_[contenthash].js",
 		filename: (pathData) => {
 			return pathData.chunk.name === "sw" ? "[name].js" : "[name]_hash_[contenthash].js";
 		},

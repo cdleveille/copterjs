@@ -5,6 +5,8 @@ import { PrecacheEntry } from "workbox-precaching";
 // @ts-ignore
 declare const self: ServiceWorkerGlobalScope;
 
+const manifest = self.__WB_MANIFEST as PrecacheEntry[];
+
 const cacheName = "swcache_" + new Date().toISOString();
 
 self.addEventListener("install", (event: ExtendableEvent) => {
@@ -15,7 +17,7 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 			// entry in the manifest so offline play is possible without a subsequent page refresh
 			const cache = await caches.open(cacheName);
 
-			for (const entry of self.__WB_MANIFEST as PrecacheEntry[]) {
+			for (const entry of manifest) {
 				const response = await fetch(entry.url);
 				await cache.put(entry.url, response.clone());
 			}
