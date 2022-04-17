@@ -19,7 +19,7 @@ html {
 	font-family: "digital-7";
 	font-style: "normal";
 	font-weight: 800;
-	src: local("digital-7"), url("../font/digital-7 (mono).ttf") format("truetype");
+	src: local("digital-7"), url("../font/digital-7-mono.ttf") format("truetype");
 }
 
 .centered {
