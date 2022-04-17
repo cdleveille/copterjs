@@ -27,7 +27,7 @@ export class InputHandler {
 				case "Tab":
 					e.preventDefault();
 					return game.highScoresLabelClickHandler();
-				case "ShiftLeft":
+				case "F2":
 					e.preventDefault();
 					return game.pilotLabelClickHandler();
 			}
