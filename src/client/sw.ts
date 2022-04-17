@@ -18,8 +18,10 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 			const cache = await caches.open(cacheName);
 
 			for (const entry of manifest) {
-				const response = await fetch(entry.url);
-				await cache.put(entry.url, response.clone());
+				if (!entry.url.endsWith("LICENSE.txt")) {
+					const response = await fetch(entry.url);
+					await cache.put(entry.url, response.clone());
+				}
 			}
 
 			const rootResponse = await fetch("/");

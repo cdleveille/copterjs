@@ -23,8 +23,8 @@ const plugins: WebpackPluginInstance[] = [
 				}
 			},
 			{
-				from: path.resolve(__dirname, "src/client/img/icons"),
-				to: path.resolve(__dirname, "build/client/assets/icons")
+				from: path.resolve(__dirname, "src/client/img"),
+				to: path.resolve(__dirname, "build/client/assets")
 			}
 		]
 	}),
