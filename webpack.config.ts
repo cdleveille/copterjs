@@ -9,9 +9,9 @@ import { InjectManifest } from "workbox-webpack-plugin";
 import Config from "./src/server/helpers/config";
 
 const plugins: WebpackPluginInstance[] = [
-	new InjectManifest({
-		swSrc: path.resolve(__dirname, "src/client/sw.ts")
-	}),
+	// new InjectManifest({
+	// 	swSrc: path.resolve(__dirname, "src/client/sw.ts")
+	// }),
 
 	new CopyPlugin({
 		patterns: [

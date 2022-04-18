@@ -14,11 +14,11 @@ game.init();
 
 window.addEventListener("load", async () => {
 	// @ts-ignore
-	if (!navigator.serviceWorker.controller) {
-		// @ts-ignore
-		await navigator.serviceWorker.register("sw.js");
-		console.log("new service worker registered");
-	} else console.log("active service worker found");
+	// if (!navigator.serviceWorker.controller) {
+	// 	// @ts-ignore
+	// 	await navigator.serviceWorker.register("sw.js");
+	// 	console.log("new service worker registered");
+	// } else console.log("active service worker found");
 
 	canvas.style.display = "block";
 	windowHandler.resize();
