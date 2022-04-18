@@ -35,9 +35,8 @@ export const imgs: ICopterImgs = {
 
 export const areAllImagesLoaded = (): boolean => {
 	for (const img of imgs.flyImgs) {
-		// @ts-ignore
 		if (!img || !img.isLoaded) return false;
 	}
-	// @ts-ignore
+
 	return imgs.copterStopped.isLoaded && imgs.smoke.isLoaded;
 };

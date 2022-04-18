@@ -1,15 +1,16 @@
-import { IRect } from "./types/abstract";
+import { IImg, IRect } from "./types/abstract";
 
 export const now = (): number => {
 	return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
 };
 
-export const loadImage = (url: string): HTMLImageElement => {
+export const loadImage = (url: string): IImg => {
 	const img = new Image();
 	img.src = url;
+	const imgTracker: IImg = { img, isLoaded: false };
 	// @ts-ignore
-	img.onload = () => (img.isLoaded = true);
-	return img;
+	img.onload = () => (imgTracker.isLoaded = true);
+	return imgTracker;
 };
 
 export const areRectanglesColliding = (rect1: IRect, rect2: IRect): boolean => {

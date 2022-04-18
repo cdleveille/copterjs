@@ -33,7 +33,12 @@ export interface IHitboxOffset {
 }
 
 export interface ICopterImgs {
-	copterStopped: HTMLImageElement;
-	smoke: HTMLImageElement;
-	flyImgs: HTMLImageElement[];
+	copterStopped: IImg;
+	smoke: IImg;
+	flyImgs: IImg[];
+}
+
+export interface IImg {
+	img: HTMLImageElement;
+	isLoaded: boolean;
 }
