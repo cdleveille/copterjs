@@ -9,7 +9,7 @@ const manifest = self.__WB_MANIFEST as PrecacheEntry[];
 
 const cacheName = "swcache_" + new Date().toISOString();
 
-const cacheFirstFilePatterns: string[] = [".bundle.js", "favicon.ico", "/font/", "browserconfig.xml"];
+const cacheFirstFilePatterns: string[] = [".bundle.js", "favicon.ico", "/font/", "/img/", "browserconfig.xml"];
 
 const isCacheFirstFile = (url: string) => {
 	for (const pattern of cacheFirstFilePatterns) {

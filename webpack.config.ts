@@ -19,7 +19,7 @@ const plugins: WebpackPluginInstance[] = [
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/font/**/*", "**/img/**/*"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/font/**/*"]
 				}
 			}
 		]
