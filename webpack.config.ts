@@ -4,8 +4,8 @@ import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import { Configuration, WebpackPluginInstance } from "webpack";
-import { InjectManifest } from "workbox-webpack-plugin";
 
+// import { InjectManifest } from "workbox-webpack-plugin";
 import Config from "./src/server/helpers/config";
 
 const plugins: WebpackPluginInstance[] = [
