@@ -18,6 +18,7 @@ const plugins: WebpackPluginInstance[] = [
 			{
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
+				toType: "dir",
 				globOptions: {
 					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/font/**/*"]
 				}
@@ -33,11 +34,11 @@ const plugins: WebpackPluginInstance[] = [
 ].filter((n) => n);
 
 export default {
-	mode: Config.IS_PROD ? "production" : "development",
+	mode: "development", //Config.IS_PROD ? "production" : "development",
 	entry: {
 		main: path.resolve(__dirname, "src/client/app/index.ts")
 	},
-	devtool: Config.IS_PROD ? false : "inline-source-map",
+	devtool: "inline-source-map", //Config.IS_PROD ? false : "inline-source-map",
 	module: {
 		rules: [
 			{
@@ -70,7 +71,7 @@ export default {
 	},
 	target: ["web", "es5"],
 	optimization: {
-		minimize: Config.IS_PROD,
+		minimize: false, //Config.IS_PROD,
 		splitChunks: {
 			cacheGroups: {
 				vendor: {
