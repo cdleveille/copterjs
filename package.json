@@ -12,12 +12,13 @@
     "db:up": "yarn mikro-orm migration:up",
     "db:down": "yarn mikro-orm migration:down",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx . && prettier --write .",
+    "copy": "copyfiles -u 3 src/client/img/**/* build/client/img",
     "build": "rimraf build && concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn build-server\" \"yarn build-client\"",
     "build-server": "rimraf build/server && rimraf build/shared && tsc -b src/server",
-    "build-client": "rimraf build/client && webpack && rimraf build/client/*LICENSE.txt",
+    "build-client": "rimraf build/client && webpack && yarn copy && rimraf build/client/*LICENSE.txt",
     "dev": "concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev-server\" \"yarn dev-client\"",
     "dev-server": "ts-node-dev --respawn --transpile-only --project src/server/tsconfig.json src/server/index.ts",
-    "dev-client": "webpack watch",
+    "dev-client": "yarn copy && webpack watch",
     "start": "node ."
   },
   "dependencies": {
@@ -52,6 +53,7 @@
     "babel-loader": "^8.2.4",
     "concurrently": "^7.0.0",
     "copy-webpack-plugin": "^10.2.4",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.0.0",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.5.0",

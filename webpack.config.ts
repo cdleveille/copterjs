@@ -19,7 +19,7 @@ const plugins: WebpackPluginInstance[] = [
 				from: path.resolve(__dirname, "src/client"),
 				to: path.resolve(__dirname, "build/client"),
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/font/**/*", "**/img/**/*"]
 				}
 			}
 		]
@@ -60,8 +60,7 @@ export default {
 	output: {
 		path: path.resolve(__dirname, "build/client"),
 		filename: "[name].[contenthash].bundle.js",
-		sourceMapFilename: "[name].js.map",
-		clean: true
+		sourceMapFilename: "[name].js.map"
 	},
 	resolve: {
 		extensions: [".ts", ".js"],
