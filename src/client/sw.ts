@@ -89,8 +89,8 @@ const cacheFirst = async (event: FetchEvent): Promise<Response> => {
 
 // clean up old versions of files with hashed filenames when a new version is fetched over the network
 const cleanCache = async (event: FetchEvent, cache: Cache) => {
-	if (event.request.url.includes("_hash_")) {
-		const prefix = event.request.url.split("_hash_")[0];
+	if (event.request.url.includes(".bundle.")) {
+		const prefix = event.request.url.split(".")[0];
 		(await cache.keys()).map(async (key: Request) => {
 			if (key.url.startsWith(prefix)) await cache.delete(key);
 		});

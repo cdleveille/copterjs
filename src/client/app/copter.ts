@@ -27,6 +27,7 @@ export class Copter {
 	init() {
 		this.x = this.game.width / 4;
 		this.y = this.game.height / 2 - this.height / 2;
+		this.yPct = this.y / this.game.height;
 		this.yv = 0;
 		this.climbing = false;
 		this.smoke = [];

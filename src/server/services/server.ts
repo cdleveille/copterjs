@@ -37,7 +37,6 @@ export default class App {
 					"object-src": ["'none'"],
 					"script-src": ["'self'", "'unsafe-eval'"],
 					"style-src": ["'self'", "'unsafe-inline'"],
-					"font-src": ["'self'"],
 					"img-src": ["'self' blob: data:"],
 					"connect-src": ["'self'"]
 				}
