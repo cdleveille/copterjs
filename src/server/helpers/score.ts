@@ -37,7 +37,7 @@ export const submitScore = async (manager: EntityManager, player: string, socket
 	const distance = computeDistance(socket);
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
-	const score: IScore = { player, score: distance };
+	const score: IScore = { player: player.toUpperCase(), score: distance };
 	await insertScore(manager, score, socket);
 
 	deleteRun(socket.id);

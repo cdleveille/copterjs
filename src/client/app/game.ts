@@ -7,8 +7,10 @@ import { areAllImagesLoaded } from "./img";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
 import { now } from "./util";
+import { WindowHandler } from "./window";
 
 export class Game {
+	windowHandler: WindowHandler;
 	width: number;
 	height: number;
 	copter: Copter;
@@ -24,6 +26,7 @@ export class Game {
 	initialsForm: HTMLFormElement;
 	initialsInput: HTMLInputElement;
 	initialsInputCaret: HTMLDivElement;
+	initialsSubmitLabel: HTMLDivElement;
 	highScores: HTMLUListElement;
 	overlay: HTMLDivElement;
 	isOver: boolean;
@@ -52,6 +55,7 @@ export class Game {
 		this.initialsForm = document.getElementById("initials-form") as HTMLFormElement;
 		this.initialsInput = document.getElementById("initials-input") as HTMLInputElement;
 		this.initialsInputCaret = document.getElementById("initials-input-caret") as HTMLDivElement;
+		this.initialsSubmitLabel = document.getElementById("initials-submit-label") as HTMLDivElement;
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
@@ -104,6 +108,8 @@ export class Game {
 	}
 
 	initIntialsForm() {
+		this.initialsSubmitLabel.innerText = "⏎";
+
 		this.initialsForm.addEventListener("submit", (e) => {
 			e.preventDefault();
 			if (this.initialsInput.value.length !== 3) return;
@@ -117,6 +123,8 @@ export class Game {
 			this.initialsInput.value = this.initialsInput.value.toUpperCase();
 
 			if (this.initialsInput.value.length === 0) {
+				this.initialsSubmitLabel.style.opacity = "0";
+				this.initialsSubmitLabel.style.animation = "";
 				this.initialsInputCaret.style.display = "block";
 				this.initialsInputCaret.style.left = "4%";
 				return;
@@ -130,23 +138,47 @@ export class Game {
 				case 0:
 					this.initialsInputCaret.style.display = "block";
 					this.initialsInputCaret.style.left = "4%";
+					this.initialsSubmitLabel.style.opacity = "0";
+					this.initialsSubmitLabel.style.animation = "";
 					break;
 				case 1:
 					this.initialsInputCaret.style.display = "block";
 					this.initialsInputCaret.style.left = "36.5%";
+					this.initialsSubmitLabel.style.opacity = "0";
+					this.initialsSubmitLabel.style.animation = "";
 					break;
 				case 2:
 					this.initialsInputCaret.style.display = "block";
 					this.initialsInputCaret.style.left = "68.5%";
+					this.initialsSubmitLabel.style.opacity = "0";
+					this.initialsSubmitLabel.style.animation = "";
 					break;
 				default:
 					this.initialsInputCaret.style.display = "none";
+					this.initialsSubmitLabel.style.animation = "blink 1s infinite";
 					break;
 			}
 		});
 
+		this.initialsInput.addEventListener("focusin", () => {
+			if (this.initialsInput.value.length === 3) {
+				this.initialsInputCaret.style.display = "none";
+				this.initialsSubmitLabel.style.animation = "blink 1s infinite";
+			} else {
+				this.initialsInputCaret.style.display = "block";
+			}
+		});
+
 		this.initialsInput.addEventListener("focusout", () => {
-			if (this.locked) this.initialsInput.focus();
+			this.windowHandler.resize();
+			this.initialsInputCaret.style.display = "none";
+			this.initialsSubmitLabel.style.opacity = "0";
+			this.initialsSubmitLabel.style.animation = "";
+		});
+
+		this.initialsInput.addEventListener("keydown", () => {
+			this.initialsInput.selectionStart = this.initialsInput.value.length;
+			this.initialsInput.selectionEnd = this.initialsInput.value.length;
 		});
 	}
 
@@ -186,6 +218,9 @@ export class Game {
 		this.initialsInputCaret.style.display = "block";
 		this.initialsInputCaret.style.left = "4%";
 
+		this.initialsSubmitLabel.style.opacity = "0";
+		this.initialsSubmitLabel.style.animation = "";
+
 		this.initialsInput.focus();
 	}
 
@@ -196,6 +231,7 @@ export class Game {
 		} else {
 			this.hideInitialsSection();
 		}
+		this.windowHandler.resize();
 	}
 
 	hideInitialsSection() {
@@ -253,7 +289,7 @@ export class Game {
 		const intialsInputFontSizeScaled = `${166 * this.scale}px`;
 		const initialsInputWidth = `${234 * this.scale}px`;
 		const initialsInputBorderWidth = `${4 * this.scale}px`;
-		const initialsFormMarginTop = `${16 * this.scale}px`;
+		const initialsFormMargin = `${16 * this.scale}px`;
 
 		const offsetHorizontalPct = 0.07;
 		const offsetVerticalPct = 0.013;
@@ -286,7 +322,10 @@ export class Game {
 		this.initialsInput.style.width = initialsInputWidth;
 		this.initialsInput.style.borderWidth = initialsInputBorderWidth;
 
-		this.initialsForm.style.marginTop = initialsFormMarginTop;
+		this.initialsForm.style.marginTop = initialsFormMargin;
+		this.initialsForm.style.marginBottom = initialsFormMargin;
+
+		this.initialsSubmitLabel.style.fontSize = fontSizeScaled;
 
 		this.copter.resize();
 		this.terrain.resize();
