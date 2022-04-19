@@ -13,6 +13,5 @@
     "lib": ["es2019"],
     "composite": true
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["./**/*.test.ts"]
+  "include": ["./**/*.ts"]
 }

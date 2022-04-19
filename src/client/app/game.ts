@@ -37,6 +37,7 @@ export class Game {
 	socket: Socket;
 	noDB: boolean;
 	allImagesLoaded: boolean;
+	env: IEnv;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -91,6 +92,7 @@ export class Game {
 	}
 
 	processEnvVars(env: IEnv) {
+		this.env = env;
 		const online = "network: online";
 		if (env.USE_DB) {
 			console.log(`${online} (db connected)`);
