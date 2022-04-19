@@ -132,3 +132,8 @@ html {
 		opacity: 35%;
 	}
 }
+
+input,
+textarea {
+	font-size: initial;
+}
