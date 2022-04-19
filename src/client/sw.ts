@@ -30,19 +30,13 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 	self.skipWaiting();
 	event.waitUntil(
 		(async () => {
-			// once page is loaded and service worker is installed, immediately fetch and cache every
-			// entry in the manifest so offline play is possible without a subsequent page refresh
+			// add every manifest entry to the cache so offline play is immediately possible without a subsequent page refresh
 			const cache = await caches.open(cacheName);
 
-			for (const entry of manifest) {
-				if (!entry.url.endsWith("LICENSE.txt")) {
-					const response = await fetch(entry.url);
-					await cache.put(entry.url, response.clone());
-				}
-			}
+			const urls = ["/"];
+			manifest.map((entry) => urls.push(entry.url));
 
-			const rootResponse = await fetch("/");
-			await cache.put("/", rootResponse.clone());
+			cache.addAll(urls);
 		})()
 	);
 });

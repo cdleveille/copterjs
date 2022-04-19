@@ -353,6 +353,7 @@ export class Game {
 
 	goOffline() {
 		console.log("network: offline (db disconnected)");
+		this.socket = undefined;
 	}
 
 	update(step: number) {
