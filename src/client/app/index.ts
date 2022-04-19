@@ -1,3 +1,5 @@
+import "../css/style.css";
+
 import { Game } from "./game";
 import { InputHandler } from "./input";
 import { now } from "./util";
@@ -20,7 +22,6 @@ window.addEventListener("load", async () => {
 	} else console.log("active service worker found");
 
 	windowHandler.resize();
-	canvas.style.display = "block";
 });
 
 let current: number,

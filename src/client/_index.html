@@ -12,38 +12,39 @@
 		<meta name="author" content="Chris Leveille" />
 		<meta name="theme-color" content="#333333" />
 		<link rel="manifest" href="manifest.json" />
-		<link rel="apple-touch-icon" href="img/icons/icon_180x180.png" />
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="apple-touch-icon" href="icons/icon_180x180.png" />
 		<title><%= htmlWebpackPlugin.options.title %></title>
 	</head>
 	<body style="background-color: #333333">
-		<noscript>Sorry, your browser does not support JavaScript! :(</noscript>
-		<div id="pilot-label" style="display: none">
-			PILOT:
-			<span id="pilot-value"></span>
+		<div id="container" style="display: none">
+			<noscript>Sorry, your browser does not support JavaScript! :(</noscript>
+			<div id="pilot-label">
+				PILOT:
+				<span id="pilot-value"></span>
+			</div>
+			<div id="high-scores-label">TOP 10</div>
+			<div id="distance-label">
+				DISTANCE:
+				<span id="distance-value"></span>
+			</div>
+			<div id="best-label">
+				BEST:
+				<span id="best-value"></span>
+			</div>
+			<div id="initials-section" class="centered">
+				<span id="initials-label"></span>
+				<form id="initials-form" spellcheck="false">
+					<div id="initials-input-caret-box">
+						<div id="initials-input-caret"></div>
+						<input id="initials-input" name="initials-input" type="text" maxlength="3" />
+					</div>
+				</form>
+			</div>
+			<ul id="high-scores" class="centered"></ul>
+			<div id="backdrop"></div>
+			<div id="overlay"></div>
+			<canvas id="game-canvas"></canvas>
+			<canvas id="ghost-canvas" class="centered"></canvas>
 		</div>
-		<div id="high-scores-label" style="display: none">TOP 10</div>
-		<div id="distance-label" style="display: none">
-			DISTANCE:
-			<span id="distance-value"></span>
-		</div>
-		<div id="best-label" style="display: none">
-			BEST:
-			<span id="best-value"></span>
-		</div>
-		<div id="initials-section" class="centered" style="display: none">
-			<span id="initials-label"></span>
-			<form id="initials-form" spellcheck="false">
-				<div id="initials-input-caret-box">
-					<div id="initials-input-caret"></div>
-					<input id="initials-input" name="initials-input" type="text" maxlength="3" />
-				</div>
-			</form>
-		</div>
-		<ul id="high-scores" class="centered"></ul>
-		<div id="backdrop"></div>
-		<div id="overlay"></div>
-		<canvas id="game-canvas" style="display: none"></canvas>
-		<canvas id="ghost-canvas" class="centered"></canvas>
 	</body>
 </html>

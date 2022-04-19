@@ -302,6 +302,8 @@ export class Game {
 	}
 
 	updateHighScores(highScores: IScore[]) {
+		if (!highScores) return;
+
 		let content = "",
 			count = 1;
 		for (const highScore of highScores) {
@@ -329,9 +331,11 @@ export class Game {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
+		// don't render the game screen until all images have loaded
 		if (!this.allImagesLoaded) {
 			this.allImagesLoaded = areAllImagesLoaded();
 			if (!this.allImagesLoaded) return;
+			document.getElementById("container").style.display = "block";
 		}
 
 		ctx.fillStyle = Color.black;

@@ -9,12 +9,10 @@ const manifest = self.__WB_MANIFEST as PrecacheEntry[];
 
 const cacheName = "swcache_" + new Date().toISOString();
 
-const cacheFirstFilePatterns: string[] = [".bundle.js", "favicon.ico", "/font/", "/img/", "browserconfig.xml"];
+const cachFileIdentifier = ".hash.";
 
 const isCacheFirstFile = (url: string) => {
-	for (const pattern of cacheFirstFilePatterns) {
-		if (url.includes(pattern)) return true;
-	}
+	if (url.includes(cachFileIdentifier)) return true;
 	return false;
 };
 
@@ -89,8 +87,8 @@ const cacheFirst = async (event: FetchEvent): Promise<Response> => {
 
 // clean up old versions of files with hashed filenames when a new version is fetched over the network
 const cleanCache = async (event: FetchEvent, cache: Cache) => {
-	if (event.request.url.includes(".bundle.")) {
-		const prefix = event.request.url.split(".")[0];
+	if (isCacheFirstFile(event.request.url)) {
+		const prefix = event.request.url.split(cachFileIdentifier)[0];
 		(await cache.keys()).map(async (key: Request) => {
 			if (key.url.startsWith(prefix)) await cache.delete(key);
 		});
