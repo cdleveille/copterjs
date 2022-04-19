@@ -3,15 +3,13 @@ import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
 import fs from "fs";
 import helmet from "helmet";
+import { createServer } from "http";
 import morgan from "morgan";
 import path from "path";
-import { Socket } from "socket.io";
-
-import { IEnv, IScore } from "@shared/types/abstract";
 
 import router from "../controllers/index";
 import Config from "../helpers/config";
-import { deleteRun, endRun, ping, sendHighScoresToClient, startRun, submitScore } from "../helpers/score";
+import { initSocket } from "../helpers/socket";
 import { Routes } from "../types/constants";
 import { Database } from "./db";
 import log from "./log";
@@ -58,51 +56,18 @@ export default class App {
 
 		App.instance.set("json spaces", 2);
 
-		App.instance.disabled("x-powered-by");
+		App.instance.disable("x-powered-by");
 	}
 
 	public static async start() {
 		if (Config.USE_DB) await Database.Connect();
 		await App.setup();
 
+		const httpServer = createServer(App.instance);
 		const manager = Config.USE_DB ? Database.Manager.fork() : null;
+		initSocket(httpServer, manager);
 
-		const http = require("http").Server(App.instance);
-		const io = require("socket.io")(http);
-
-		io.on("connect", (socket: Socket) => {
-			deleteRun(socket.id);
-
-			socket.on("start-run", () => {
-				startRun(socket);
-			});
-
-			socket.on("end-run", async (data: IScore) => {
-				await endRun(manager, data.player, data.score, socket);
-			});
-
-			socket.on("submit-score", async (player: string) => {
-				await submitScore(manager, player, socket);
-			});
-
-			socket.on("player-input-ping", () => {
-				ping(socket);
-			});
-
-			socket.on("high-scores-request", async () => {
-				await sendHighScoresToClient(manager, socket);
-			});
-
-			socket.on("env-var-request", async () => {
-				socket.emit("env-var-send", { IS_PROD: Config.IS_PROD, USE_DB: Config.USE_DB } as IEnv);
-			});
-
-			socket.on("disconnect", () => {
-				deleteRun(socket.id);
-			});
-		});
-
-		http.listen(Config.PORT, () => {
+		httpServer.listen(Config.PORT, () => {
 			log.info(
 				`Server started - listening on http${Config.IS_PROD ? "s" : ""}://${Config.HOST}${
 					Config.IS_PROD ? "" : ":" + Config.PORT
