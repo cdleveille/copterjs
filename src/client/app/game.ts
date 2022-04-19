@@ -16,11 +16,8 @@ export class Game {
 	pausedAtStart: boolean;
 	locked: boolean;
 	distanceLabel: HTMLDivElement;
-	distanceValue: HTMLDivElement;
 	bestLabel: HTMLDivElement;
-	bestValue: HTMLDivElement;
 	pilotLabel: HTMLDivElement;
-	pilotValue: HTMLDivElement;
 	highScoresLabel: HTMLDivElement;
 	initialsSection: HTMLDivElement;
 	initialsLabel: HTMLSpanElement;
@@ -47,11 +44,8 @@ export class Game {
 		this.best = 0;
 
 		this.distanceLabel = document.getElementById("distance-label") as HTMLDivElement;
-		this.distanceValue = document.getElementById("distance-value") as HTMLDivElement;
 		this.bestLabel = document.getElementById("best-label") as HTMLDivElement;
-		this.bestValue = document.getElementById("best-value") as HTMLDivElement;
 		this.pilotLabel = document.getElementById("pilot-label") as HTMLDivElement;
-		this.pilotValue = document.getElementById("pilot-value") as HTMLDivElement;
 		this.initialsSection = document.getElementById("initials-section") as HTMLDivElement;
 		this.initialsLabel = document.getElementById("initials-label") as HTMLSpanElement;
 		this.initialsForm = document.getElementById("initials-form") as HTMLFormElement;
@@ -61,11 +55,6 @@ export class Game {
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("player");
-
-		this.pilotLabel.style.display = "block";
-		this.highScoresLabel.style.display = "block";
-		this.distanceLabel.style.display = "block";
-		this.bestLabel.style.display = "block";
 
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
@@ -344,8 +333,9 @@ export class Game {
 		this.copter.draw(ctx);
 		this.terrain.draw(ctx);
 
-		this.distanceValue.innerText = this.distance.toString();
-		this.bestValue.innerText = this.best.toString();
-		this.pilotValue.innerText = this.player || "?";
+		this.pilotLabel.innerText = `PILOT: ${this.player || "?"}`;
+		this.highScoresLabel.innerText = "TOP 10";
+		this.distanceLabel.innerText = `DISTANCE: ${this.distance.toString()}`;
+		this.bestLabel.innerText = `BEST: ${this.best.toString()}`;
 	}
 }

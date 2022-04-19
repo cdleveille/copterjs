@@ -6,12 +6,12 @@ Modern remake of the classic addicting flash game.
 
 ## Technologies
 
+-   [Node.js](https://nodejs.org/en/)
 -   [TypeScript](https://www.typescriptlang.org/)
+-   [HTML5 Canvas](https://www.w3schools.com/html/html5_canvas.asp)
 -   [Webpack](https://webpack.js.org/)
 -   [Babel](https://babeljs.io/)
--   [HTML5 Canvas](https://www.w3schools.com/html/html5_canvas.asp)
 -   [Socket.io](https://socket.io/)
--   [Node.js](https://nodejs.org/en/)
 -   [Express](http://expressjs.com/)
 -   [MikroORM](https://mikro-orm.io/)
 -   [PostgreSQL](https://www.postgresql.org/)
@@ -39,8 +39,8 @@ Set up dev environment:
     -   [EditorConfig](https://marketplace.visualstudio.com/items?itemName=editorconfig.editorconfig)
     -   [TypeScript Import Sorter](https://marketplace.visualstudio.com/items?itemName=mike-co.import-sorter)
 -   Run `yarn` in the terminal to install package dependencies.
--   Create and populate a `.env` file in the root folder based on the `.env.example` file, which contains default environment variable values for a development environment.
--   Optionally set the `USE_DB` environment variable to `false` and skip the "Set up dev database" instructions below if there is no need for a dev database.
+-   Create and populate a `.env` file in the root folder based on the `.env.example` file, which contains default environment variable values for a dev environment.
+-   Optionally switch the `USE_DB` environment variable to `false` and skip the "Set up dev database" instructions below if there is no need for a dev database.
 
 Set up dev database (only required if `USE_DB=true` in the `.env` file):
 

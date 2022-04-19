@@ -15,7 +15,7 @@ game.init();
 
 window.addEventListener("load", async () => {
 	// @ts-ignore
-	if (!navigator.serviceWorker.controller) {
+	if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
 		// @ts-ignore
 		await navigator.serviceWorker.register("sw.js");
 		console.log("new service worker registered");

@@ -2,7 +2,6 @@
 
 import { PrecacheEntry } from "workbox-precaching";
 
-// @ts-ignore
 declare const self: ServiceWorkerGlobalScope;
 
 const manifest = self.__WB_MANIFEST as PrecacheEntry[];
@@ -11,7 +10,7 @@ const cacheName = "swcache_" + new Date().toISOString();
 
 const cachFileIdentifier = ".hash.";
 
-const isCacheFirstFile = (url: string) => {
+const isCacheFirstFile = (url: string): boolean => {
 	if (url.includes(cachFileIdentifier)) return true;
 	return false;
 };
@@ -54,7 +53,6 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 self.addEventListener("fetch", (event: FetchEvent) => {
 	event.respondWith(
 		(async () => {
-			// if (event.request.url.includes("googletagmanager.com")) return {} as Response;
 			if (isCacheFirstFile(event.request.url)) return cacheFirst(event);
 			return networkFirst(event);
 		})()
