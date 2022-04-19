@@ -35,8 +35,7 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 
 			const urls = ["/"];
 			manifest.map((entry) => urls.push(entry.url));
-
-			cache.addAll(urls);
+			urls.map(async (url) => await cache.put(url, await fetch(url)));
 		})()
 	);
 });
