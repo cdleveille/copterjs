@@ -3,40 +3,11 @@
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
-import { Configuration, WebpackPluginInstance } from "webpack";
+import { Configuration } from "webpack";
+import WebpackObfuscator from "webpack-obfuscator";
 import { InjectManifest } from "workbox-webpack-plugin";
 
 import Config from "./src/server/helpers/config";
-
-const plugins: WebpackPluginInstance[] = [
-	new InjectManifest({
-		swSrc: path.resolve(__dirname, "src/client/sw.ts")
-	}),
-
-	new CopyPlugin({
-		patterns: [
-			{
-				from: path.resolve(__dirname, "src/client"),
-				to: path.resolve(__dirname, "build/client"),
-				toType: "dir",
-				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/css/**/*", "**/font/**/*", "**/img/**/*"]
-				}
-			},
-			{
-				from: path.resolve(__dirname, "src/client/img/icons"),
-				to: path.resolve(__dirname, "build/client/icons"),
-				toType: "dir"
-			}
-		]
-	}),
-
-	new HtmlWebpackPlugin({
-		title: "copterjs",
-		filename: "index.html",
-		template: path.resolve(__dirname, "src/client/_index.html")
-	})
-].filter((n) => n);
 
 export default {
 	mode: Config.IS_PROD ? "production" : "development",
@@ -48,6 +19,7 @@ export default {
 		rules: [
 			{
 				test: /\.[jt]sx?$/i,
+				exclude: [path.resolve(__dirname, "node_modules")],
 				use: [
 					{
 						loader: "babel-loader",
@@ -58,8 +30,7 @@ export default {
 						}
 					},
 					{ loader: "ts-loader" }
-				],
-				exclude: path.resolve(__dirname, "node_modules")
+				]
 			},
 			{
 				test: /\.css$/i,
@@ -98,5 +69,70 @@ export default {
 			}
 		}
 	},
-	plugins: plugins
+	plugins: [
+		new InjectManifest({
+			swSrc: path.resolve(__dirname, "src/client/sw.ts")
+		}),
+
+		new CopyPlugin({
+			patterns: [
+				{
+					from: path.resolve(__dirname, "src/client"),
+					to: path.resolve(__dirname, "build/client"),
+					toType: "dir",
+					globOptions: {
+						ignore: [
+							"**/*.ts",
+							"**/tsconfig.json",
+							"**/*.html",
+							"**/css/**/*",
+							"**/font/**/*",
+							"**/img/**/*"
+						]
+					}
+				},
+				{
+					from: path.resolve(__dirname, "src/client/img/icons"),
+					to: path.resolve(__dirname, "build/client/icons"),
+					toType: "dir"
+				}
+			]
+		}),
+
+		new HtmlWebpackPlugin({
+			title: "copterjs",
+			filename: "index.html",
+			template: path.resolve(__dirname, "src/client/_index.html")
+		}),
+
+		Config.IS_PROD &&
+			new WebpackObfuscator(
+				{
+					compact: true,
+					disableConsoleOutput: true,
+					identifierNamesGenerator: "hexadecimal",
+					log: false,
+					numbersToExpressions: true,
+					renameGlobals: false,
+					selfDefending: true,
+					simplify: true,
+					splitStrings: true,
+					splitStringsChunkLength: 2,
+					stringArray: true,
+					stringArrayCallsTransform: true,
+					stringArrayEncoding: ["rc4"],
+					stringArrayIndexShift: true,
+					stringArrayRotate: true,
+					stringArrayShuffle: true,
+					stringArrayWrappersCount: 5,
+					stringArrayWrappersChainedCalls: true,
+					stringArrayWrappersParametersMaxCount: 5,
+					stringArrayWrappersType: "function",
+					stringArrayThreshold: 1,
+					transformObjectKeys: true,
+					unicodeEscapeSequence: false
+				},
+				["sw.js"]
+			)
+	].filter((n) => n)
 } as Configuration;
