@@ -68,11 +68,11 @@ export class InputHandler {
 	}
 
 	press(game: Game) {
-		if (game.locked) return;
+		if (game.locked) return game.pilotLabelClickHandler();
 		if (game.pausedAtStart) game.pausedAtStart = false;
 		if (game.isOver) return game.reset();
+		if (game.highScores.style.display === "block") game.highScores.style.display = "none";
 		game.copter.climbing = true;
-		game.highScores.style.display = "none";
 		game.ping();
 	}
 

@@ -8,6 +8,7 @@ export class WindowHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
 		this.canvas = canvas;
 		this.game = game;
+		this.game.windowHandler = this;
 
 		window.addEventListener("resize", () => {
 			this.resize();

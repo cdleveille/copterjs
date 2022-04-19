@@ -1,3 +1,8 @@
+:root {
+	--blue: #33ccff;
+	--gray: #333333;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -44,7 +49,7 @@ html {
 
 #backdrop {
 	position: absolute;
-	background-color: #333333;
+	background-color: var(--gray);
 	z-index: -1;
 	width: 100%;
 	height: 100%;
@@ -52,7 +57,7 @@ html {
 
 #overlay {
 	position: absolute;
-	background-color: #333333;
+	background-color: var(--gray);
 	z-index: 1;
 	height: 100%;
 	pointer-events: none;
@@ -79,16 +84,16 @@ html {
 	justify-content: center;
 	align-items: center;
 	font-size: 60px;
-	color: #33ccff;
+	color: var(--blue);
 	display: none;
 	pointer-events: none;
 }
 
 #initials-input {
-	font-size: 166px !important;
-	color: #33ccff;
+	font-size: 166px;
+	color: var(--blue);
 	width: 228px;
-	border: 4px solid #33ccff;
+	border: 4px solid var(--blue);
 	outline: none;
 	pointer-events: all;
 	background: transparent;
@@ -105,7 +110,7 @@ html {
 #initials-input-caret {
 	position: absolute;
 	z-index: 2;
-	background-color: #33ccff;
+	background-color: var(--blue);
 	animation: blink 1s infinite;
 	pointer-events: none;
 	left: 4%;
@@ -114,11 +119,16 @@ html {
 	height: 64%;
 }
 
+#initials-submit-label {
+	font-size: 60px;
+	color: var(--blue);
+}
+
 #high-scores {
 	list-style: none;
 	z-index: 1;
 	font-size: 60px;
-	color: #33ccff;
+	color: var(--blue);
 	display: none;
 	pointer-events: none;
 }
@@ -130,13 +140,5 @@ html {
 	}
 	50% {
 		opacity: 35%;
-	}
-}
-
-@media screen and (max-width: 767px) {
-	input,
-	select,
-	textarea {
-		font-size: 16px;
 	}
 }
