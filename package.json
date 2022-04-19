@@ -11,6 +11,7 @@
     "db:create": "yarn mikro-orm migration:create",
     "db:up": "yarn mikro-orm migration:up",
     "db:down": "yarn mikro-orm migration:down",
+    "postinstall": "husky install",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx . && prettier --write .",
     "build": "rimraf build && concurrently --prefix \"[{name}]\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn build-server\" \"yarn build-client\"",
     "build-server": "rimraf build/server && rimraf build/shared && tsc -b src/server",
