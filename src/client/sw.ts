@@ -56,7 +56,7 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 self.addEventListener("fetch", (event: FetchEvent) => {
 	event.respondWith(
 		(async () => {
-			if (event.request.url.includes("googletagmanager.com")) return {} as Response;
+			// if (event.request.url.includes("googletagmanager.com")) return {} as Response;
 			if (isCacheFirstFile(event.request.url)) return cacheFirst(event);
 			return networkFirst(event);
 		})()
@@ -66,7 +66,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
 const networkFirst = async (event: FetchEvent): Promise<Response> => {
 	try {
 		const networkResponse = await fetch(event.request);
-		if (event.request.method !== "POST" && !event.request.url.includes("socket.io")) {
+		if (event.request.method === "GET" && !event.request.url.includes("socket.io")) {
 			const cache = await caches.open(cacheName);
 			await cleanCache(event, cache);
 			event.waitUntil(await cache.put(event.request, networkResponse.clone()));

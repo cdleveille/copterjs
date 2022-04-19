@@ -4,14 +4,14 @@ import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import { Configuration, WebpackPluginInstance } from "webpack";
+import { InjectManifest } from "workbox-webpack-plugin";
 
-// import { InjectManifest } from "workbox-webpack-plugin";
 import Config from "./src/server/helpers/config";
 
 const plugins: WebpackPluginInstance[] = [
-	// new InjectManifest({
-	// 	swSrc: path.resolve(__dirname, "src/client/sw.ts")
-	// }),
+	new InjectManifest({
+		swSrc: path.resolve(__dirname, "src/client/sw.ts")
+	}),
 
 	new CopyPlugin({
 		patterns: [
@@ -20,7 +20,7 @@ const plugins: WebpackPluginInstance[] = [
 				to: path.resolve(__dirname, "build/client"),
 				toType: "dir",
 				globOptions: {
-					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html", "**/font/**/*"]
+					ignore: ["**/*.ts", "**/tsconfig.json", "**/*.html"]
 				}
 			}
 		]
@@ -34,11 +34,11 @@ const plugins: WebpackPluginInstance[] = [
 ].filter((n) => n);
 
 export default {
-	mode: "development", //Config.IS_PROD ? "production" : "development",
+	mode: Config.IS_PROD ? "production" : "development",
 	entry: {
 		main: path.resolve(__dirname, "src/client/app/index.ts")
 	},
-	devtool: "inline-source-map", //Config.IS_PROD ? false : "inline-source-map",
+	devtool: Config.IS_PROD ? false : "inline-source-map",
 	module: {
 		rules: [
 			{
@@ -61,7 +61,8 @@ export default {
 	output: {
 		path: path.resolve(__dirname, "build/client"),
 		filename: "[name].[contenthash].bundle.js",
-		sourceMapFilename: "[name].js.map"
+		sourceMapFilename: "[name].js.map",
+		clean: true
 	},
 	resolve: {
 		extensions: [".ts", ".js"],
@@ -71,7 +72,7 @@ export default {
 	},
 	target: ["web", "es5"],
 	optimization: {
-		minimize: false, //Config.IS_PROD,
+		minimize: Config.IS_PROD,
 		splitChunks: {
 			cacheGroups: {
 				vendor: {

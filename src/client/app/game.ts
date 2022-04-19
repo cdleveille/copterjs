@@ -3,6 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { IEnv, IScore } from "@shared/types/abstract";
 
 import { Copter } from "./copter";
+import { areAllImagesLoaded } from "./img";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
 import { now } from "./util";
@@ -38,6 +39,7 @@ export class Game {
 	scale: number;
 	socket: Socket;
 	noDB: boolean;
+	allImagesLoaded: boolean;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -327,6 +329,11 @@ export class Game {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
+		if (!this.allImagesLoaded) {
+			this.allImagesLoaded = areAllImagesLoaded();
+			if (!this.allImagesLoaded) return;
+		}
+
 		ctx.fillStyle = Color.black;
 		ctx.fillRect(0, 0, this.width + 1, this.height);
 
