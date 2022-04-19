@@ -19,7 +19,7 @@ export default {
 		rules: [
 			{
 				test: /\.[jt]sx?$/i,
-				exclude: [path.resolve(__dirname, "node_modules")],
+				include: path.resolve(__dirname, "src/client"),
 				use: [
 					{
 						loader: "babel-loader",
@@ -34,10 +34,12 @@ export default {
 			},
 			{
 				test: /\.css$/i,
+				include: path.resolve(__dirname, "src/client"),
 				use: ["style-loader", "css-loader"]
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif|webp|ttf)$/i,
+				include: path.resolve(__dirname, "src/client"),
 				type: "asset/resource"
 			}
 		]
@@ -45,8 +47,8 @@ export default {
 	output: {
 		path: path.resolve(__dirname, "build/client"),
 		filename: "[name].hash.[contenthash].bundle.js",
-		sourceMapFilename: "[name].js.map",
 		assetModuleFilename: "assets/[name].hash.[contenthash][ext]",
+		sourceMapFilename: "[name].js.map",
 		clean: true
 	},
 	resolve: {
