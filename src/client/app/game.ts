@@ -245,7 +245,7 @@ export class Game {
 		canvas.style.transform = `translate(${transformX}px, ${transformY}px)`;
 
 		this.overlay.style.left = `${transformX + this.width}px`;
-		this.overlay.style.width = `${transformX}px`;
+		this.overlay.style.width = `${transformX * 4}px`;
 
 		this.scale = this.width / 1600;
 
