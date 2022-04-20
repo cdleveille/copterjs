@@ -68,7 +68,7 @@ export class InputHandler {
 	}
 
 	press(game: Game) {
-		if (game.locked) return;
+		if (game.locked) return game.hideInitialsSection(true);
 		if (game.pausedAtStart) game.pausedAtStart = false;
 		if (game.isOver) return game.reset();
 		if (game.highScores.style.display === "block") game.highScores.style.display = "none";
@@ -77,7 +77,6 @@ export class InputHandler {
 	}
 
 	release(game: Game) {
-		if (game.locked) return game.hideInitialsSection(true);
 		game.copter.climbing = false;
 		game.ping();
 	}
