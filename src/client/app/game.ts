@@ -257,8 +257,6 @@ export class Game {
 		this.initialsSubmitLabel.style.display = "block";
 		this.initialsSubmitLabel.style.opacity = "0";
 		this.initialsSubmitLabel.style.animation = "";
-
-		this.initialsInput.focus();
 		this.initialsInput.inputMode = "text";
 	}
 
