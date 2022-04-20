@@ -63,7 +63,12 @@ export class Game {
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("player");
 
-		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
+		this.pilotLabel.onclick = (e) => {
+			e.preventDefault();
+			this.initialsSection.style.display = "block";
+			this.initialsInput.focus();
+			this.pilotLabelClickHandler();
+		};
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
