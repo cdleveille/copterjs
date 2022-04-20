@@ -69,7 +69,7 @@ export class Game {
 		this.initIntialsForm();
 	}
 
-	init(noHideInitials?: boolean) {
+	init() {
 		this.pausedAtStart = true;
 		this.locked = false;
 		this.isOver = false;
@@ -78,7 +78,7 @@ export class Game {
 		this.distance = 0;
 		this.initialsRequested = false;
 
-		if (!noHideInitials) this.hideInitialsSection();
+		this.hideInitialsSection();
 
 		this.copter.init();
 		this.terrain.init();
@@ -174,7 +174,6 @@ export class Game {
 		});
 
 		this.initialsInput.addEventListener("focusout", () => {
-			this.windowHandler.resize();
 			this.initialsInput.inputMode = "none";
 			this.initialsInputCaret.style.display = "none";
 			this.initialsSubmitLabel.style.opacity = "0";
@@ -248,9 +247,6 @@ export class Game {
 		this.locked = false;
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
-		this.windowHandler.resize();
-
-		this.init(true);
 	}
 
 	showNewHighScoreMsg() {
@@ -299,7 +295,7 @@ export class Game {
 
 		const fontSizeScaled = `${60 * this.scale}px`;
 		const intialsInputFontSizeScaled = `${166 * this.scale}px`;
-		const initialsInputWidth = `${234 * this.scale}px`;
+		const initialsInputWidth = `${236 * this.scale}px`;
 		const initialsInputBorderWidth = `${4 * this.scale}px`;
 		const initialsFormMarginTop = `${16 * this.scale}px`;
 		const initialsFormMarginBottom = `${5 * this.scale}px`;
