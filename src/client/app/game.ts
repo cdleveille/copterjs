@@ -69,7 +69,7 @@ export class Game {
 		this.initIntialsForm();
 	}
 
-	init() {
+	init(noHideInitials?: boolean) {
 		this.pausedAtStart = true;
 		this.locked = false;
 		this.isOver = false;
@@ -77,7 +77,8 @@ export class Game {
 		this.endTime = undefined;
 		this.distance = 0;
 		this.initialsRequested = false;
-		this.hideInitialsSection();
+
+		if (!noHideInitials) this.hideInitialsSection();
 
 		this.copter.init();
 		this.terrain.init();
@@ -248,6 +249,8 @@ export class Game {
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
 		this.windowHandler.resize();
+
+		this.init(true);
 	}
 
 	showNewHighScoreMsg() {
