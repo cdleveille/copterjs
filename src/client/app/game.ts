@@ -41,6 +41,7 @@ export class Game {
 	noDB: boolean;
 	allImagesLoaded: boolean;
 	env: IEnv;
+	lastIntialsFocus: number;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -75,6 +76,7 @@ export class Game {
 		this.startTime = undefined;
 		this.endTime = undefined;
 		this.distance = 0;
+		this.initialsRequested = false;
 		this.hideInitialsSection();
 
 		this.copter.init();
@@ -161,7 +163,6 @@ export class Game {
 		});
 
 		this.initialsInput.addEventListener("focusin", () => {
-			this.windowHandler.resize();
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
@@ -177,6 +178,7 @@ export class Game {
 			this.initialsInputCaret.style.display = "none";
 			this.initialsSubmitLabel.style.opacity = "0";
 			this.initialsSubmitLabel.style.animation = "";
+			this.hideInitialsSection(true);
 		});
 
 		this.initialsInput.addEventListener("keydown", () => {
@@ -234,10 +236,13 @@ export class Game {
 		} else {
 			this.hideInitialsSection();
 		}
-		this.windowHandler.resize();
 	}
 
-	hideInitialsSection() {
+	hideInitialsSection(focusLoss?: boolean) {
+		if (this.initialsRequested) return;
+
+		if (focusLoss) this.lastIntialsFocus = now();
+
 		this.initialsInput.inputMode = "none";
 		this.locked = false;
 		this.initialsRequested = false;
@@ -254,9 +259,8 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
-		if (this.initialsRequested) return;
 		if (this.locked) return this.hideInitialsSection();
-		this.getPlayerInitials();
+		if (!this.lastIntialsFocus || now() - this.lastIntialsFocus > 100) this.getPlayerInitials();
 	}
 
 	highScoresLabelClickHandler() {
