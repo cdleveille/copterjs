@@ -41,7 +41,7 @@ export class Game {
 	noDB: boolean;
 	allImagesLoaded: boolean;
 	env: IEnv;
-	lastIntialsFocus: number;
+	lastInitialsFocus: number;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -64,6 +64,7 @@ export class Game {
 
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
+		this.lastInitialsFocus = now();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
 		this.initIntialsForm();
@@ -182,7 +183,7 @@ export class Game {
 	}
 
 	initialsInputFocusLoss() {
-		this.lastIntialsFocus = now();
+		this.lastInitialsFocus = now();
 		this.initialsInput.inputMode = "none";
 		this.initialsInputCaret.style.display = "none";
 		this.initialsSubmitLabel.style.opacity = "0";
@@ -259,8 +260,8 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
-		if (this.locked) return this.hideInitialsSection();
-		if (!this.lastIntialsFocus || now() - this.lastIntialsFocus > 500) this.getPlayerInitials();
+		if (this.locked) return this.initialsInputFocusLoss();
+		if (now() - this.lastInitialsFocus >= 500) this.getPlayerInitials();
 	}
 
 	highScoresLabelClickHandler() {
