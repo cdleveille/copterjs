@@ -21,7 +21,7 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
-	if (Math.abs(distance - clientDistance) > 1) return deleteRun(socket.id);
+	if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
 
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 

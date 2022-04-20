@@ -9,15 +9,17 @@
 	margin: 0;
 	padding: 0;
 	font-family: "digital-7";
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-text-size-adjust: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 body,
 html {
 	overflow: hidden;
-	-webkit-touch-callout: none;
-	-webkit-text-size-adjust: none;
-	-webkit-user-select: none;
-	user-select: none;
 	touch-action: none;
 	position: absolute !important;
 	width: 100%;
@@ -37,6 +39,7 @@ html {
 	left: 50%;
 	-moz-transform: translateX(-50%) translateY(-50%);
 	-webkit-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
 	transform: translateX(-50%) translateY(-50%);
 }
 

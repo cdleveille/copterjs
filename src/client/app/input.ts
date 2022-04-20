@@ -19,11 +19,13 @@ export class InputHandler {
 		});
 
 		document.addEventListener("keydown", (e) => {
+			this.hideCursor(canvas);
 			if (e.repeat) return;
 			switch (e.code) {
 				case "Space":
 					e.preventDefault();
-					return this.press(game);
+					if (!game.locked) this.press(game);
+					return;
 				case "Tab":
 					e.preventDefault();
 					return game.highScoresLabelClickHandler();
@@ -34,6 +36,7 @@ export class InputHandler {
 		});
 
 		document.addEventListener("keyup", (e) => {
+			this.hideCursor(canvas);
 			if (e.code === "Space") {
 				e.preventDefault();
 				this.release(game);
@@ -65,6 +68,10 @@ export class InputHandler {
 			e.preventDefault();
 			this.release(game);
 		});
+
+		document.addEventListener("mousemove", (e) => {
+			this.showCursor(canvas);
+		});
 	}
 
 	press(game: Game) {
@@ -79,5 +86,17 @@ export class InputHandler {
 	release(game: Game) {
 		game.copter.climbing = false;
 		game.ping();
+	}
+
+	hideCursor(canvas: HTMLCanvasElement) {
+		// canvas.style.cursor = "none";
+		// document.getElementById("backdrop").style.cursor = "none";
+		document.getElementById("container").style.cursor = "none";
+	}
+
+	showCursor(canvas: HTMLCanvasElement) {
+		// canvas.style.cursor = "auto";
+		// document.getElementById("backdrop").style.cursor = "auto";
+		document.getElementById("container").style.cursor = "auto";
 	}
 }

@@ -112,6 +112,35 @@ export class Game {
 	}
 
 	initIntialsForm() {
+		this.initialsInput.onselectstart = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.onpaste = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.oncopy = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.oncut = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.ondrag = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.ondrop = (e) => {
+			e.preventDefault();
+			return false;
+		};
+		this.initialsInput.oncontextmenu = (e) => {
+			e.preventDefault();
+			return false;
+		};
+
 		this.initialsSubmitLabel.innerText = "⏎";
 
 		this.initialsForm.addEventListener("submit", (e) => {
@@ -164,7 +193,7 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusin", () => {
+		this.initialsInput.addEventListener("focus", () => {
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
@@ -174,7 +203,7 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusout", () => this.initialsInputFocusLoss());
+		this.initialsInput.addEventListener("blur", () => this.initialsInputFocusLoss());
 
 		this.initialsInput.addEventListener("keydown", () => {
 			this.initialsInput.selectionStart = this.initialsInput.value.length;
@@ -184,6 +213,7 @@ export class Game {
 
 	initialsInputFocusLoss() {
 		this.lastInitialsFocus = now();
+		if (this.isOver && now() - this.endTime < 1000) return this.initialsInput.focus();
 		this.initialsInput.inputMode = "none";
 		this.initialsInputCaret.style.display = "none";
 		this.initialsSubmitLabel.style.opacity = "0";
@@ -239,7 +269,7 @@ export class Game {
 			this.submitScore();
 			this.init();
 		} else {
-			this.hideInitialsSection();
+			this.initialsInputFocusLoss();
 		}
 	}
 
@@ -279,7 +309,7 @@ export class Game {
 	}
 
 	reset() {
-		if (this.isOver && now() > this.endTime + 500) this.init();
+		if (this.isOver && now() > this.endTime + 1000) this.init();
 	}
 
 	resize(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
