@@ -193,7 +193,7 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focus", () => {
+		this.initialsInput.addEventListener("focusin", () => {
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
@@ -280,6 +280,8 @@ export class Game {
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
 		this.pilotLabel.style.pointerEvents = "auto";
+
+		this.pilotLabel.focus();
 	}
 
 	showNewHighScoreMsg() {
