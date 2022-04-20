@@ -81,7 +81,7 @@ html {
 #best-label,
 #pilot-label,
 #high-scores-label {
-	z-index: 4;
+	z-index: 5;
 	position: absolute;
 	font-size: 60px;
 	color: var(--black);
@@ -95,6 +95,14 @@ html {
 #distance-label,
 #best-label {
 	pointer-events: none;
+}
+
+#pilot-label-ghost {
+	border: 2px solid red;
+	position: absolute;
+	z-index: 4;
+	cursor: pointer;
+	opacity: 0;
 }
 
 #initials-section {

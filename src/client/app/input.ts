@@ -20,6 +20,9 @@ export class InputHandler {
 
 		document.addEventListener("keydown", (e) => {
 			this.hideCursor(canvas);
+
+			// if (game.locked) game.initialsInput.focus();
+
 			if (e.repeat) return;
 			switch (e.code) {
 				case "Space":

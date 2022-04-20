@@ -20,6 +20,7 @@ export class Game {
 	distanceLabel: HTMLDivElement;
 	bestLabel: HTMLDivElement;
 	pilotLabel: HTMLDivElement;
+	pilotLabelGhost: HTMLDivElement;
 	highScoresLabel: HTMLDivElement;
 	initialsSection: HTMLDivElement;
 	initialsLabel: HTMLSpanElement;
@@ -50,6 +51,7 @@ export class Game {
 		this.distanceLabel = document.getElementById("distance-label") as HTMLDivElement;
 		this.bestLabel = document.getElementById("best-label") as HTMLDivElement;
 		this.pilotLabel = document.getElementById("pilot-label") as HTMLDivElement;
+		this.pilotLabelGhost = document.getElementById("pilot-label-ghost") as HTMLDivElement;
 		this.initialsSection = document.getElementById("initials-section") as HTMLDivElement;
 		this.initialsLabel = document.getElementById("initials-label") as HTMLSpanElement;
 		this.initialsForm = document.getElementById("initials-form") as HTMLFormElement;
@@ -258,6 +260,8 @@ export class Game {
 		this.initialsSubmitLabel.style.opacity = "0";
 		this.initialsSubmitLabel.style.animation = "";
 		this.initialsInput.inputMode = "text";
+
+		this.initialsInput.focus();
 	}
 
 	initialsSubmitted() {
@@ -275,7 +279,7 @@ export class Game {
 		this.locked = false;
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
-		document.getElementById("game-canvas").focus();
+		this.pilotLabel.style.pointerEvents = "auto";
 	}
 
 	showNewHighScoreMsg() {
@@ -288,6 +292,7 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
+		this.pilotLabel.style.pointerEvents = "none";
 		if (this.locked) return this.initialsInputFocusLoss();
 		this.getPlayerInitials();
 	}
@@ -341,6 +346,10 @@ export class Game {
 		this.pilotLabel.style.fontSize = fontSizeScaled;
 		this.pilotLabel.style.left = offsetHorizontal;
 		this.pilotLabel.style.top = offsetVertical;
+
+		this.pilotLabelGhost.style.fontSize = fontSizeScaled;
+		this.pilotLabelGhost.style.left = offsetHorizontal;
+		this.pilotLabelGhost.style.top = offsetVertical;
 
 		this.highScoresLabel.style.fontSize = fontSizeScaled;
 		this.highScoresLabel.style.right = offsetHorizontal;
@@ -415,6 +424,7 @@ export class Game {
 		this.terrain.draw(ctx);
 
 		this.pilotLabel.innerText = `PILOT: ${this.player || "?"}`;
+		this.pilotLabelGhost.innerText = this.pilotLabel.innerText;
 		this.highScoresLabel.innerText = "TOP 10";
 		this.distanceLabel.innerText = `DISTANCE: ${this.distance.toString()}`;
 		this.bestLabel.innerText = `BEST: ${this.best.toString()}`;
