@@ -162,6 +162,7 @@ export class Game {
 
 		this.initialsInput.addEventListener("focusin", () => {
 			this.windowHandler.resize();
+			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
 				this.initialsSubmitLabel.style.animation = "blink-brighter 1s infinite";
@@ -172,10 +173,10 @@ export class Game {
 
 		this.initialsInput.addEventListener("focusout", () => {
 			this.windowHandler.resize();
+			this.initialsInput.inputMode = "none";
 			this.initialsInputCaret.style.display = "none";
 			this.initialsSubmitLabel.style.opacity = "0";
 			this.initialsSubmitLabel.style.animation = "";
-			this.initialsInput.inputMode = "none";
 		});
 
 		this.initialsInput.addEventListener("keydown", () => {
@@ -237,9 +238,11 @@ export class Game {
 	}
 
 	hideInitialsSection() {
+		this.initialsInput.inputMode = "none";
 		this.locked = false;
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
+		this.windowHandler.resize();
 	}
 
 	showNewHighScoreMsg() {
