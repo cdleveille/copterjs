@@ -178,7 +178,7 @@ export class Game {
 			this.initialsInputCaret.style.display = "none";
 			this.initialsSubmitLabel.style.opacity = "0";
 			this.initialsSubmitLabel.style.animation = "";
-			this.hideInitialsSection(true);
+			if (!this.initialsRequested) this.hideInitialsSection(true);
 		});
 
 		this.initialsInput.addEventListener("keydown", () => {
@@ -239,9 +239,8 @@ export class Game {
 	}
 
 	hideInitialsSection(focusLoss?: boolean) {
-		if (this.initialsRequested) return;
-
 		if (focusLoss) this.lastIntialsFocus = now();
+		if (this.initialsRequested) return;
 
 		this.initialsInput.inputMode = "none";
 		this.locked = false;
