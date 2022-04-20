@@ -36,7 +36,7 @@ export class Copter {
 
 	crash() {
 		this.game.endTime = now();
-		this.game.updateDistance(Math.floor((this.game.endTime - this.game.startTime) / 30));
+		if (!navigator.onLine) this.game.updateDistance(Math.floor((this.game.endTime - this.game.startTime) / 30));
 		this.game.isOver = true;
 		this.game.endRun(this.game.distance);
 	}

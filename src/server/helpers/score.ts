@@ -6,6 +6,7 @@ import { IScore } from "@shared/types/abstract";
 import { Score } from "../models/Score";
 import { ScoreRepository } from "../repositories/ScoreRepository";
 import { IRun } from "../types/abstract";
+import Config from "./config";
 
 const activeRuns: { [id: string]: IRun } = {};
 let tenthPlaceScore: number, lastPlayerInputPing: number;
@@ -21,7 +22,7 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
-	if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
+	// if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
 
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
@@ -32,6 +33,7 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 };
 
 export const submitScore = async (manager: EntityManager, player: string, socket: Socket) => {
+	if (!Config.USE_DB) return;
 	if (!activeRuns[socket.id]) return;
 
 	const distance = computeDistance(socket);
@@ -64,6 +66,7 @@ const insertScore = async (manager: EntityManager, score: IScore, socket: Socket
 };
 
 export const sendHighScoresToClient = async (manager: EntityManager, socket: Socket, broadcast?: boolean) => {
+	if (!Config.USE_DB) return;
 	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
 	if (highScores.length === 10) tenthPlaceScore = highScores[highScores.length - 1].score;
 	socket.emit("high-scores-updated", highScores);
