@@ -203,7 +203,7 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("blur", () => this.initialsInputFocusLoss());
+		this.initialsInput.addEventListener("focusout", () => this.initialsInputFocusLoss());
 
 		this.initialsInput.addEventListener("keydown", () => {
 			this.initialsInput.selectionStart = this.initialsInput.value.length;
