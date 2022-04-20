@@ -87,6 +87,11 @@ html {
 	cursor: pointer;
 }
 
+#distance-label,
+#best-label {
+	pointer-events: none;
+}
+
 #initials-section {
 	z-index: 1;
 	text-align: center;
