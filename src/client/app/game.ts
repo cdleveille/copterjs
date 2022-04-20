@@ -63,12 +63,7 @@ export class Game {
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("player");
 
-		this.pilotLabel.onclick = (e) => {
-			e.preventDefault();
-			this.initialsSection.style.display = "block";
-			this.initialsInput.focus();
-			this.pilotLabelClickHandler();
-		};
+		this.pilotLabel.onclick = (e) => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
@@ -198,7 +193,14 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusin", () => {
+		this.initialsInput.addEventListener("focusin", (e) => {
+			e.stopPropagation();
+			this.initialsInput.style.transform = "TranslateY(-10000px)";
+			this.initialsInput.focus();
+			setTimeout(function () {
+				this.initialsInput.style.transform = "none";
+			}, 100);
+
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
