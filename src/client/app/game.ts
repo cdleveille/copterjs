@@ -193,14 +193,7 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusin", (e) => {
-			e.stopPropagation();
-			this.initialsInput.style.transform = "TranslateY(-10000px)";
-			this.initialsInput.focus();
-			setTimeout(function () {
-				this.initialsInput.style.transform = "none";
-			}, 100);
-
+		this.initialsInput.addEventListener("focusin", () => {
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
@@ -268,6 +261,9 @@ export class Game {
 		this.initialsSubmitLabel.style.animation = "";
 		this.initialsInput.inputMode = "text";
 
+		const rect = this.initialsInput.getBoundingClientRect();
+
+		window.scrollTo(rect.x, rect.y);
 		this.initialsInput.focus();
 	}
 
