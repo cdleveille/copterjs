@@ -173,18 +173,20 @@ export class Game {
 			}
 		});
 
-		this.initialsInput.addEventListener("focusout", () => {
-			this.initialsInput.inputMode = "none";
-			this.initialsInputCaret.style.display = "none";
-			this.initialsSubmitLabel.style.opacity = "0";
-			this.initialsSubmitLabel.style.animation = "";
-			if (!this.initialsRequested) this.hideInitialsSection(true);
-		});
+		this.initialsInput.addEventListener("focusout", () => this.initialsInputFocusLoss());
 
 		this.initialsInput.addEventListener("keydown", () => {
 			this.initialsInput.selectionStart = this.initialsInput.value.length;
 			this.initialsInput.selectionEnd = this.initialsInput.value.length;
 		});
+	}
+
+	initialsInputFocusLoss() {
+		this.initialsInput.inputMode = "none";
+		this.initialsInputCaret.style.display = "none";
+		this.initialsSubmitLabel.style.opacity = "0";
+		this.initialsSubmitLabel.style.animation = "";
+		if (!this.initialsRequested) this.hideInitialsSection(true);
 	}
 
 	endRun(distance: number) {
