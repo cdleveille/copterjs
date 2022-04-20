@@ -261,8 +261,7 @@ export class Game {
 		this.initialsSubmitLabel.style.animation = "";
 		this.initialsInput.inputMode = "text";
 
-		const rect = this.initialsInput.getBoundingClientRect();
-
+		const rect = this.initialsSection.getBoundingClientRect();
 		window.scrollTo(rect.x, rect.y);
 		this.initialsInput.focus();
 	}
