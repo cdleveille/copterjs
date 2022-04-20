@@ -277,7 +277,7 @@ export class Game {
 		this.locked = false;
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
-		// document.getElementById("game-canvas").focus();
+		document.getElementById("game-canvas").focus();
 	}
 
 	showNewHighScoreMsg() {
