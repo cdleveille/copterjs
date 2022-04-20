@@ -182,6 +182,7 @@ export class Game {
 	}
 
 	initialsInputFocusLoss() {
+		this.lastIntialsFocus = now();
 		this.initialsInput.inputMode = "none";
 		this.initialsInputCaret.style.display = "none";
 		this.initialsSubmitLabel.style.opacity = "0";
