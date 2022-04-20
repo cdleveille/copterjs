@@ -41,7 +41,6 @@ export class Game {
 	noDB: boolean;
 	allImagesLoaded: boolean;
 	env: IEnv;
-	// lastInitialsFocus: number;
 
 	constructor() {
 		this.copter = new Copter(this);
@@ -64,7 +63,6 @@ export class Game {
 
 		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
-		// this.lastInitialsFocus = now();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
 		this.initIntialsForm();
@@ -212,7 +210,6 @@ export class Game {
 	}
 
 	initialsInputFocusLoss() {
-		// this.lastInitialsFocus = now();
 		if (this.isOver && now() - this.endTime < 1000) return this.initialsInput.focus();
 		this.initialsInput.inputMode = "none";
 		this.initialsInputCaret.style.display = "none";
@@ -257,6 +254,7 @@ export class Game {
 		this.initialsInputCaret.style.display = "block";
 		this.initialsInputCaret.style.left = "4%";
 
+		this.initialsSubmitLabel.style.display = "block";
 		this.initialsSubmitLabel.style.opacity = "0";
 		this.initialsSubmitLabel.style.animation = "";
 
@@ -275,11 +273,11 @@ export class Game {
 
 	hideInitialsSection() {
 		if (this.initialsRequested) return;
-
 		this.initialsInput.inputMode = "none";
 		this.locked = false;
 		this.initialsRequested = false;
 		this.initialsSection.style.display = "none";
+		// document.getElementById("game-canvas").focus();
 	}
 
 	showNewHighScoreMsg() {
@@ -288,11 +286,11 @@ export class Game {
 		this.initialsLabel.style.display = "block";
 		this.initialsForm.style.display = "none";
 		this.highScores.style.display = "none";
+		this.initialsSubmitLabel.style.display = "none";
 	}
 
 	pilotLabelClickHandler() {
 		if (this.locked) return this.initialsInputFocusLoss();
-		// if (now() - this.lastInitialsFocus >= 500)
 		this.getPlayerInitials();
 	}
 
