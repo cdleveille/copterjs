@@ -63,7 +63,7 @@ export class Game {
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("player");
 
-		this.pilotLabel.onclick = (e) => this.pilotLabelClickHandler();
+		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
@@ -296,6 +296,7 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
+		if (this.initialsRequested) return;
 		this.pilotLabel.style.pointerEvents = "none";
 		if (this.locked) return this.initialsInputFocusLoss();
 		this.getPlayerInitials();
@@ -408,9 +409,16 @@ export class Game {
 		this.socket = undefined;
 	}
 
-	update(step: number) {
-		this.terrain.update(step);
-		this.copter.update(step);
+	updateTextIfChanged(text: string, element: HTMLElement, element2?: HTMLElement) {
+		if (element.innerText !== text) {
+			element.innerText = text;
+			if (element2) element2.innerText = text;
+		}
+	}
+
+	update(delta: number) {
+		this.terrain.update(delta);
+		this.copter.update(delta);
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
@@ -427,10 +435,9 @@ export class Game {
 		this.copter.draw(ctx);
 		this.terrain.draw(ctx);
 
-		this.pilotLabel.innerText = `PILOT: ${this.player || "?"}`;
-		this.pilotLabelGhost.innerText = this.pilotLabel.innerText;
-		this.highScoresLabel.innerText = "TOP 10";
-		this.distanceLabel.innerText = `DISTANCE: ${this.distance.toString()}`;
-		this.bestLabel.innerText = `BEST: ${this.best.toString()}`;
+		this.updateTextIfChanged(`PILOT: ${this.player || "?"}`, this.pilotLabel, this.pilotLabelGhost);
+		this.updateTextIfChanged("TOP 10", this.highScoresLabel);
+		this.updateTextIfChanged(`DISTANCE: ${this.distance.toString()}`, this.distanceLabel);
+		this.updateTextIfChanged(`BEST: ${this.best.toString()}`, this.bestLabel);
 	}
 }

@@ -38,19 +38,12 @@ export class Terrain {
 		}
 	}
 
-	update(step: number) {
-		if (this.game.isOver) return;
-
-		this.updateTunnel(step);
-		this.updateBlocks(step);
-	}
-
-	updateTunnel(step: number) {
+	updateTunnel(delta: number) {
 		this.maintainTunnel();
 
 		// update position of each tunnel segment, remove if offscreen
 		for (const segment of this.tunnel) {
-			if (!this.game.pausedAtStart) segment.x -= this.game.copter.xv * step;
+			if (!this.game.pausedAtStart) segment.x -= this.game.copter.xv * delta;
 			segment.xPct = segment.x / this.game.width;
 			if (segment.x + segment.lengthPct * this.game.width < 0) this.tunnel.shift();
 		}
@@ -71,6 +64,9 @@ export class Terrain {
 	}
 
 	createNewTunnelSegment(lastSegment: ITunnel) {
+		const minTunnelWidthPct = 40;
+		const minEdgeDepthPct = 9;
+
 		const x = lastSegment.x + lastSegment.lengthPct * this.game.width;
 		const topDirection = randomInt(0, 3);
 		const botDirection = randomInt(0, 3);
@@ -102,8 +98,27 @@ export class Terrain {
 				break;
 		}
 
-		if (topDepthPct < 9) topDepthPct = 9;
-		if (botDepthPct < 9) botDepthPct = 9;
+		// ensure tunnel does not get too wide
+		if (topDepthPct < minEdgeDepthPct) topDepthPct = minEdgeDepthPct;
+		if (botDepthPct < minEdgeDepthPct) botDepthPct = minEdgeDepthPct;
+
+		// ensure tunnel does not get too narrow
+		const segmentWidthPct = 100 - topDepthPct - botDepthPct;
+		console.log(`old: ${segmentWidthPct}`);
+		if (segmentWidthPct < minTunnelWidthPct) {
+			const diff = minTunnelWidthPct - segmentWidthPct;
+			const side = randomInt(0, 2);
+			switch (side) {
+				case 0:
+					botDepthPct -= diff;
+					break;
+				case 1:
+					topDepthPct -= diff;
+					break;
+			}
+		}
+
+		console.log(`new: ${100 - topDepthPct - botDepthPct}`);
 
 		if (this.newBlockNeeded) this.createNewBlock(x, topDepthPct, botDepthPct);
 
@@ -120,12 +135,12 @@ export class Terrain {
 		} as ITunnel;
 	}
 
-	updateBlocks(step: number) {
+	updateBlocks(delta: number) {
 		this.maintainBlocks();
 
 		// update position of each block, remove if offscreen
 		for (const block of this.blocks) {
-			if (!this.game.pausedAtStart) block.x -= this.game.copter.xv * step;
+			if (!this.game.pausedAtStart) block.x -= this.game.copter.xv * delta;
 			block.xPct = block.x / this.game.width;
 			block.yPct = block.y / this.game.height;
 			if (block.x + block.widthPct * this.game.width < 0) this.blocks.shift();
@@ -165,6 +180,13 @@ export class Terrain {
 			widthPct: widthPct / 100,
 			heightPct: heightPct / 100
 		} as IBlock;
+	}
+
+	update(delta: number) {
+		if (this.game.isOver) return;
+
+		this.updateTunnel(delta);
+		this.updateBlocks(delta);
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {

@@ -45,7 +45,7 @@ export class Copter {
 		// constant
 		this.g = 3500 * this.game.scale;
 		this.power = 6500 * this.game.scale;
-		this.xv = 800 * this.game.scale;
+		this.xv = 900 * this.game.scale;
 		this.width = 124 * this.game.scale;
 		this.height = 57 * this.game.scale;
 		this.hitBoxOffset = {
@@ -61,14 +61,43 @@ export class Copter {
 		this.yv = this.yv * this.game.scale;
 	}
 
-	update(step: number) {
+	updateImg() {
+		if (this.game.isOver) return (this.img = imgs.copterStopped.img);
+		this.img = imgs.flyImgs[Math.floor(Math.random() * imgs.flyImgs.length)].img;
+	}
+
+	updateSmoke(delta: number) {
+		if (this.game.pausedAtStart) return;
+
+		// add new smoke puff
+		if (
+			!this.game.isOver &&
+			(this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 50 * this.game.scale)
+		) {
+			this.smoke.push({ x: this.x - 18 * this.game.scale, y: this.y + 6 * this.game.scale });
+		}
+
+		if (this.smoke.length < 1) return;
+
+		// remove smoke puff if it is offscreen
+		if (this.smoke[0].x < -imgs.smoke.img.width) {
+			this.smoke.shift();
+		}
+
+		// update position
+		for (const puff of this.smoke) {
+			puff.x -= this.xv * delta;
+		}
+	}
+
+	update(delta: number) {
 		this.updateImg();
 
 		this.yPct = this.y / this.game.height;
 
 		if (this.game.pausedAtStart) return;
 
-		this.updateSmoke(step);
+		this.updateSmoke(delta);
 
 		if (this.game.isOver) return;
 
@@ -79,9 +108,9 @@ export class Copter {
 		this.game.distance = Math.floor((now() - this.game.startTime) / 30);
 
 		// update position
-		this.yv += this.g * step;
-		if (this.climbing) this.yv -= this.power * step;
-		this.y += this.yv * step;
+		this.yv += this.g * delta;
+		if (this.climbing) this.yv -= this.power * delta;
+		this.y += this.yv * delta;
 
 		// update hitbox position
 		this.hitbox = {
@@ -134,35 +163,6 @@ export class Copter {
 		}
 	}
 
-	updateImg() {
-		if (this.game.isOver) return (this.img = imgs.copterStopped.img);
-		this.img = imgs.flyImgs[Math.floor(Math.random() * imgs.flyImgs.length)].img;
-	}
-
-	updateSmoke(step: number) {
-		if (this.game.pausedAtStart) return;
-
-		// add new smoke puff
-		if (
-			!this.game.isOver &&
-			(this.smoke.length === 0 || this.x - this.smoke[this.smoke.length - 1].x >= 50 * this.game.scale)
-		) {
-			this.smoke.push({ x: this.x - 18 * this.game.scale, y: this.y + 6 * this.game.scale });
-		}
-
-		if (this.smoke.length < 1) return;
-
-		// remove smoke puff if it is offscreen
-		if (this.smoke[0].x < -imgs.smoke.img.width) {
-			this.smoke.shift();
-		}
-
-		// update position
-		for (const puff of this.smoke) {
-			puff.x -= this.xv * step;
-		}
-	}
-
 	draw(ctx: CanvasRenderingContext2D) {
 		if (this.climbing && !this.game.pausedAtStart && !this.game.isOver) {
 			ctx.save();
@@ -174,10 +174,6 @@ export class Copter {
 			ctx.drawImage(this.img, this.x, this.y, 124 * this.game.scale, 57 * this.game.scale);
 		}
 
-		this.drawSmoke(ctx);
-	}
-
-	drawSmoke(ctx: CanvasRenderingContext2D) {
 		for (const s of this.smoke) {
 			ctx.drawImage(imgs.smoke.img, s.x, s.y, 19 * this.game.scale, 23 * this.game.scale);
 		}
