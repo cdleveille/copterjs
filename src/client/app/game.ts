@@ -260,8 +260,8 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
-		if (this.locked) return this.hideInitialsSection();
-		if (!this.lastIntialsFocus || now() - this.lastIntialsFocus > 100) this.getPlayerInitials();
+		this.hideInitialsSection();
+		if (!this.lastIntialsFocus || now() - this.lastIntialsFocus > 500) this.getPlayerInitials();
 	}
 
 	highScoresLabelClickHandler() {

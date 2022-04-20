@@ -1,6 +1,7 @@
 :root {
 	--blue: #33ccff;
 	--gray: #333333;
+	--black: #000000;
 }
 
 * {
@@ -79,7 +80,7 @@ html {
 	z-index: 1;
 	position: absolute;
 	font-size: 60px;
-	color: #000000;
+	color: var(--black);
 }
 
 #pilot-label:hover,
