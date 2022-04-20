@@ -187,7 +187,7 @@ export class Game {
 		this.initialsInputCaret.style.display = "none";
 		this.initialsSubmitLabel.style.opacity = "0";
 		this.initialsSubmitLabel.style.animation = "";
-		if (!this.initialsRequested) this.hideInitialsSection(true);
+		if (!this.initialsRequested) this.hideInitialsSection();
 	}
 
 	endRun(distance: number) {
@@ -241,8 +241,7 @@ export class Game {
 		}
 	}
 
-	hideInitialsSection(focusLoss?: boolean) {
-		if (focusLoss) this.lastIntialsFocus = now();
+	hideInitialsSection() {
 		if (this.initialsRequested) return;
 
 		this.initialsInput.inputMode = "none";
@@ -260,7 +259,7 @@ export class Game {
 	}
 
 	pilotLabelClickHandler() {
-		this.hideInitialsSection();
+		if (this.locked) return this.hideInitialsSection();
 		if (!this.lastIntialsFocus || now() - this.lastIntialsFocus > 500) this.getPlayerInitials();
 	}
 
