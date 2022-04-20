@@ -155,15 +155,16 @@ export class Game {
 					break;
 				default:
 					this.initialsInputCaret.style.display = "none";
-					this.initialsSubmitLabel.style.animation = "blink 1s infinite";
+					this.initialsSubmitLabel.style.animation = "blink-brighter 1s infinite";
 					break;
 			}
 		});
 
 		this.initialsInput.addEventListener("focusin", () => {
+			this.windowHandler.resize();
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
-				this.initialsSubmitLabel.style.animation = "blink 1s infinite";
+				this.initialsSubmitLabel.style.animation = "blink-brighter 1s infinite";
 			} else {
 				this.initialsInputCaret.style.display = "block";
 			}
@@ -174,6 +175,7 @@ export class Game {
 			this.initialsInputCaret.style.display = "none";
 			this.initialsSubmitLabel.style.opacity = "0";
 			this.initialsSubmitLabel.style.animation = "";
+			this.initialsInput.inputMode = "none";
 		});
 
 		this.initialsInput.addEventListener("keydown", () => {
@@ -289,7 +291,8 @@ export class Game {
 		const intialsInputFontSizeScaled = `${166 * this.scale}px`;
 		const initialsInputWidth = `${234 * this.scale}px`;
 		const initialsInputBorderWidth = `${4 * this.scale}px`;
-		const initialsFormMargin = `${16 * this.scale}px`;
+		const initialsFormMarginTop = `${16 * this.scale}px`;
+		const initialsFormMarginBottom = `${5 * this.scale}px`;
 
 		const offsetHorizontalPct = 0.07;
 		const offsetVerticalPct = 0.013;
@@ -322,8 +325,8 @@ export class Game {
 		this.initialsInput.style.width = initialsInputWidth;
 		this.initialsInput.style.borderWidth = initialsInputBorderWidth;
 
-		this.initialsForm.style.marginTop = initialsFormMargin;
-		this.initialsForm.style.marginBottom = initialsFormMargin;
+		this.initialsForm.style.marginTop = initialsFormMarginTop;
+		this.initialsForm.style.marginBottom = initialsFormMarginBottom;
 
 		this.initialsSubmitLabel.style.fontSize = fontSizeScaled;
 
