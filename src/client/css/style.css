@@ -158,12 +158,12 @@ html {
 	}
 }
 
-@keyframes blink-brighter {
+@keyframes blink-bright {
 	from,
 	to {
 		opacity: 0%;
 	}
 	50% {
-		opacity: 65%;
+		opacity: 100%;
 	}
 }

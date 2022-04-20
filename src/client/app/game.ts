@@ -159,7 +159,7 @@ export class Game {
 					break;
 				default:
 					this.initialsInputCaret.style.display = "none";
-					this.initialsSubmitLabel.style.animation = "blink-brighter 1s infinite";
+					this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
 					break;
 			}
 		});
@@ -168,7 +168,7 @@ export class Game {
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
 				this.initialsInputCaret.style.display = "none";
-				this.initialsSubmitLabel.style.animation = "blink-brighter 1s infinite";
+				this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
 			} else {
 				this.initialsInputCaret.style.display = "block";
 			}
@@ -231,6 +231,7 @@ export class Game {
 		this.initialsSubmitLabel.style.animation = "";
 
 		this.initialsInput.focus();
+		this.initialsInput.inputMode = "text";
 	}
 
 	initialsSubmitted() {
