@@ -7,7 +7,7 @@ import { areAllImagesLoaded } from "./img";
 import { InitialsForm } from "./initials";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
-import { now } from "./util";
+import { now, setHidden, toggleVisibility } from "./util";
 
 export class Game {
 	width: number;
@@ -53,6 +53,7 @@ export class Game {
 		this.player = window.localStorage.getItem("player");
 
 		this.pilotLabel.onclick = () => this.initialsForm.pilotLabelClickHandler();
+		this.pilotLabelGhost.onclick = () => this.initialsForm.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
@@ -69,6 +70,7 @@ export class Game {
 		this.initialsRequested = false;
 
 		this.initialsForm.hide();
+		setHidden(this.highScores);
 
 		this.copter.init();
 		this.terrain.init();
@@ -124,8 +126,8 @@ export class Game {
 		if (!this.initialsRequested) this.initialsForm.hide();
 		if (this.locked) return;
 
-		if (this.highScores.style.display === "block") return (this.highScores.style.display = "none");
-		this.highScores.style.display = "block";
+		const visible = toggleVisibility(this.highScores);
+		if (!visible) return;
 
 		if (!navigator.onLine || this.noDB) {
 			const localHighScores = window.localStorage.getItem("high-scores");

@@ -112,7 +112,6 @@ html {
 	align-items: center;
 	font-size: 60px;
 	color: var(--blue);
-	display: none;
 	pointer-events: none;
 }
 
@@ -156,7 +155,6 @@ html {
 	z-index: 4;
 	font-size: 60px;
 	color: var(--blue);
-	display: none;
 	pointer-events: none;
 }
 
@@ -178,4 +176,16 @@ html {
 	50% {
 		opacity: 100%;
 	}
+}
+
+.visible {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.1s linear;
+}
+
+.hidden {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 0.1s, opacity 0.1s linear;
 }

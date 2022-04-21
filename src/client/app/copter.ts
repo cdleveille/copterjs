@@ -12,6 +12,8 @@ export class Copter {
 	height: number;
 	xv: number;
 	yv: number;
+	yvMin: number;
+	yvMax: number;
 	g: number;
 	power: number;
 	climbing: boolean;
@@ -22,6 +24,8 @@ export class Copter {
 
 	constructor(game: Game) {
 		this.game = game;
+		this.yvMin = -500;
+		this.yvMax = 670;
 	}
 
 	init() {
@@ -43,7 +47,7 @@ export class Copter {
 
 	resize() {
 		// constant
-		this.g = 3500 * this.game.scale;
+		this.g = 3600 * this.game.scale;
 		this.power = 6500 * this.game.scale;
 		this.xv = 900 * this.game.scale;
 		this.width = 124 * this.game.scale;
@@ -121,8 +125,8 @@ export class Copter {
 		};
 
 		// enforce maximum vertical speeds
-		if (this.yv < -500 * this.game.scale) this.yv = -500 * this.game.scale;
-		if (this.yv > 650 * this.game.scale) this.yv = 650 * this.game.scale;
+		if (this.yv < this.yvMin * this.game.scale) this.yv = this.yvMin * this.game.scale;
+		if (this.yv > this.yvMax * this.game.scale) this.yv = this.yvMax * this.game.scale;
 
 		// check for collision with tunnel
 		for (const segment of this.game.terrain.tunnel) {
@@ -164,15 +168,19 @@ export class Copter {
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
-		if (this.climbing && !this.game.pausedAtStart && !this.game.isOver) {
-			ctx.save();
-			ctx.translate(this.x, this.y);
-			ctx.rotate((-5 * Math.PI) / 180);
-			ctx.drawImage(this.img, 0, 0, 124 * this.game.scale, 57 * this.game.scale);
-			ctx.restore();
+		const noseAngleMagnitute = 8;
+		let noseAngle: number;
+		if (this.yv < 0) {
+			noseAngle = Math.min(-noseAngleMagnitute * (this.yv / (this.yvMin * this.game.scale)), 0);
 		} else {
-			ctx.drawImage(this.img, this.x, this.y, 124 * this.game.scale, 57 * this.game.scale);
+			noseAngle = Math.max(-noseAngleMagnitute * (this.yv / (this.yvMax * this.game.scale)), 0);
 		}
+
+		ctx.save();
+		ctx.translate(this.x, this.y);
+		ctx.rotate((noseAngle * Math.PI) / 180);
+		ctx.drawImage(this.img, 0, 0, 124 * this.game.scale, 57 * this.game.scale);
+		ctx.restore();
 
 		for (const s of this.smoke) {
 			ctx.drawImage(imgs.smoke.img, s.x, s.y, 19 * this.game.scale, 23 * this.game.scale);

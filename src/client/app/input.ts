@@ -1,4 +1,5 @@
 import { Game } from "./game";
+import { isVisible, setHidden } from "./util";
 
 export class InputHandler {
 	constructor(canvas: HTMLCanvasElement, game: Game) {
@@ -81,7 +82,7 @@ export class InputHandler {
 		if (game.locked) return game.initialsForm.hide();
 		if (game.pausedAtStart) game.pausedAtStart = false;
 		if (game.isOver) return game.reset();
-		if (game.highScores.style.display === "block") game.highScores.style.display = "none";
+		if (isVisible(game.highScores)) setHidden(game.highScores);
 		game.copter.climbing = true;
 		game.ping();
 	}

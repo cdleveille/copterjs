@@ -1,5 +1,5 @@
 import { Game } from "./game";
-import { now } from "./util";
+import { now, setHidden, setVisible } from "./util";
 
 export class InitialsForm {
 	game: Game;
@@ -127,51 +127,51 @@ export class InitialsForm {
 
 	show(onNewHighScore?: boolean) {
 		this.game.locked = true;
-		this.game.highScores.style.display = "none";
 
 		this.initialsInput.value = "";
+		this.initialsInput.inputMode = "text";
+
 		this.initialsLabel.innerText = onNewHighScore
 			? "NEW HIGH SCORE!\nENTER YOUR INITIALS:"
 			: "ENTER YOUR INITIALS:";
+
 		if (onNewHighScore) this.game.initialsRequested = true;
 
-		this.initialsSection.style.display = "block";
-		this.initialsForm.style.display = "block";
-		this.initialsInput.style.display = "block";
-
 		this.setCaretPos(0);
-
-		this.initialsSubmitLabel.style.display = "block";
 		this.initialsSubmitLabel.style.opacity = "0";
 		this.initialsSubmitLabel.style.animation = "";
-		this.initialsInput.inputMode = "text";
 
 		const rect = this.initialsSection.getBoundingClientRect();
 		window.scrollTo(rect.x, rect.y);
+
+		setHidden(this.game.highScores);
+		setVisible(this.initialsSection);
+		this.initialsForm.style.display = "block";
+		this.initialsInput.style.display = "block";
+		this.initialsSubmitLabel.style.display = "block";
+
 		this.initialsInput.focus();
 	}
 
 	hide() {
 		if (this.game.isOver && now() - this.game.endTime < 1000) return this.initialsInput.focus();
 		this.initialsInput.inputMode = "none";
-		this.initialsInputCaret.style.display = "none";
-		this.initialsSubmitLabel.style.opacity = "0";
-		this.initialsSubmitLabel.style.animation = "";
-
 		if (this.game.initialsRequested) return;
+
 		this.initialsInput.inputMode = "none";
 		this.game.locked = false;
 		this.game.initialsRequested = false;
-		this.initialsSection.style.display = "none";
+		setHidden(this.initialsSection);
 		this.game.pilotLabel.style.pointerEvents = "auto";
 	}
 
 	showNewHighScoreMsg() {
 		this.initialsLabel.innerText = "NEW HIGH SCORE!";
-		this.initialsSection.style.display = "block";
-		this.initialsLabel.style.display = "block";
+
+		setHidden(this.game.highScores);
+		setVisible(this.initialsSection);
 		this.initialsForm.style.display = "none";
-		this.game.highScores.style.display = "none";
+		this.initialsInput.style.display = "none";
 		this.initialsSubmitLabel.style.display = "none";
 	}
 

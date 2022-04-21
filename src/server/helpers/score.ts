@@ -22,7 +22,7 @@ export const endRun = async (manager: EntityManager, player: string, clientDista
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
-	// if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
+	if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
 
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
@@ -39,7 +39,7 @@ export const submitScore = async (manager: EntityManager, player: string, socket
 	const distance = computeDistance(socket);
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
-	const score: IScore = { player: player.toUpperCase(), score: distance };
+	const score: IScore = { player: player.toUpperCase().substring(0, 3), score: distance };
 	await insertScore(manager, score, socket);
 
 	deleteRun(socket.id);
@@ -57,7 +57,7 @@ const computeDistance = (socket: Socket): number => {
 export const ping = (socket: Socket) => {
 	if (!activeRuns[socket.id]) return;
 	const newPing = new Date().getTime();
-	if (newPing - lastPlayerInputPing > 2000) deleteRun(socket.id);
+	if (newPing - lastPlayerInputPing > 3000) deleteRun(socket.id);
 };
 
 const insertScore = async (manager: EntityManager, score: IScore, socket: Socket) => {

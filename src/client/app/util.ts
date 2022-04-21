@@ -54,3 +54,30 @@ export class Counter {
 		return this;
 	}
 }
+
+export const toggleVisibility = (element: HTMLElement): boolean => {
+	if (isVisible(element)) {
+		setHidden(element);
+		return false;
+	}
+	setVisible(element);
+	return true;
+};
+
+export const setVisible = (element: HTMLElement) => {
+	element.classList.remove("hidden");
+	element.classList.add("visible");
+};
+
+export const setHidden = (element: HTMLElement) => {
+	element.classList.remove("visible");
+	element.classList.add("hidden");
+};
+
+export const isVisible = (element: HTMLElement): boolean => {
+	return element.classList.contains("visible");
+};
+
+export const isHidden = (element: HTMLElement): boolean => {
+	return element.classList.contains("hidden");
+};
