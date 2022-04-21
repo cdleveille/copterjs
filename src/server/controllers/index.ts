@@ -11,7 +11,7 @@ const router = Router();
 router.get(Routes.top10, async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 	try {
 		const manager: EntityManager = res.locals.em;
-		const scores = await ScoreRepository.FindTopTen(manager);
+		const scores = await ScoreRepository.FindTop(manager, 10);
 
 		return res.status(200).send({
 			ok: true,
