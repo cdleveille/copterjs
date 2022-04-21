@@ -7,7 +7,6 @@ export class ScoreRepository {
 	public static async InsertOne(manager: EntityManager, score: IScore): Promise<Score> {
 		try {
 			const newScore = new Score({ player: score.player, score: score.score });
-
 			await manager.persistAndFlush(newScore);
 			return newScore;
 		} catch (error) {
@@ -15,26 +14,12 @@ export class ScoreRepository {
 		}
 	}
 
-	public static async InsertMany(manager: EntityManager, scores: IScore[]): Promise<boolean> {
-		try {
-			for (const score of scores) {
-				const newScore = new Score({ player: score.player, score: score.score });
-				manager.persist(newScore);
-			}
-
-			await manager.flush();
-			return true;
-		} catch (error) {
-			throw Error(error);
-		}
-	}
-
-	public static async FindTopTen(manager: EntityManager): Promise<Score[]> {
+	public static async FindTop(manager: EntityManager, limit: number): Promise<Score[]> {
 		try {
 			const repo = manager.getRepository(Score);
 			const scores = await repo.findAll({
 				orderBy: { score: QueryOrder.DESC },
-				limit: 10
+				limit
 			});
 			return scores;
 		} catch (error) {

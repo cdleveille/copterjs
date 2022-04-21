@@ -8,10 +8,8 @@ import { InitialsForm } from "./initials";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
 import { now } from "./util";
-import { WindowHandler } from "./window";
 
 export class Game {
-	windowHandler: WindowHandler;
 	width: number;
 	height: number;
 	copter: Copter;

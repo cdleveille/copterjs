@@ -67,7 +67,7 @@ const insertScore = async (manager: EntityManager, score: IScore, socket: Socket
 
 export const sendHighScoresToClient = async (manager: EntityManager, socket: Socket, broadcast?: boolean) => {
 	if (!Config.USE_DB) return;
-	const highScores: Score[] = await ScoreRepository.FindTopTen(manager);
+	const highScores: Score[] = await ScoreRepository.FindTop(manager, 10);
 	if (highScores.length === 10) tenthPlaceScore = highScores[highScores.length - 1].score;
 	socket.emit("high-scores-updated", highScores);
 	if (broadcast) socket.broadcast.emit("high-scores-updated", highScores);

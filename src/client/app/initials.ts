@@ -67,47 +67,6 @@ export class InitialsForm {
 			}
 		});
 
-		this.initialsInput.addEventListener("input", () => {
-			this.initialsInput.value = this.initialsInput.value.toUpperCase();
-
-			if (this.initialsInput.value.length === 0) {
-				this.initialsSubmitLabel.style.opacity = "0";
-				this.initialsSubmitLabel.style.animation = "";
-				this.initialsInputCaret.style.display = "block";
-				this.initialsInputCaret.style.left = "4%";
-				return;
-			}
-
-			const lastChar = this.initialsInput.value[this.initialsInput.value.length - 1];
-			if (!"ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(lastChar))
-				this.initialsInput.value = this.initialsInput.value.substring(0, this.initialsInput.value.length - 1);
-
-			switch (this.initialsInput.value.length) {
-				case 0:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "4%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				case 1:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "36.5%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				case 2:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "68.5%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				default:
-					this.initialsInputCaret.style.display = "none";
-					this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
-					break;
-			}
-		});
-
 		this.initialsInput.addEventListener("focusin", () => {
 			this.initialsInput.inputMode = "text";
 			if (this.initialsInput.value.length === 3) {
@@ -120,10 +79,50 @@ export class InitialsForm {
 
 		this.initialsInput.addEventListener("focusout", () => this.hide());
 
-		this.initialsInput.addEventListener("keydown", () => {
-			this.initialsInput.selectionStart = this.initialsInput.value.length;
-			this.initialsInput.selectionEnd = this.initialsInput.value.length;
+		document.addEventListener("selectionchange", () => {
+			this.updateCaretAndSubmitLabel();
 		});
+
+		this.initialsInput.addEventListener("beforeinput", (e) => {
+			if (!e.data) return;
+			if (!e.data.toUpperCase().match(/^[A-Z]$/)) e.preventDefault();
+		});
+
+		this.initialsInput.addEventListener("input", (e: InputEvent) => {
+			if (e.inputType.startsWith("deleteContent")) {
+				this.updateCaretAndSubmitLabel();
+			}
+		});
+	}
+
+	updateCaretAndSubmitLabel() {
+		if (this.initialsInput.value.length === 3) {
+			this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
+		} else {
+			this.initialsSubmitLabel.style.animation = "";
+		}
+
+		this.setCaretPos(this.initialsInput.selectionStart);
+	}
+
+	setCaretPos(pos: number) {
+		switch (pos) {
+			case 0:
+				this.initialsInputCaret.style.left = "4%";
+				this.initialsInputCaret.style.display = "block";
+				break;
+			case 1:
+				this.initialsInputCaret.style.left = "36%";
+				this.initialsInputCaret.style.display = "block";
+				break;
+			case 2:
+				this.initialsInputCaret.style.left = "68%";
+				this.initialsInputCaret.style.display = "block";
+				break;
+			default:
+				this.initialsInputCaret.style.display = "none";
+				break;
+		}
 	}
 
 	show(onNewHighScore?: boolean) {
@@ -139,8 +138,8 @@ export class InitialsForm {
 		this.initialsSection.style.display = "block";
 		this.initialsForm.style.display = "block";
 		this.initialsInput.style.display = "block";
-		this.initialsInputCaret.style.display = "block";
-		this.initialsInputCaret.style.left = "4%";
+
+		this.setCaretPos(0);
 
 		this.initialsSubmitLabel.style.display = "block";
 		this.initialsSubmitLabel.style.opacity = "0";

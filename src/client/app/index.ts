@@ -12,12 +12,10 @@ const ctx = canvas.getContext("2d");
 
 const game = new Game();
 new InputHandler(canvas, game);
-const windowHandler = new WindowHandler(canvas, game);
+new WindowHandler(canvas, game);
 game.init();
 
 window.addEventListener("load", async () => {
-	windowHandler.resize();
-
 	if (!navigator.serviceWorker) return;
 
 	if (!navigator.serviceWorker.controller) {

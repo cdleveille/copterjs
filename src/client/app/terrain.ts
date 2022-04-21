@@ -104,7 +104,6 @@ export class Terrain {
 
 		// ensure tunnel does not get too narrow
 		const segmentWidthPct = 100 - topDepthPct - botDepthPct;
-		console.log(`old: ${segmentWidthPct}`);
 		if (segmentWidthPct < minTunnelWidthPct) {
 			const diff = minTunnelWidthPct - segmentWidthPct;
 			const side = randomInt(0, 2);
@@ -117,8 +116,6 @@ export class Terrain {
 					break;
 			}
 		}
-
-		console.log(`new: ${100 - topDepthPct - botDepthPct}`);
 
 		if (this.newBlockNeeded) this.createNewBlock(x, topDepthPct, botDepthPct);
 
