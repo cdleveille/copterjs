@@ -4,6 +4,7 @@ import { IEnv, IScore } from "@shared/types/abstract";
 
 import { Copter } from "./copter";
 import { areAllImagesLoaded } from "./img";
+import { InitialsForm } from "./initials";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
 import { now } from "./util";
@@ -22,12 +23,7 @@ export class Game {
 	pilotLabel: HTMLDivElement;
 	pilotLabelGhost: HTMLDivElement;
 	highScoresLabel: HTMLDivElement;
-	initialsSection: HTMLDivElement;
-	initialsLabel: HTMLSpanElement;
-	initialsForm: HTMLFormElement;
-	initialsInput: HTMLInputElement;
-	initialsInputCaret: HTMLDivElement;
-	initialsSubmitLabel: HTMLDivElement;
+	initialsForm: InitialsForm;
 	highScores: HTMLUListElement;
 	overlay: HTMLDivElement;
 	isOver: boolean;
@@ -46,28 +42,23 @@ export class Game {
 	constructor() {
 		this.copter = new Copter(this);
 		this.terrain = new Terrain(this);
+		this.initialsForm = new InitialsForm(this);
 		this.best = 0;
 
 		this.distanceLabel = document.getElementById("distance-label") as HTMLDivElement;
 		this.bestLabel = document.getElementById("best-label") as HTMLDivElement;
 		this.pilotLabel = document.getElementById("pilot-label") as HTMLDivElement;
 		this.pilotLabelGhost = document.getElementById("pilot-label-ghost") as HTMLDivElement;
-		this.initialsSection = document.getElementById("initials-section") as HTMLDivElement;
-		this.initialsLabel = document.getElementById("initials-label") as HTMLSpanElement;
-		this.initialsForm = document.getElementById("initials-form") as HTMLFormElement;
-		this.initialsInput = document.getElementById("initials-input") as HTMLInputElement;
-		this.initialsInputCaret = document.getElementById("initials-input-caret") as HTMLDivElement;
-		this.initialsSubmitLabel = document.getElementById("initials-submit-label") as HTMLDivElement;
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
 		this.player = window.localStorage.getItem("player");
 
-		this.pilotLabel.onclick = () => this.pilotLabelClickHandler();
+		this.pilotLabel.onclick = () => this.initialsForm.pilotLabelClickHandler();
 		this.highScoresLabel.onclick = () => this.highScoresLabelClickHandler();
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
-		this.initIntialsForm();
+		this.initialsForm.init();
 	}
 
 	init() {
@@ -79,7 +70,7 @@ export class Game {
 		this.distance = 0;
 		this.initialsRequested = false;
 
-		this.hideInitialsSection();
+		this.initialsForm.hide();
 
 		this.copter.init();
 		this.terrain.init();
@@ -90,8 +81,8 @@ export class Game {
 
 		this.socket = io();
 
-		this.socket.on("initials-request", () => this.getPlayerInitials(true));
-		this.socket.on("show-new-high-score-msg", () => this.showNewHighScoreMsg());
+		this.socket.on("initials-request", () => this.initialsForm.show(true));
+		this.socket.on("show-new-high-score-msg", () => this.initialsForm.showNewHighScoreMsg());
 		this.socket.on("high-scores-updated", (highScores: IScore[]) => this.updateHighScores(highScores));
 		this.socket.on("report-distance-to-client", (distance: number) => this.updateDistance(distance));
 		this.socket.on("env-var-send", (env: IEnv) => this.processEnvVars(env));
@@ -109,115 +100,6 @@ export class Game {
 			console.log(`${online} (db disconnected)`);
 			this.noDB = true;
 		}
-	}
-
-	initIntialsForm() {
-		this.initialsInput.onselectstart = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.onpaste = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.oncopy = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.oncut = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.ondrag = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.ondrop = (e) => {
-			e.preventDefault();
-			return false;
-		};
-		this.initialsInput.oncontextmenu = (e) => {
-			e.preventDefault();
-			return false;
-		};
-
-		this.initialsSubmitLabel.innerText = "⏎";
-
-		this.initialsForm.addEventListener("submit", (e) => {
-			e.preventDefault();
-			if (this.initialsInput.value.length !== 3) return;
-
-			this.player = this.initialsInput.value;
-			window.localStorage.setItem("player", this.player);
-			this.initialsSubmitted();
-		});
-
-		this.initialsInput.addEventListener("input", () => {
-			this.initialsInput.value = this.initialsInput.value.toUpperCase();
-
-			if (this.initialsInput.value.length === 0) {
-				this.initialsSubmitLabel.style.opacity = "0";
-				this.initialsSubmitLabel.style.animation = "";
-				this.initialsInputCaret.style.display = "block";
-				this.initialsInputCaret.style.left = "4%";
-				return;
-			}
-
-			const lastChar = this.initialsInput.value[this.initialsInput.value.length - 1];
-			if (!"ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(lastChar))
-				this.initialsInput.value = this.initialsInput.value.substring(0, this.initialsInput.value.length - 1);
-
-			switch (this.initialsInput.value.length) {
-				case 0:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "4%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				case 1:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "36.5%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				case 2:
-					this.initialsInputCaret.style.display = "block";
-					this.initialsInputCaret.style.left = "68.5%";
-					this.initialsSubmitLabel.style.opacity = "0";
-					this.initialsSubmitLabel.style.animation = "";
-					break;
-				default:
-					this.initialsInputCaret.style.display = "none";
-					this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
-					break;
-			}
-		});
-
-		this.initialsInput.addEventListener("focusin", () => {
-			this.initialsInput.inputMode = "text";
-			if (this.initialsInput.value.length === 3) {
-				this.initialsInputCaret.style.display = "none";
-				this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
-			} else {
-				this.initialsInputCaret.style.display = "block";
-			}
-		});
-
-		this.initialsInput.addEventListener("focusout", () => this.initialsInputFocusLoss());
-
-		this.initialsInput.addEventListener("keydown", () => {
-			this.initialsInput.selectionStart = this.initialsInput.value.length;
-			this.initialsInput.selectionEnd = this.initialsInput.value.length;
-		});
-	}
-
-	initialsInputFocusLoss() {
-		if (this.isOver && now() - this.endTime < 1000) return this.initialsInput.focus();
-		this.initialsInput.inputMode = "none";
-		this.initialsInputCaret.style.display = "none";
-		this.initialsSubmitLabel.style.opacity = "0";
-		this.initialsSubmitLabel.style.animation = "";
-		if (!this.initialsRequested) this.hideInitialsSection();
 	}
 
 	endRun(distance: number) {
@@ -240,70 +122,8 @@ export class Game {
 		this.socket.emit("player-input-ping");
 	}
 
-	getPlayerInitials(onNewHighScore?: boolean) {
-		this.locked = true;
-		this.highScores.style.display = "none";
-
-		this.initialsInput.value = "";
-		this.initialsLabel.innerText = onNewHighScore
-			? "NEW HIGH SCORE!\nENTER YOUR INITIALS:"
-			: "ENTER YOUR INITIALS:";
-		if (onNewHighScore) this.initialsRequested = true;
-
-		this.initialsSection.style.display = "block";
-		this.initialsForm.style.display = "block";
-		this.initialsInput.style.display = "block";
-		this.initialsInputCaret.style.display = "block";
-		this.initialsInputCaret.style.left = "4%";
-
-		this.initialsSubmitLabel.style.display = "block";
-		this.initialsSubmitLabel.style.opacity = "0";
-		this.initialsSubmitLabel.style.animation = "";
-		this.initialsInput.inputMode = "text";
-
-		const rect = this.initialsSection.getBoundingClientRect();
-		window.scrollTo(rect.x, rect.y);
-		this.initialsInput.focus();
-	}
-
-	initialsSubmitted() {
-		if (this.initialsRequested) {
-			this.submitScore();
-			this.init();
-		} else {
-			this.initialsInputFocusLoss();
-		}
-	}
-
-	hideInitialsSection() {
-		if (this.initialsRequested) return;
-		this.initialsInput.inputMode = "none";
-		this.locked = false;
-		this.initialsRequested = false;
-		this.initialsSection.style.display = "none";
-		this.pilotLabel.style.pointerEvents = "auto";
-
-		this.pilotLabel.focus();
-	}
-
-	showNewHighScoreMsg() {
-		this.initialsLabel.innerText = "NEW HIGH SCORE!";
-		this.initialsSection.style.display = "block";
-		this.initialsLabel.style.display = "block";
-		this.initialsForm.style.display = "none";
-		this.highScores.style.display = "none";
-		this.initialsSubmitLabel.style.display = "none";
-	}
-
-	pilotLabelClickHandler() {
-		if (this.initialsRequested) return;
-		this.pilotLabel.style.pointerEvents = "none";
-		if (this.locked) return this.initialsInputFocusLoss();
-		this.getPlayerInitials();
-	}
-
 	highScoresLabelClickHandler() {
-		if (!this.initialsRequested) this.hideInitialsSection();
+		if (!this.initialsRequested) this.initialsForm.hide();
 		if (this.locked) return;
 
 		if (this.highScores.style.display === "block") return (this.highScores.style.display = "none");
@@ -334,11 +154,6 @@ export class Game {
 		this.scale = this.width / 1600;
 
 		const fontSizeScaled = `${60 * this.scale}px`;
-		const intialsInputFontSizeScaled = `${166 * this.scale}px`;
-		const initialsInputWidth = `${236 * this.scale}px`;
-		const initialsInputBorderWidth = `${4 * this.scale}px`;
-		const initialsFormMarginTop = `${16 * this.scale}px`;
-		const initialsFormMarginBottom = `${5 * this.scale}px`;
 
 		const offsetHorizontalPct = 0.07;
 		const offsetVerticalPct = 0.013;
@@ -369,17 +184,8 @@ export class Game {
 		this.bestLabel.style.bottom = offsetVertical;
 
 		this.highScores.style.fontSize = fontSizeScaled;
-		this.initialsSection.style.fontSize = fontSizeScaled;
-		this.initialsInput.style.fontSize = intialsInputFontSizeScaled;
 
-		this.initialsInput.style.width = initialsInputWidth;
-		this.initialsInput.style.borderWidth = initialsInputBorderWidth;
-
-		this.initialsForm.style.marginTop = initialsFormMarginTop;
-		this.initialsForm.style.marginBottom = initialsFormMarginBottom;
-
-		this.initialsSubmitLabel.style.fontSize = fontSizeScaled;
-
+		this.initialsForm.resize();
 		this.copter.resize();
 		this.terrain.resize();
 	}

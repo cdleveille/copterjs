@@ -31,7 +31,7 @@ export class InputHandler {
 					return;
 				case "Digit1":
 					e.preventDefault();
-					return game.pilotLabelClickHandler();
+					return game.initialsForm.pilotLabelClickHandler();
 				case "Digit2":
 					e.preventDefault();
 					return game.highScoresLabelClickHandler();
@@ -78,7 +78,7 @@ export class InputHandler {
 	}
 
 	press(game: Game) {
-		if (game.locked) return game.initialsInputFocusLoss();
+		if (game.locked) return game.initialsForm.hide();
 		if (game.pausedAtStart) game.pausedAtStart = false;
 		if (game.isOver) return game.reset();
 		if (game.highScores.style.display === "block") game.highScores.style.display = "none";
