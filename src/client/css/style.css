@@ -4,6 +4,13 @@
 	--black: #000000;
 }
 
+@font-face {
+	font-family: "digital-7";
+	font-style: "normal";
+	font-weight: 800;
+	src: local("digital-7"), url("../font/digital-7-mono.ttf") format("truetype");
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -24,23 +31,6 @@ html {
 	position: absolute !important;
 	width: 100%;
 	height: 100%;
-}
-
-@font-face {
-	font-family: "digital-7";
-	font-style: "normal";
-	font-weight: 800;
-	src: local("digital-7"), url("../font/digital-7-mono.ttf") format("truetype");
-}
-
-.centered {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	-moz-transform: translateX(-50%) translateY(-50%);
-	-webkit-transform: translateX(-50%) translateY(-50%);
-	-ms-transform: translateX(-50%) translateY(-50%);
-	transform: translateX(-50%) translateY(-50%);
 }
 
 #container {
@@ -158,6 +148,28 @@ html {
 	pointer-events: none;
 }
 
+.visible {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.1s linear;
+}
+
+.hidden {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 0.1s, opacity 0.1s linear;
+}
+
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+}
+
 @keyframes blink {
 	from,
 	to {
@@ -176,16 +188,4 @@ html {
 	50% {
 		opacity: 100%;
 	}
-}
-
-.visible {
-	visibility: visible;
-	opacity: 1;
-	transition: opacity 0.1s linear;
-}
-
-.hidden {
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s 0.1s, opacity 0.1s linear;
 }
