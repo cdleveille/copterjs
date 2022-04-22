@@ -18,7 +18,7 @@ export const startRun = (socket: Socket) => {
 export const endRun = async (manager: EntityManager, player: string, clientDistance: number, socket: Socket) => {
 	if (!activeRuns[socket.id]) return;
 	activeRuns[socket.id].endTime = new Date().getTime();
-	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 2000) return deleteRun(socket.id);
+	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 3000) return deleteRun(socket.id);
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
