@@ -55,4 +55,4 @@ Set up dev database (only required if `USE_DB=true` in the `.env` file):
 Launch:
 
 -   Run `yarn dev` to concurrently run the server via ts-node-dev and the client via webpack in watch mode. This will cause either to automatically restart whenever a change is made to any of their respective source code files. The client will be accessible on [localhost:3000](http://localhost:3000).
--   Alternatively, start the `debug` launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` with the VS Code degugger attached to the server. The client can be debugged in the browser developer tools via source maps.
+-   Alternatively, start the `debug` launch configuration in VS Code (press `F5`), which essentially runs `yarn dev` with the VS Code debugger attached to the server. The client can be debugged in the browser developer tools via source maps.
