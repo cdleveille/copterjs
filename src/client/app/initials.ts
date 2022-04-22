@@ -1,5 +1,5 @@
 import { Game } from "./game";
-import { now, setHidden, setVisible } from "./util";
+import { now, onMobile, setHidden, setVisible } from "./util";
 
 export class InitialsForm {
 	game: Game;
@@ -79,20 +79,34 @@ export class InitialsForm {
 
 		this.initialsInput.addEventListener("focusout", () => this.hide());
 
-		document.addEventListener("selectionchange", () => {
-			this.updateCaretAndSubmitLabel();
-		});
+		if (onMobile()) {
+			this.initialsInput.addEventListener("input", () => {
+				this.initialsInput.value = this.initialsInput.value.toUpperCase();
 
-		this.initialsInput.addEventListener("beforeinput", (e) => {
-			if (!e.data) return;
-			if (!e.data.toUpperCase().match(/^[A-Z]$/)) e.preventDefault();
-		});
+				for (const char of this.initialsInput.value) {
+					if (!char.toUpperCase().match(/^[A-Z]$/)) {
+						this.initialsInput.value = this.initialsInput.value.replace(char, "");
+					}
+				}
 
-		this.initialsInput.addEventListener("input", (e: InputEvent) => {
-			if (e.inputType.startsWith("deleteContent")) {
 				this.updateCaretAndSubmitLabel();
-			}
-		});
+			});
+		} else {
+			document.addEventListener("selectionchange", () => {
+				this.updateCaretAndSubmitLabel();
+			});
+
+			this.initialsInput.addEventListener("beforeinput", (e) => {
+				if (!e.data) return;
+				if (!e.data.toUpperCase().match(/^[A-Z]$/)) e.preventDefault();
+			});
+
+			this.initialsInput.addEventListener("input", (e: InputEvent) => {
+				if (e.inputType.startsWith("deleteContent")) {
+					this.updateCaretAndSubmitLabel();
+				}
+			});
+		}
 	}
 
 	updateCaretAndSubmitLabel() {

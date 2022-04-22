@@ -81,3 +81,7 @@ export const isVisible = (element: HTMLElement): boolean => {
 export const isHidden = (element: HTMLElement): boolean => {
 	return element.classList.contains("hidden");
 };
+
+export const onMobile = () => {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent);
+};
