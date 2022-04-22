@@ -124,7 +124,6 @@ export class Terrain {
 
 		const segmentWidthPct = 100 - topDepthPct - botDepthPct;
 		if (segmentWidthPct < minTunnelWidthPct) {
-			// const diff = minTunnelWidthPct - segmentWidthPct;
 			const side = randomInt(0, 2);
 			switch (side) {
 				case 0:
@@ -135,7 +134,6 @@ export class Terrain {
 					break;
 			}
 		} else if (segmentWidthPct > maxTunnelWidthPct) {
-			// const diff = segmentWidthPct - maxTunnelWidthPct;
 			const side = randomInt(0, 2);
 			switch (side) {
 				case 0:

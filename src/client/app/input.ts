@@ -40,7 +40,6 @@ export class InputHandler {
 		});
 
 		document.addEventListener("keyup", (e) => {
-			this.hideCursor();
 			if (e.code === "Space") {
 				e.preventDefault();
 				this.release(game);
