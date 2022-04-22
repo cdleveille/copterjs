@@ -36,7 +36,7 @@ export default class App {
 					"script-src": ["'self'", "'unsafe-eval'"],
 					"style-src": ["'self'", "'unsafe-inline'"],
 					"img-src": ["'self' blob: data:"],
-					"connect-src": ["'self'"]
+					"connect-src": ["'self'", "www.googletagmanager.com"]
 				}
 			})
 		);
