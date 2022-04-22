@@ -80,16 +80,7 @@ export class InitialsForm {
 		this.initialsInput.addEventListener("focusout", () => this.hide());
 
 		if (onMobile()) {
-			this.initialsInput.addEventListener("input", (e: InputEvent) => {
-				if (e.inputType === "deleteContentBackward") {
-					this.initialsInput.value = this.initialsInput.value.substring(
-						0,
-						this.initialsInput.value.length - 1
-					);
-					e.preventDefault();
-					return;
-				}
-
+			this.initialsInput.addEventListener("input", () => {
 				this.initialsInput.value = this.initialsInput.value.toUpperCase();
 
 				for (const char of this.initialsInput.value) {
@@ -227,8 +218,6 @@ export class InitialsForm {
 		this.initialsForm.style.marginBottom = initialsFormMarginBottom;
 
 		this.initialsSubmitLabel.style.fontSize = fontSizeScaled;
-
-		if (this.game.locked) this.scrollToForm();
 	}
 
 	scrollToForm() {

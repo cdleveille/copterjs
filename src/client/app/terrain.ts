@@ -1,7 +1,7 @@
 import { Game } from "./game";
 import { IBlock, ITunnel } from "./types/abstract";
 import { Color } from "./types/constant";
-import { randomInt } from "./util";
+import { now, randomInt } from "./util";
 
 export class Terrain {
 	game: Game;
@@ -64,13 +64,33 @@ export class Terrain {
 	}
 
 	createNewTunnelSegment(lastSegment: ITunnel) {
-		const minTunnelWidthPct = 40;
+		let maxTunnelWidthPct: number, minTunnelWidthPct: number;
 		const minEdgeDepthPct = 9;
+
+		const secondsPerStage = 15;
+		const seconds = (now() - this.game.startTime) / 1000;
+
+		if (seconds < secondsPerStage) {
+			maxTunnelWidthPct = 80;
+			minTunnelWidthPct = 70;
+		} else if (seconds < secondsPerStage * 2) {
+			maxTunnelWidthPct = 75;
+			minTunnelWidthPct = 65;
+		} else if (seconds < secondsPerStage * 3) {
+			maxTunnelWidthPct = 60;
+			minTunnelWidthPct = 50;
+		} else if (seconds < secondsPerStage * 4) {
+			maxTunnelWidthPct = 55;
+			minTunnelWidthPct = 45;
+		} else {
+			maxTunnelWidthPct = 50;
+			minTunnelWidthPct = 40;
+		}
 
 		const x = lastSegment.x + lastSegment.lengthPct * this.game.width;
 		const topDirection = randomInt(0, 3);
 		const botDirection = randomInt(0, 3);
-		const lengthPct = randomInt(1, 11);
+		const lengthPct = randomInt(5, 15);
 
 		let topDepthPct: number, botDepthPct: number;
 
@@ -98,21 +118,31 @@ export class Terrain {
 				break;
 		}
 
-		// ensure tunnel does not get too wide
+		// ensure tunnel does not go out of bounds
 		if (topDepthPct < minEdgeDepthPct) topDepthPct = minEdgeDepthPct;
 		if (botDepthPct < minEdgeDepthPct) botDepthPct = minEdgeDepthPct;
 
-		// ensure tunnel does not get too narrow
 		const segmentWidthPct = 100 - topDepthPct - botDepthPct;
 		if (segmentWidthPct < minTunnelWidthPct) {
-			const diff = minTunnelWidthPct - segmentWidthPct;
+			// const diff = minTunnelWidthPct - segmentWidthPct;
 			const side = randomInt(0, 2);
 			switch (side) {
 				case 0:
-					botDepthPct -= diff;
+					botDepthPct -= 1;
 					break;
 				case 1:
-					topDepthPct -= diff;
+					topDepthPct -= 1;
+					break;
+			}
+		} else if (segmentWidthPct > maxTunnelWidthPct) {
+			// const diff = segmentWidthPct - maxTunnelWidthPct;
+			const side = randomInt(0, 2);
+			switch (side) {
+				case 0:
+					botDepthPct += 1;
+					break;
+				case 1:
+					topDepthPct += 1;
 					break;
 			}
 		}
