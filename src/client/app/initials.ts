@@ -89,11 +89,16 @@ export class InitialsForm {
 					}
 				}
 
-				this.updateCaretAndSubmitLabel();
+				this.updateCaretAndSubmitLabel(this.initialsInput.value.length);
+			});
+
+			this.initialsInput.addEventListener("keydown", () => {
+				this.initialsInput.selectionStart = this.initialsInput.value.length;
+				this.initialsInput.selectionEnd = this.initialsInput.value.length;
 			});
 		} else {
 			document.addEventListener("selectionchange", () => {
-				this.updateCaretAndSubmitLabel();
+				this.updateCaretAndSubmitLabel(this.initialsInput.selectionStart);
 			});
 
 			this.initialsInput.addEventListener("beforeinput", (e) => {
@@ -103,20 +108,20 @@ export class InitialsForm {
 
 			this.initialsInput.addEventListener("input", (e: InputEvent) => {
 				if (e.inputType.startsWith("deleteContent")) {
-					this.updateCaretAndSubmitLabel();
+					this.updateCaretAndSubmitLabel(this.initialsInput.selectionStart);
 				}
 			});
 		}
 	}
 
-	updateCaretAndSubmitLabel() {
+	updateCaretAndSubmitLabel(caretPos: number) {
 		if (this.initialsInput.value.length === 3) {
 			this.initialsSubmitLabel.style.animation = "blink-bright 1s infinite";
 		} else {
 			this.initialsSubmitLabel.style.animation = "";
 		}
 
-		this.setCaretPos(this.initialsInput.selectionStart);
+		this.setCaretPos(caretPos);
 	}
 
 	setCaretPos(pos: number) {
