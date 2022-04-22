@@ -86,6 +86,7 @@ export class InitialsForm {
 						0,
 						this.initialsInput.value.length - 1
 					);
+					e.preventDefault();
 					return;
 				}
 
