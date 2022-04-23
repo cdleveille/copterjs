@@ -2,22 +2,19 @@ import { Game } from "./game";
 import { isVisible, setHidden } from "./util";
 
 export class InputHandler {
-	constructor(canvas: HTMLCanvasElement, game: Game) {
-		canvas.addEventListener("mousedown", (e) => {
+	constructor(game: Game) {
+		const backdrop = document.getElementById("backdrop");
+
+		document.oncontextmenu = (e) => {
+			e.preventDefault();
+		};
+
+		backdrop.addEventListener("mousedown", (e) => {
 			this.showCursor();
 			if (e.button == 0) this.press(game);
 		});
 
-		document.getElementById("backdrop").addEventListener("mousedown", (e) => {
-			this.showCursor();
-			if (e.button == 0) this.press(game);
-		});
-
-		canvas.addEventListener("mouseup", (e) => {
-			if (e.button == 0) this.release(game);
-		});
-
-		document.getElementById("backdrop").addEventListener("mouseup", (e) => {
+		backdrop.addEventListener("mouseup", (e) => {
 			if (e.button == 0) this.release(game);
 		});
 
@@ -46,7 +43,7 @@ export class InputHandler {
 			}
 		});
 
-		canvas.addEventListener(
+		backdrop.addEventListener(
 			"touchstart",
 			() => {
 				this.press(game);
@@ -54,20 +51,7 @@ export class InputHandler {
 			{ passive: true }
 		);
 
-		document.getElementById("backdrop").addEventListener(
-			"touchstart",
-			() => {
-				this.press(game);
-			},
-			{ passive: true }
-		);
-
-		canvas.addEventListener("touchend", (e) => {
-			e.preventDefault();
-			this.release(game);
-		});
-
-		document.getElementById("backdrop").addEventListener("touchend", (e) => {
+		backdrop.addEventListener("touchend", (e) => {
 			e.preventDefault();
 			this.release(game);
 		});

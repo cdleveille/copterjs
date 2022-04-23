@@ -70,21 +70,30 @@ export class Terrain {
 		const secondsPerStage = 15;
 		const seconds = (now() - this.game.startTime) / 1000;
 
+		// at 0s
 		if (seconds < secondsPerStage) {
 			maxTunnelWidthPct = 80;
 			minTunnelWidthPct = 70;
+			// at 15s
 		} else if (seconds < secondsPerStage * 2) {
 			maxTunnelWidthPct = 75;
 			minTunnelWidthPct = 65;
+			// at 30s
 		} else if (seconds < secondsPerStage * 3) {
 			maxTunnelWidthPct = 60;
 			minTunnelWidthPct = 50;
+			// at 45s
 		} else if (seconds < secondsPerStage * 4) {
 			maxTunnelWidthPct = 55;
 			minTunnelWidthPct = 45;
-		} else {
+			// at 60s
+		} else if (seconds < secondsPerStage * 6) {
 			maxTunnelWidthPct = 50;
 			minTunnelWidthPct = 40;
+			// at 90s
+		} else {
+			maxTunnelWidthPct = 45;
+			minTunnelWidthPct = 37;
 		}
 
 		const x = lastSegment.x + lastSegment.lengthPct * this.game.width;
