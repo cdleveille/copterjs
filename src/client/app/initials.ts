@@ -163,6 +163,7 @@ export class InitialsForm {
 		this.scrollToForm();
 
 		setHidden(this.game.highScores);
+		setHidden(this.game.controls);
 		setVisible(this.initialsSection);
 		this.initialsForm.style.display = "block";
 		this.initialsInput.style.display = "block";
@@ -181,6 +182,7 @@ export class InitialsForm {
 		this.game.initialsRequested = false;
 		setHidden(this.initialsSection);
 		this.game.pilotLabel.style.pointerEvents = "auto";
+		if (this.game.pausedAtStart) setVisible(this.game.controls);
 	}
 
 	showNewHighScoreMsg() {

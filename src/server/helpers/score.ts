@@ -9,27 +9,30 @@ import { IRun } from "../types/abstract";
 import Config from "./config";
 
 const activeRuns: { [id: string]: IRun } = {};
-let tenthPlaceScore: number, lastPlayerInputPing: number;
 
 export const startRun = (socket: Socket) => {
-	activeRuns[socket.id] = { startTime: new Date().getTime(), endTime: undefined };
+	activeRuns[socket.id] = { startTime: new Date().getTime(), endTime: undefined, lastPing: new Date().getTime() };
 };
 
 export const endRun = async (manager: EntityManager, player: string, clientDistance: number, socket: Socket) => {
+	if (!Config.USE_DB) return;
 	if (!activeRuns[socket.id]) return;
+
 	activeRuns[socket.id].endTime = new Date().getTime();
-	if (activeRuns[socket.id].endTime - lastPlayerInputPing > 3000) return deleteRun(socket.id);
+	if (activeRuns[socket.id].endTime - activeRuns[socket.id].lastPing > 3000) return deleteRun(socket.id);
 
 	const distance = computeDistance(socket);
 	socket.emit("report-distance-to-client", distance);
 	if (Math.abs(distance - clientDistance) > 100) return deleteRun(socket.id);
 
+	const tenthPlaceScore = await getTenthPlaceScore(manager);
 	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
 	if (!player) return socket.emit("initials-request");
 	socket.emit("show-new-high-score-msg");
 
 	await submitScore(manager, player, socket);
+	deleteRun(socket.id);
 };
 
 export const submitScore = async (manager: EntityManager, player: string, socket: Socket) => {
@@ -37,16 +40,12 @@ export const submitScore = async (manager: EntityManager, player: string, socket
 	if (!activeRuns[socket.id]) return;
 
 	const distance = computeDistance(socket);
-	if (tenthPlaceScore && distance < tenthPlaceScore) return;
 
 	const score: IScore = { player: player.toUpperCase().substring(0, 3), score: distance };
 	await insertScore(manager, score, socket);
-
-	deleteRun(socket.id);
 };
 
 export const deleteRun = (id: string) => {
-	if (!activeRuns[id]) return;
 	delete activeRuns[id];
 };
 
@@ -55,9 +54,12 @@ const computeDistance = (socket: Socket): number => {
 };
 
 export const ping = (socket: Socket) => {
+	if (!Config.USE_DB) return;
 	if (!activeRuns[socket.id]) return;
+
 	const newPing = new Date().getTime();
-	if (newPing - lastPlayerInputPing > 3000) deleteRun(socket.id);
+	if (newPing - activeRuns[socket.id].lastPing > 3000) return deleteRun(socket.id);
+	activeRuns[socket.id].lastPing = newPing;
 };
 
 const insertScore = async (manager: EntityManager, score: IScore, socket: Socket) => {
@@ -68,7 +70,11 @@ const insertScore = async (manager: EntityManager, score: IScore, socket: Socket
 export const sendHighScoresToClient = async (manager: EntityManager, socket: Socket, broadcast?: boolean) => {
 	if (!Config.USE_DB) return;
 	const highScores: Score[] = await ScoreRepository.FindTop(manager, 10);
-	if (highScores.length === 10) tenthPlaceScore = highScores[highScores.length - 1].score;
 	socket.emit("high-scores-updated", highScores);
 	if (broadcast) socket.broadcast.emit("high-scores-updated", highScores);
+};
+
+const getTenthPlaceScore = async (manager: EntityManager): Promise<number> => {
+	const highScores: Score[] = await ScoreRepository.FindTop(manager, 10);
+	return highScores.length === 10 ? highScores[highScores.length - 1].score : null;
 };

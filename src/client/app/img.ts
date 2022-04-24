@@ -51,9 +51,19 @@ import copter9 from "../img/copter9.png";
 // @ts-ignore
 import copterStopped from "../img/copter_stopped.png";
 // @ts-ignore
+import lmb from "../img/lmb.svg";
+// @ts-ignore
 import smoke from "../img/smoke.png";
+// @ts-ignore
+import space from "../img/space.svg";
 import { ICopterImgs } from "./types/abstract";
 import { loadImage } from "./util";
+
+const lmbImg = document.getElementById("lmb") as HTMLImageElement;
+lmbImg.src = loadImage(lmb).img.src;
+
+const spaceImg = document.getElementById("space") as HTMLImageElement;
+spaceImg.src = loadImage(space).img.src;
 
 export const imgs: ICopterImgs = {
 	copterStopped: loadImage(copterStopped),

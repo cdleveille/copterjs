@@ -44,6 +44,7 @@ html {
 #game-canvas {
 	position: absolute;
 	z-index: 2;
+	pointer-events: none;
 }
 
 #ghost-canvas {
@@ -147,6 +148,16 @@ html {
 	z-index: 4;
 	font-size: 60px;
 	color: var(--blue);
+	pointer-events: none;
+}
+
+#controls {
+	z-index: 4;
+	position: absolute;
+	animation: blink-bright 1s infinite;
+	color: var(--blue);
+	display: flex;
+	align-items: center;
 	pointer-events: none;
 }
 

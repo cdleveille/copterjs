@@ -7,7 +7,7 @@ import { areAllImagesLoaded } from "./img";
 import { InitialsForm } from "./initials";
 import { Terrain } from "./terrain";
 import { Color } from "./types/constant";
-import { now, setHidden, toggleVisibility } from "./util";
+import { now, onMobile, setHidden, setVisible, toggleVisibility } from "./util";
 
 export class Game {
 	width: number;
@@ -24,6 +24,10 @@ export class Game {
 	initialsForm: InitialsForm;
 	highScores: HTMLUListElement;
 	overlay: HTMLDivElement;
+	controls: HTMLDivElement;
+	controlsText: HTMLSpanElement;
+	lmbImg: HTMLImageElement;
+	spaceImg: HTMLImageElement;
 	isOver: boolean;
 	startTime: number;
 	endTime: number;
@@ -50,6 +54,10 @@ export class Game {
 		this.highScoresLabel = document.getElementById("high-scores-label") as HTMLDivElement;
 		this.highScores = document.getElementById("high-scores") as HTMLUListElement;
 		this.overlay = document.getElementById("overlay") as HTMLDivElement;
+		this.controls = document.getElementById("controls") as HTMLDivElement;
+		this.controlsText = document.getElementById("controls-text") as HTMLDivElement;
+		this.lmbImg = document.getElementById("lmb") as HTMLImageElement;
+		this.spaceImg = document.getElementById("space") as HTMLImageElement;
 		this.player = window.localStorage.getItem("player");
 
 		this.pilotLabel.onclick = () => this.initialsForm.pilotLabelClickHandler();
@@ -58,6 +66,8 @@ export class Game {
 
 		navigator.onLine ? this.goOnline() : this.goOffline();
 		this.initialsForm.init();
+
+		if (onMobile()) this.controls.style.display = "none";
 	}
 
 	init() {
@@ -71,6 +81,7 @@ export class Game {
 
 		this.initialsForm.hide();
 		setHidden(this.highScores);
+		setVisible(this.controls);
 
 		this.copter.init();
 		this.terrain.init();
@@ -127,7 +138,12 @@ export class Game {
 		if (this.locked) return;
 
 		const visible = toggleVisibility(this.highScores);
-		if (!visible) return;
+		if (!visible) {
+			if (this.pausedAtStart) setVisible(this.controls);
+			return;
+		}
+
+		setHidden(this.controls);
 
 		if (!navigator.onLine || this.noDB) {
 			const localHighScores = window.localStorage.getItem("high-scores");
@@ -136,7 +152,7 @@ export class Game {
 	}
 
 	reset() {
-		if (this.isOver && now() > this.endTime + 1000) this.init();
+		if (this.isOver && now() - this.endTime >= 1000) this.init();
 	}
 
 	resize(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
@@ -184,6 +200,14 @@ export class Game {
 		this.bestLabel.style.bottom = offsetVertical;
 
 		this.highScores.style.fontSize = fontSizeScaled;
+
+		this.lmbImg.width = 54 * this.scale;
+		this.lmbImg.height = 54 * this.scale;
+
+		this.spaceImg.width = 100 * this.scale;
+		this.spaceImg.height = 100 * this.scale;
+
+		this.controlsText.style.fontSize = `${32 * this.scale}px`;
 
 		this.initialsForm.resize();
 		this.copter.resize();

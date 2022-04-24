@@ -11,7 +11,7 @@ const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
 const game = new Game();
-new InputHandler(canvas, game);
+new InputHandler(game);
 new WindowHandler(canvas, game);
 game.init();
 
