@@ -152,7 +152,7 @@ export class Game {
 	}
 
 	reset() {
-		if (this.isOver && now() > this.endTime + 1000) this.init();
+		if (this.isOver && now() - this.endTime >= 1000) this.init();
 	}
 
 	resize(canvas: HTMLCanvasElement, ghostCanvas: HTMLCanvasElement) {
