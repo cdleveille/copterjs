@@ -1,7 +1,7 @@
 import { Game } from "./game";
 import { imgs } from "./img";
 import { ICoord, IHitboxOffset, IRect } from "./types/abstract";
-import { areRectanglesColliding, now } from "./util";
+import { areRectanglesColliding, now, setHidden } from "./util";
 
 export class Copter {
 	game: Game;
@@ -100,6 +100,8 @@ export class Copter {
 		this.yPct = this.y / this.game.height;
 
 		if (this.game.pausedAtStart) return;
+
+		setHidden(this.game.controls);
 
 		this.updateSmoke(delta);
 

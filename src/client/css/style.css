@@ -151,6 +151,16 @@ html {
 	pointer-events: none;
 }
 
+#controls {
+	z-index: 4;
+	position: absolute;
+	animation: blink-bright 1s infinite;
+	color: var(--blue);
+	display: flex;
+	align-items: center;
+	pointer-events: none;
+}
+
 .visible {
 	visibility: visible;
 	opacity: 1;
