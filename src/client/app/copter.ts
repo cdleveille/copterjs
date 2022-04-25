@@ -17,8 +17,8 @@ export class Copter {
 	g: number;
 	power: number;
 	climbing: boolean;
-	hitbox: IRect;
-	hitBoxOffset: IHitboxOffset;
+	hitboxes: IRect[];
+	hitboxOffsets: IHitboxOffset[];
 	img: HTMLImageElement;
 	smoke: ICoord[];
 
@@ -52,12 +52,68 @@ export class Copter {
 		this.xv = 900 * this.game.scale;
 		this.width = 124 * this.game.scale;
 		this.height = 57 * this.game.scale;
-		this.hitBoxOffset = {
-			left: 10 * this.game.scale,
-			right: 10 * this.game.scale,
-			top: 5 * this.game.scale,
-			bottom: 5 * this.game.scale
-		};
+		this.hitboxOffsets = [
+			{
+				left: 58 * this.game.scale,
+				right: 33 * this.game.scale,
+				top: 1 * this.game.scale,
+				bottom: 54 * this.game.scale
+			},
+			{
+				left: 42 * this.game.scale,
+				right: 18 * this.game.scale,
+				top: 4 * this.game.scale,
+				bottom: 51 * this.game.scale
+			},
+			{
+				left: 31 * this.game.scale,
+				right: 10 * this.game.scale,
+				top: 7 * this.game.scale,
+				bottom: 48 * this.game.scale
+			},
+			{
+				left: 6 * this.game.scale,
+				right: 110 * this.game.scale,
+				top: 10 * this.game.scale,
+				bottom: 45 * this.game.scale
+			},
+			{
+				left: 26 * this.game.scale,
+				right: 5 * this.game.scale,
+				top: 10 * this.game.scale,
+				bottom: 45 * this.game.scale
+			},
+			{
+				left: 2 * this.game.scale,
+				right: 3 * this.game.scale,
+				top: 13 * this.game.scale,
+				bottom: 37 * this.game.scale
+			},
+			{
+				left: 5 * this.game.scale,
+				right: 5 * this.game.scale,
+				top: 21 * this.game.scale,
+				bottom: 34 * this.game.scale
+			},
+			{
+				left: 13 * this.game.scale,
+				right: 8 * this.game.scale,
+				top: 24 * this.game.scale,
+				bottom: 31 * this.game.scale
+			},
+			{
+				left: 13 * this.game.scale,
+				right: 15 * this.game.scale,
+				top: 27 * this.game.scale,
+				bottom: 28 * this.game.scale
+			},
+			{
+				left: 60 * this.game.scale,
+				right: 17 * this.game.scale,
+				top: 30 * this.game.scale,
+				bottom: 4 * this.game.scale
+			}
+		] as IHitboxOffset[];
 
 		// variable
 		this.x = this.game.width / 4;
@@ -118,13 +174,16 @@ export class Copter {
 		if (this.climbing) this.yv -= this.power * delta;
 		this.y += this.yv * delta;
 
-		// update hitbox position
-		this.hitbox = {
-			x: this.x + this.hitBoxOffset.left,
-			y: this.y + this.hitBoxOffset.top,
-			width: this.width - this.hitBoxOffset.left - this.hitBoxOffset.right,
-			height: this.height - this.hitBoxOffset.top - this.hitBoxOffset.bottom
-		};
+		// update position of hitboxes
+		this.hitboxes = [];
+		for (const hitboxOffset of this.hitboxOffsets) {
+			this.hitboxes.push({
+				x: this.x + hitboxOffset.left,
+				y: this.y + hitboxOffset.top,
+				width: this.width - hitboxOffset.left - hitboxOffset.right,
+				height: this.height - hitboxOffset.top - hitboxOffset.bottom
+			} as IRect);
+		}
 
 		// enforce maximum vertical speeds
 		if (this.yv < this.yvMin * this.game.scale) this.yv = this.yvMin * this.game.scale;
@@ -146,11 +205,10 @@ export class Copter {
 				height: segment.botDepthPct * this.game.height
 			};
 
-			if (
-				areRectanglesColliding(this.hitbox, segmentTopRect) ||
-				areRectanglesColliding(this.hitbox, segmentBotRect)
-			) {
-				this.crash();
+			for (const hitbox of this.hitboxes) {
+				if (areRectanglesColliding(hitbox, segmentTopRect) || areRectanglesColliding(hitbox, segmentBotRect)) {
+					this.crash();
+				}
 			}
 		}
 
@@ -163,8 +221,10 @@ export class Copter {
 				height: block.heightPct * this.game.height
 			};
 
-			if (areRectanglesColliding(this.hitbox, blockRect)) {
-				this.crash();
+			for (const hitbox of this.hitboxes) {
+				if (areRectanglesColliding(hitbox, blockRect)) {
+					this.crash();
+				}
 			}
 		}
 	}
