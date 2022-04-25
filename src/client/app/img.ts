@@ -60,10 +60,12 @@ import { ICopterImgs } from "./types/abstract";
 import { loadImage } from "./util";
 
 const lmbImg = document.getElementById("lmb") as HTMLImageElement;
-lmbImg.src = loadImage(lmb).img.src;
+const lmbLoad = loadImage(lmb);
+lmbImg.src = lmbLoad.img.src;
 
 const spaceImg = document.getElementById("space") as HTMLImageElement;
-spaceImg.src = loadImage(space).img.src;
+const spaceLoad = loadImage(space);
+spaceImg.src = spaceLoad.img.src;
 
 export const imgs: ICopterImgs = {
 	copterStopped: loadImage(copterStopped),
@@ -102,5 +104,5 @@ export const areAllImagesLoaded = (): boolean => {
 		if (!img || !img.isLoaded) return false;
 	}
 
-	return imgs.copterStopped.isLoaded && imgs.smoke.isLoaded;
+	return imgs.copterStopped.isLoaded && imgs.smoke.isLoaded && lmbLoad.isLoaded && spaceLoad.isLoaded;
 };
