@@ -5,20 +5,20 @@ export class InputHandler {
 	constructor(game: Game) {
 		const backdrop = document.getElementById("backdrop");
 
-		document.oncontextmenu = (e) => {
+		document.oncontextmenu = (e: MouseEvent) => {
 			e.preventDefault();
 		};
 
-		backdrop.addEventListener("mousedown", (e) => {
+		backdrop.addEventListener("mousedown", (e: MouseEvent) => {
 			this.showCursor();
 			if (e.button == 0) this.press(game);
 		});
 
-		backdrop.addEventListener("mouseup", (e) => {
+		backdrop.addEventListener("mouseup", (e: MouseEvent) => {
 			if (e.button == 0) this.release(game);
 		});
 
-		document.addEventListener("keydown", (e) => {
+		document.addEventListener("keydown", (e: KeyboardEvent) => {
 			this.hideCursor();
 
 			if (e.repeat) return;
@@ -33,10 +33,13 @@ export class InputHandler {
 				case "Digit2":
 					e.preventDefault();
 					return game.highScoresLabelClickHandler();
+				case "Enter":
+					e.preventDefault();
+					return game.initialsForm.submit();
 			}
 		});
 
-		document.addEventListener("keyup", (e) => {
+		document.addEventListener("keyup", (e: KeyboardEvent) => {
 			if (e.code === "Space") {
 				e.preventDefault();
 				this.release(game);
@@ -51,12 +54,12 @@ export class InputHandler {
 			{ passive: true }
 		);
 
-		backdrop.addEventListener("touchend", (e) => {
+		backdrop.addEventListener("touchend", (e: TouchEvent) => {
 			e.preventDefault();
 			this.release(game);
 		});
 
-		document.addEventListener("mousemove", (e) => {
+		document.addEventListener("mousemove", () => {
 			this.showCursor();
 		});
 	}

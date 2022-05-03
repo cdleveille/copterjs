@@ -54,17 +54,7 @@ export class InitialsForm {
 
 		this.initialsForm.addEventListener("submit", (e) => {
 			e.preventDefault();
-			if (this.initialsInput.value.length !== 3) return;
-
-			this.game.player = this.initialsInput.value.toUpperCase();
-			window.localStorage.setItem("player", this.game.player);
-
-			if (this.game.initialsRequested) {
-				this.game.submitScore();
-				this.game.init();
-			} else {
-				this.hide();
-			}
+			this.submit();
 		});
 
 		this.initialsInput.addEventListener("focusin", () => {
@@ -111,6 +101,21 @@ export class InitialsForm {
 					this.updateCaretAndSubmitLabel(this.initialsInput.selectionStart);
 				}
 			});
+		}
+	}
+
+	submit() {
+		if (!this.game.locked) return;
+		if (this.initialsInput.value.length !== 3) return;
+
+		this.game.player = this.initialsInput.value.toUpperCase();
+		window.localStorage.setItem("player", this.game.player);
+
+		if (this.game.initialsRequested) {
+			this.game.submitScore();
+			this.game.init();
+		} else {
+			this.hide();
 		}
 	}
 
