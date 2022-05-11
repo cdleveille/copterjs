@@ -1,6 +1,6 @@
 import compression from "compression";
 import cors from "cors";
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import fs from "fs";
 import helmet from "helmet";
 import { createServer } from "http";
@@ -14,65 +14,58 @@ import { Routes } from "../types/constants";
 import { Database } from "./db";
 import log from "./log";
 
-export default class App {
-	private static instance: Express;
+export const startServer = async () => {
+	if (Config.USE_DB) await Database.Connect();
 
-	private static async setup() {
-		App.instance = express();
+	const app = express();
 
-		const logStream = fs.createWriteStream("combined.log", { flags: "a" });
-		App.instance.use(morgan("combined", { stream: logStream }));
+	const logStream = fs.createWriteStream("combined.log", { flags: "a" });
+	app.use(morgan("combined", { stream: logStream }));
 
-		App.instance.use((req: Request, res: Response, next: NextFunction) => {
-			res.locals.em = Config.USE_DB ? Database.Manager.fork() : null;
-			next();
-		});
+	app.use((req: Request, res: Response, next: NextFunction) => {
+		res.locals.em = Config.USE_DB ? Database.Manager.fork() : null;
+		next();
+	});
 
-		App.instance.use(
-			helmet.contentSecurityPolicy({
-				directives: {
-					"default-src": ["'self'"],
-					"object-src": ["'none'"],
-					"script-src": ["'self'", "'unsafe-eval'"],
-					"style-src": ["'self'", "'unsafe-inline'"],
-					"img-src": ["'self' blob: data:"],
-					"connect-src": ["'self'", "www.googletagmanager.com"]
-				}
-			})
+	app.use(
+		helmet.contentSecurityPolicy({
+			directives: {
+				"default-src": ["'self'"],
+				"object-src": ["'none'"],
+				"script-src": ["'self'", "'unsafe-eval'"],
+				"style-src": ["'self'", "'unsafe-inline'"],
+				"img-src": ["'self' blob: data:"],
+				"connect-src": ["'self'", "www.googletagmanager.com"]
+			}
+		})
+	);
+
+	app.use(compression());
+
+	app.use(
+		cors({
+			origin: "*",
+			methods: ["GET"]
+		})
+	);
+
+	app.use(Routes.root, router);
+
+	app.use(express.static(path.join(process.cwd(), "build/client")));
+
+	app.set("json spaces", 2);
+
+	app.disable("x-powered-by");
+
+	const httpServer = createServer(app);
+	const manager = Config.USE_DB ? Database.Manager.fork() : null;
+	initSocket(httpServer, manager);
+
+	httpServer.listen(Config.PORT, () => {
+		log.info(
+			`Server started - listening on http${Config.IS_PROD ? "s" : ""}://${Config.HOST}${
+				Config.IS_PROD ? "" : ":" + Config.PORT
+			}`
 		);
-
-		App.instance.use(compression());
-
-		App.instance.use(
-			cors({
-				origin: "*",
-				methods: ["GET"]
-			})
-		);
-
-		App.instance.use(Routes.root, router);
-
-		App.instance.use(express.static(path.join(process.cwd(), "build/client")));
-
-		App.instance.set("json spaces", 2);
-
-		App.instance.disable("x-powered-by");
-	}
-
-	public static async start() {
-		if (Config.USE_DB) await Database.Connect();
-		await App.setup();
-
-		const httpServer = createServer(App.instance);
-		const manager = Config.USE_DB ? Database.Manager.fork() : null;
-		initSocket(httpServer, manager);
-
-		httpServer.listen(Config.PORT, () => {
-			log.info(
-				`Server started - listening on http${Config.IS_PROD ? "s" : ""}://${Config.HOST}${
-					Config.IS_PROD ? "" : ":" + Config.PORT
-				}`
-			);
-		});
-	}
-}
+	});
+};
