@@ -25,6 +25,7 @@ jobs:
                   cache: yarn
 
             - run: yarn install --frozen-lockfile
+            - run: yarn build
 
             - uses: superfly/flyctl-actions/setup-flyctl@master
             - run: flyctl deploy --remote-only --detach --no-cache
