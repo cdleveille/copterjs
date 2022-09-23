@@ -1,13 +1,12 @@
 import { Server as HttpServer } from "http";
 import { Server, Socket } from "socket.io";
 
-import { EntityManager } from "@mikro-orm/core";
 import { IEnv, IScore } from "@shared/types/abstract";
 
 import { deleteRun, endRun, ping, sendHighScoresToClient, startRun, submitScore } from "../helpers/score";
 import Config from "./config";
 
-export const initSocket = (httpServer: HttpServer, manager: EntityManager) => {
+export const initSocket = (httpServer: HttpServer) => {
 	const io = new Server(httpServer);
 
 	io.on("connect", (socket: Socket) => {
@@ -18,11 +17,11 @@ export const initSocket = (httpServer: HttpServer, manager: EntityManager) => {
 		});
 
 		socket.on("end-run", async (data: IScore) => {
-			await endRun(manager, data.player, data.score, socket);
+			await endRun(data.player, data.score, socket);
 		});
 
 		socket.on("submit-score", async (player: string) => {
-			await submitScore(manager, player, socket);
+			await submitScore(player, socket);
 		});
 
 		socket.on("player-input-ping", () => {
@@ -30,7 +29,7 @@ export const initSocket = (httpServer: HttpServer, manager: EntityManager) => {
 		});
 
 		socket.on("high-scores-request", async () => {
-			await sendHighScoresToClient(manager, socket);
+			await sendHighScoresToClient(socket);
 		});
 
 		socket.on("env-var-request", async () => {

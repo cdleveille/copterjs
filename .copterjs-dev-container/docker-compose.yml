@@ -1,0 +1,23 @@
+version: "3.6"
+
+services:
+    # mongo service
+    copterjs-mongodb-local:
+        image: mongo:latest
+        container_name: copterjs-mongodb-local
+        command: mongod --port 27037
+        ports:
+            - 27037:27037
+        expose:
+            - 27037
+        volumes:
+            - mongo-data:/data/db
+        networks:
+            - mongo_net
+
+volumes:
+    mongo-data:
+
+networks:
+    mongo_net:
+        driver: bridge

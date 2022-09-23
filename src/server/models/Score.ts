@@ -1,19 +1,19 @@
-import { Entity, Index, Property } from "@mikro-orm/core";
+import { model, Schema } from "mongoose";
 
-import { Base } from "./Base";
+import { IScore } from "@shared/types/abstract";
 
-@Entity()
-export class Score extends Base {
-	constructor(score?: Partial<Score>) {
-		super();
-		Object.assign(this, score);
+import { IScoreModel } from "../types/abstract";
+import { BaseSchema } from "./_base";
+
+const ScoreSchema = new Schema<IScore>({
+	player: {
+		type: String,
+		required: true
+	},
+	score: {
+		type: Number,
+		required: true
 	}
+}).add(BaseSchema);
 
-	@Index()
-	@Property()
-	player: string;
-
-	@Index()
-	@Property()
-	score: number;
-}
+export const Score = model<IScore, IScoreModel>("Score", ScoreSchema);

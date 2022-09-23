@@ -8,5 +8,5 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": ["**/mikro-orm.config.ts"]
+  "include": ["**/webpack.config.ts"]
 }

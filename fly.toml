@@ -1,4 +1,4 @@
-# fly.toml file generated for copterjs on 2022-09-19T23:49:43-04:00
+# fly.toml file generated for copterjs on 2022-09-23T15:04:48-04:00
 
 app = "copterjs"
 kill_signal = "SIGINT"
