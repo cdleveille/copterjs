@@ -2,7 +2,7 @@
 
 Modern remake of the classic addicting flash game.
 
-Play on Heroku: [copterjs.herokuapp.com](https://copterjs.herokuapp.com/)
+Play on fly.io: [copterjs.fly.dev](https://copterjs.fly.dev)
 
 ![screenshot](https://user-images.githubusercontent.com/1410481/163531396-d0a021b6-2a70-44d7-ada4-60f716c775b8.png)
 
