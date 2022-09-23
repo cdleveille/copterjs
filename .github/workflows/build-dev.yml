@@ -23,8 +23,5 @@ jobs:
             - name: install dependencies
               run: yarn install --frozen-lockfile
 
-            - name: build project
-              run: yarn build
-
               env:
                   SKIP_PREFLIGHT_CHECK: true
