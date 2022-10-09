@@ -15,8 +15,8 @@ Play on fly.io: [copterjs.fly.dev](https://copterjs.fly.dev)
 -   [Babel](https://babeljs.io/)
 -   [Socket.IO](https://socket.io/)
 -   [Express](http://expressjs.com/)
--   [MikroORM](https://mikro-orm.io/)
--   [PostgreSQL](https://www.postgresql.org/)
+-   [Mongoose](https://mongoosejs.com/)
+-   [MongoDB](https://www.mongodb.com/)
 
 ## Local Setup
 
@@ -30,7 +30,6 @@ Optional (for database-related development only):
 
 -   [Docker Desktop](https://www.docker.com/products/docker-desktop) (plus [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-manual) if on Windows)
 -   [Docker VS Code Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
--   [Azure Data Studio](https://azure.microsoft.com/en-us/services/developer-tools/data-studio/) (plus [PostgreSQL extension](https://docs.microsoft.com/en-us/sql/azure-data-studio/extensions/postgres-extension?view=sql-server-ver15))
 
 Set up dev environment:
 
@@ -47,10 +46,7 @@ Set up dev environment:
 Set up dev database (only required if `USE_DB=true` in the `.env` file):
 
 -   Open Docker Desktop and leave it running in the background.
--   Run `docker network create copterjs-dev-network` in the terminal to create the Docker network.
--   In VS Code, right-click on `/copterjs-dev-container/docker-compose.yml` and select `Compose Up`.
--   Run `yarn db:up` in the terminal to execute the default "from scratch" database migration checked into source control.
--   If schema changes are subsequently made, run `yarn db:create` to generate a new migration and `yarn db:up` to execute it.
+-   In VS Code, right-click on `/.copterjs-dev-container/docker-compose.yml` and select `Compose Up`.
 
 Launch:
 
