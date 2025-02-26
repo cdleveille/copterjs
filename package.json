@@ -51,7 +51,6 @@
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.5.0",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.4",
     "javascript-obfuscator": "^4.0.0",
     "prettier": "^2.6.1",
     "rimraf": "^3.0.2",

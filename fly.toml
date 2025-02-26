@@ -23,9 +23,8 @@ processes = []
   script_checks = []
   tcp_checks = []
   [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
     type = "connections"
+    soft_limit = 500
 
   [[services.ports]]
     force_https = true
